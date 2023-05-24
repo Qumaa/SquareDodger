@@ -4,6 +4,6 @@
     {
         bool ShouldSpawn { get; }
         float SpawningInterval { get; }
-        IObstacle Spawn();
+        void SpawnAndInit();
     }
 }

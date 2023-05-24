@@ -68,8 +68,7 @@ namespace Project
         {
             while (spawner.ShouldSpawn)
             {
-                var pos = spawner.Data.Calculator.CalculatePosition();
-                spawner.Spawn().SetVelocity(spawner.Data.Calculator.CalculateVelocity());
+                spawner.SpawnAndInit();
 
                 yield return new WaitForSeconds(spawner.SpawningInterval);
             }

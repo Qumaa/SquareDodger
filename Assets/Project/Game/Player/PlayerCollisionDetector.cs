@@ -11,9 +11,7 @@ namespace Project.Game
         {
             if (other.gameObject.TryGetComponent(out Obstacle obs))
             {
-                OnCollided?.Invoke(); 
-                Debug.Log("Death");
-            
+                OnCollided?.Invoke();
             }
         }
     }

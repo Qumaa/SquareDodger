@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f68b02d4861642b5a8eaef6b89fa6ea9, type: 3}
   m_Name: Spawner Left
   m_EditorClassIdentifier: 
-  _obstaclesToSpawn: 0
-  _spawnInterval: 0
+  _obstaclesToSpawn: 5
+  _spawnInterval: 2
   _obstaclesSpeed: 0
   _viewportFrom: {x: 0, y: 0}
-  _viewportTo: {x: 0, y: 0}
+  _viewportTo: {x: 0, y: 1}
   _offset: {x: 0, y: 0}

@@ -7,19 +7,18 @@ namespace Project
     public class Obstacle : MonoBehaviour, IObstacle, IPoolerTarget
     {
         private bool _active;
-        private Vector2 _velocity;
+        private Rigidbody2D _rigidbody;
         
         public event Action<IObstacle> OnDespawned;
 
         private void Awake()
         {
             _active = true;
+            _rigidbody = GetComponent<Rigidbody2D>();
         }
 
-        public void SetVelocity(Vector2 velocity)
-        {
-            _velocity = velocity;
-        }
+        public void SetVelocity(Vector2 velocity) =>
+            _rigidbody.velocity = velocity;
 
         void IPoolerTarget.PoppedFromPool() =>
             UpdateActiveStatus(true);

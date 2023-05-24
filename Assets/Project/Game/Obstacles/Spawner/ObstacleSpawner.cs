@@ -1,4 +1,5 @@
 ﻿using Project.Game;
+using UnityEngine;
 
 namespace Project
 {
@@ -19,7 +20,7 @@ namespace Project
             _data = data;
         }
 
-        public IObstacle Spawn()
+        public void SpawnAndInit()
         {
             Obstacle spawned;
 
@@ -27,12 +28,10 @@ namespace Project
                 spawned = _data.Factory.CreateNew();
 
             spawned.OnDespawned += HandleDespawned;
-
-            var position = _data.Calculator.CalculatePosition();
-            spawned.transform.position = position;
+            spawned.transform.position = _data.Calculator.CalculatePosition();
+            spawned.SetVelocity(_data.Calculator.CalculateVelocity());
 
             SpawnedObstacles++;
-            return spawned;
         }
 
         private void HandleDespawned(IObstacle obstacle)
