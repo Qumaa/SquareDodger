@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _obstaclesToSpawn: 5
   _spawnInterval: 2
-  _obstaclesSpeed: 0
+  _obstaclesSpeed: 1
   _viewportFrom: {x: 1, y: 0}
   _viewportTo: {x: 1, y: 1}
   _offset: {x: 0, y: 0}
