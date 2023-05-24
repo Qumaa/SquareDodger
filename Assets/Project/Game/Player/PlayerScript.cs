@@ -10,33 +10,34 @@ namespace Project.Game
 
         private bool _directionRight;
         private IPlayerInputService _inputService;
+        private Rigidbody2D _rigidbody;
+        
 
         private void Start()
         {
             InitializeInputService();
             _inputService.OnTurnInput += Turn;
+            _rigidbody = GetComponent<Rigidbody2D>();
         }
 
         // TODO: move to bootstrap
         private void InitializeInputService() =>
             _inputService = GetComponent<IPlayerInputService>();
 
-        private void Update()
+       
+       
+        private Vector2 GetDirectionVector() =>
+            _directionRight ?
+                new Vector2(_movementSpeed, 0) :
+                new Vector2(0,_movementSpeed );
+
+        private void Turn()
         {
-            MakePlayerStep();
+            var vector = GetDirectionVector();
+            _directionRight = !_directionRight;
+            _rigidbody.velocity = vector;
+
         }
         
-        public void MakePlayerStep()
-        {
-            transform.position += GetDirectionVector() * Time.deltaTime;
-        }
-
-        private Vector3 GetDirectionVector() =>
-            _directionRight ?
-                new Vector3(_movementSpeed, 0, 0) :
-                new Vector3(0, _movementSpeed, 0);
-
-        private void Turn() =>
-            _directionRight = !_directionRight;
     }
 }
