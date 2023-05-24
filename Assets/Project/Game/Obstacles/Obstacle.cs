@@ -1,9 +1,10 @@
 ﻿using System;
 using Project.Game;
+using UnityEngine;
 
 namespace Project
 {
-    public class Obstacle : IObstacle, IPoolerTarget
+    public class Obstacle : MonoBehaviour, IObstacle, IPoolerTarget
     {
         public event Action<IObstacle> OnDespawned;
         public void ResetToDefault()
