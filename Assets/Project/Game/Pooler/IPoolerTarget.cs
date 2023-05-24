@@ -2,7 +2,7 @@
 {
     public interface IPoolerTarget
     {
-        void ResetToDefault();
-        void Pool();
+        void PoppedFromPool();
+        void PushedToPool();
     }
 }

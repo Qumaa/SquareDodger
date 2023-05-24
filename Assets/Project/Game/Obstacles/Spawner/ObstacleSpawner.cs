@@ -1,35 +1,36 @@
 ﻿using Project.Game;
-using UnityEngine;
 
 namespace Project
 {
-    public class ObstacleSpawner : IObstacleSpawner
+    public class ObstacleSpawnerViewport : IObstacleSpawnerViewport
     {
-        private ObstaclePooler _obstaclePooler;
-        private ObstacleFactory _obstacleFactory;
-
-        private readonly ObstacleSpawnerConfig _config;
+        private readonly ObstacleSpawnerDataViewport _data;
 
         public int SpawnedObstacles { get; private set; }
+        private ObstacleSpawnerConfigViewport _config => _data.Config;
+        public bool ShouldSpawn => SpawnedObstacles < _config.ObstaclesToSpawn;
+        public float SpawningInterval => _config.SpawnInterval;
+        public float ObstacleSpeed => _config.ObstaclesSpeed;
 
-        public ObstacleSpawner(ObstacleSpawnerConfig config)
+        public ObstacleSpawnerDataViewport Data => _data;
+
+        public ObstacleSpawnerViewport(ObstacleSpawnerDataViewport data)
         {
-            _config = config;
-
-            _obstaclePooler = new ObstaclePooler();
-            _obstacleFactory = new ObstacleFactory();
+            _data = data;
         }
 
-        //TODO: resolve positioning of newly created object
-        public IObstacle Spawn(Vector3 position)
+        public IObstacle Spawn()
         {
             Obstacle spawned;
 
-            if (!_obstaclePooler.TryPop(out spawned))
-                spawned = _obstacleFactory.CreateNew();
+            if (!_data.Pooler.TryPop(out spawned))
+                spawned = _data.Factory.CreateNew();
 
             spawned.OnDespawned += HandleDespawned;
-            
+
+            var position = _data.Calculator.CalculatePosition();
+            spawned.transform.position = position;
+
             SpawnedObstacles++;
             return spawned;
         }

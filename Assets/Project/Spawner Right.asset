@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f68b02d4861642b5a8eaef6b89fa6ea9, type: 3}
+  m_Name: Spawner Right
+  m_EditorClassIdentifier: 
+  _obstaclesToSpawn: 0
+  _spawnInterval: 0
+  _obstaclesSpeed: 0
+  _viewportFrom: {x: 0, y: 0}
+  _viewportTo: {x: 0, y: 0}
+  _offset: {x: 0, y: 0}

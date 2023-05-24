@@ -1,10 +1,9 @@
-﻿using UnityEngine;
-
-namespace Project
+﻿namespace Project
 {
     public interface IObstacleSpawner
     {
-        int SpawnedObstacles { get; }
-        IObstacle Spawn(Vector3 position);
+        bool ShouldSpawn { get; }
+        float SpawningInterval { get; }
+        IObstacle Spawn();
     }
 }

@@ -1,32 +1,78 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Project
 {
     public class ObstacleManager : MonoBehaviour
     {
-        [SerializeField] private GameObject _obstaclePrefab;
-        
-        [Space]
-        [SerializeField] private ObstacleSpawnerConfig _topSpawnerConfig;
-        [SerializeField] private ObstacleSpawnerConfig _leftSpawnerConfig;
-        [SerializeField] private ObstacleSpawnerConfig _rightSpawnerConfig;
+        [SerializeField] private Obstacle _obstaclePrefab;
 
-        private IObstacleSpawner[] _spawners = new IObstacleSpawner[3];
+        [Space] [SerializeField] private ObstacleSpawnerConfigViewport _topSpawnerConfig;
+        [SerializeField] private ObstacleSpawnerConfigViewport _leftSpawnerConfig;
+        [SerializeField] private ObstacleSpawnerConfigViewport _rightSpawnerConfig;
+
+        private ObstaclePooler _obstaclePooler;
+        private ObstacleFactory _obstacleFactory;
+
+        private Camera _viewportCamera;
+        private float _viewportDepth;
 
         private void Start()
         {
-            var configs = new[]
-            {
-                _leftSpawnerConfig,
+            _obstaclePooler = new ObstaclePooler();
+            _obstacleFactory = new ObstacleFactory(_obstaclePrefab.gameObject);
+
+            _viewportCamera = Camera.main;
+            _viewportDepth = 10;
+            
+            var datas = CreateSpawnerDatas();
+            CreateSpawners(datas);
+        }
+
+        private ObstacleSpawnerDataViewport[] CreateSpawnerDatas()
+        {
+            var top = new ObstacleSpawnerDataViewport(
                 _topSpawnerConfig,
-                _rightSpawnerConfig
-            };
-                
-            for (int i = 0; i < _spawners.Length; i++)
-                _spawners[i] = new ObstacleSpawner(configs[i]);
+                _obstaclePooler,
+                _obstacleFactory,
+                new ObstacleSpawnerDataCalculatorTop(_topSpawnerConfig, _viewportCamera, _viewportDepth)
+            );
+
+            var left = new ObstacleSpawnerDataViewport(
+                _leftSpawnerConfig,
+                _obstaclePooler,
+                _obstacleFactory,
+                new ObstacleSpawnerDataCalculatorLeft(_leftSpawnerConfig, _viewportCamera, _viewportDepth)
+            );
+
+            var right = new ObstacleSpawnerDataViewport(
+                _rightSpawnerConfig,
+                _obstaclePooler,
+                _obstacleFactory,
+                new ObstacleSpawnerDataCalculatorRight(_rightSpawnerConfig, _viewportCamera, _viewportDepth)
+            );
+
+            return new[] {top, left, right};
+        }
+
+        private void CreateSpawners(ObstacleSpawnerDataViewport[] spawnerDatas)
+        {
+            foreach (var data in spawnerDatas)
+            {
+                var spawner = new ObstacleSpawnerViewport(data);
+                StartCoroutine(SpawnerRoutine(spawner));
+            }
+        }
+
+        private IEnumerator SpawnerRoutine(IObstacleSpawnerViewport spawner)
+        {
+            while (spawner.ShouldSpawn)
+            {
+                var pos = spawner.Data.Calculator.CalculatePosition();
+                spawner.Spawn().SetVelocity(spawner.Data.Calculator.CalculateVelocity());
+
+                yield return new WaitForSeconds(spawner.SpawningInterval);
+            }
         }
     }
 }

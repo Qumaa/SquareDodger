@@ -6,14 +6,26 @@ namespace Project.Game
         where TTarget : IPoolerTarget
     {
         private Stack<TTarget> _pool;
-        
-        public void Push(TTarget objToPool) =>
+
+        public Pooler()
+        {
+            _pool = new Stack<TTarget>();
+        }
+
+        public void Push(TTarget objToPool)
+        {
             _pool.Push(objToPool);
+            objToPool.PushedToPool();
+        }
 
         public bool CanPop() =>
-            _pool.Peek() != null;
+            _pool.TryPeek(out var res) && res != null;
 
-        public TTarget Pop() =>
-            _pool.Pop();
+        public TTarget Pop()
+        {
+            var popped = _pool.Pop();
+            popped.PoppedFromPool();
+            return popped;
+        }
     }
 }

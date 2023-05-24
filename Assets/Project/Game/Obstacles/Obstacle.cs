@@ -1,19 +1,40 @@
 ﻿using System;
 using Project.Game;
+using UnityEngine;
 
 namespace Project
 {
-    public class Obstacle : IObstacle, IPoolerTarget
+    public class Obstacle : MonoBehaviour, IObstacle, IPoolerTarget
     {
+        private bool _active;
+        private Vector2 _velocity;
+        
         public event Action<IObstacle> OnDespawned;
-        public void ResetToDefault()
+
+        private void Awake()
         {
-            throw new NotImplementedException();
+            _active = true;
         }
 
-        public void Pool()
+        public void SetVelocity(Vector2 velocity)
         {
-            OnDespawned?.Invoke(this);
+            _velocity = velocity;
+        }
+
+        void IPoolerTarget.PoppedFromPool() =>
+            UpdateActiveStatus(true);
+
+        void IPoolerTarget.PushedToPool() =>
+            UpdateActiveStatus(false);
+
+        private void UpdateActiveStatus(bool status)
+        {
+            if (_active == status)
+                return;
+            
+            _active = status;
+            
+            gameObject.SetActive(_active);
         }
     }
 }
