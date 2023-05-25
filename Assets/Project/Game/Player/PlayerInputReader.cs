@@ -2,7 +2,7 @@ using System;
 using Project.Game;
 using UnityEngine;
 
-namespace Project
+namespace Project.Game
 {
     public class PlayerInputReader : MonoBehaviour, IPlayerInputService
     {

@@ -1,11 +1,13 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Project
+namespace Project.Game
 {
-    public interface IObstacle
+    public interface IObstacle : IPoolerTarget
     {
         event Action<IObstacle> OnDespawned;
-        void SetVelocity(Vector2 velocity);
+        Vector2 Velocity { get; set; }
+        Vector2 Position { get; set; }
+        void Despawn();
     }
 }

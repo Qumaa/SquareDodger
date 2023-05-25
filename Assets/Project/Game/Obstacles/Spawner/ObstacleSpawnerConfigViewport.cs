@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Project
+namespace Project.Game
 {
     [CreateAssetMenu(menuName = AssetMenuPaths.OBSTACLE_SPAWNER, fileName = "New Obstacle Spawner Config")]
     public class ObstacleSpawnerConfigViewport : ObstacleSpawnerConfig

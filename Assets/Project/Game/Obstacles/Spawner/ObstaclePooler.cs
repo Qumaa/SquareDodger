@@ -1,8 +1,8 @@
 ﻿using Project.Game;
 
-namespace Project
+namespace Project.Game
 {
-    public class ObstaclePooler : Pooler<Obstacle>
+    public class ObstaclePooler : Pooler<IObstacle>
     {
     }
 }

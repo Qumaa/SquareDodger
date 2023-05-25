@@ -15,16 +15,14 @@ namespace Project.Game
 
         private void Start()
         {
-            InitializeInputService();
+            // TODO: move to bootstrap
+            _inputService = GetComponent<IPlayerInputService>();
+            
             _inputService.OnTurnInput += Turn;
             _rigidbody = GetComponent<Rigidbody2D>();
+            UpdateVelocity();
         }
-
-        // TODO: move to bootstrap
-
-        private void InitializeInputService() =>
-            _inputService = GetComponent<IPlayerInputService>();
-
+        
         private Vector2 GetDirectionVector() =>
             _directionRight ?
                 new Vector2(_movementSpeed, 0) :
@@ -32,16 +30,13 @@ namespace Project.Game
 
         private void Turn()
         {
-            var vector = GetDirectionVector();
+            UpdateVelocity();
             _directionRight = !_directionRight;
-            _rigidbody.velocity = vector;
-            
+
             OnTurned?.Invoke();
         }
-    }
 
-    public interface IPlayer
-    {
-        public event Action OnTurned;
+        private void UpdateVelocity() =>
+            _rigidbody.velocity = GetDirectionVector();
     }
 }

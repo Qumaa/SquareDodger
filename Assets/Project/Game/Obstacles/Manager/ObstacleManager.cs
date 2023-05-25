@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-namespace Project
+namespace Project.Game
 {
     public class ObstacleManager : MonoBehaviour
     {
@@ -13,53 +16,64 @@ namespace Project
 
         private ObstaclePooler _obstaclePooler;
         private ObstacleFactory _obstacleFactory;
+        private IObstacleDespawner _obstacleDespawner;
 
         private Camera _viewportCamera;
         private float _viewportDepth;
+        
+        private IObstacleSpawner[] _spawners;
 
         private void Start()
         {
-            _obstaclePooler = new ObstaclePooler();
-            _obstacleFactory = new ObstacleFactory(_obstaclePrefab.gameObject);
-
+            // TODO: tie to gamecamera component
             _viewportCamera = Camera.main;
             _viewportDepth = 10;
             
-            var datas = CreateSpawnerDatas();
-            CreateSpawners(datas);
+            // TODO: move to bootstrap
+            _obstaclePooler = new ObstaclePooler();
+            _obstacleFactory = new ObstacleFactory(_obstaclePrefab.gameObject);
+            _obstacleDespawner = new ObstacleDespawnerViewport(_viewportCamera);
+
+            var data = CreateSpawnersData();
+            CreateSpawners(data);
         }
 
-        private ObstacleSpawnerDataViewport[] CreateSpawnerDatas()
+        private void Update()
         {
-            var top = new ObstacleSpawnerDataViewport(
-                _topSpawnerConfig,
-                _obstaclePooler,
-                _obstacleFactory,
-                new ObstacleSpawnerDataCalculatorTop(_topSpawnerConfig, _viewportCamera, _viewportDepth)
-            );
-
-            var left = new ObstacleSpawnerDataViewport(
-                _leftSpawnerConfig,
-                _obstaclePooler,
-                _obstacleFactory,
-                new ObstacleSpawnerDataCalculatorLeft(_leftSpawnerConfig, _viewportCamera, _viewportDepth)
-            );
-
-            var right = new ObstacleSpawnerDataViewport(
-                _rightSpawnerConfig,
-                _obstaclePooler,
-                _obstacleFactory,
-                new ObstacleSpawnerDataCalculatorRight(_rightSpawnerConfig, _viewportCamera, _viewportDepth)
-            );
-
-            return new[] {top, left, right};
+            foreach (var spawner in _spawners)
+                _obstacleDespawner.DespawnNecessaryObstacles(spawner.ActiveObstacles);
         }
 
-        private void CreateSpawners(ObstacleSpawnerDataViewport[] spawnerDatas)
+        private ObstacleSpawnerDataViewport[] CreateSpawnersData()
         {
-            foreach (var data in spawnerDatas)
+            var configs = new []
             {
-                var spawner = new ObstacleSpawnerViewport(data);
+                _topSpawnerConfig,
+                _leftSpawnerConfig,
+                _rightSpawnerConfig
+            };
+
+            var output = new ObstacleSpawnerDataViewport[3];
+
+            for (int i = 0; i < 3; i++)
+                output[i] = new ObstacleSpawnerDataViewport(
+                    configs[i],
+                    _obstaclePooler,
+                    _obstacleFactory,
+                    new ObstacleSpawnerDataCalculatorTop(configs[i], _viewportCamera, _viewportDepth)
+                );
+            
+            return output;
+        }
+
+        private void CreateSpawners(ObstacleSpawnerDataViewport[] spawnersData)
+        {
+            _spawners = new IObstacleSpawner[spawnersData.Length];
+
+            for (var i = 0; i < spawnersData.Length; i++)
+            {
+                var spawner = new ObstacleSpawnerViewport(spawnersData[i]);
+                _spawners[i] = spawner;
                 StartCoroutine(SpawnerRoutine(spawner));
             }
         }
@@ -71,7 +85,35 @@ namespace Project
                 spawner.SpawnAndInit();
 
                 yield return new WaitForSeconds(spawner.SpawningInterval);
+                spawner.RegisterSpawnedObstacles();
             }
         }
+    }
+
+    public class ObstacleDespawnerViewport : IObstacleDespawner
+    {
+        private readonly Camera _camera;
+
+        public ObstacleDespawnerViewport(Camera viewportCamera)
+        {
+            _camera = viewportCamera;
+        }
+
+        public void DespawnNecessaryObstacles(IObstacle[] obstacles)
+        {
+            var count = obstacles.Length;
+
+            for (var i = count - 1; i >= 0; i--)
+                if (IsBelowScreen(obstacles[i].Position))
+                    obstacles[i].Despawn();
+        }
+
+        private bool IsBelowScreen(Vector2 obstaclePosition) =>
+            _camera.WorldToViewportPoint(obstaclePosition).y < 0;
+    }
+
+    public interface IObstacleDespawner
+    {
+        void DespawnNecessaryObstacles(IObstacle[] obstacles);
     }
 }

@@ -1,15 +1,26 @@
 ﻿using System;
-using Project.Game;
 using UnityEngine;
 
-namespace Project
+namespace Project.Game
 {
-    public class Obstacle : MonoBehaviour, IObstacle, IPoolerTarget
+    public class Obstacle : MonoBehaviour, IObstacle
     {
         private bool _active;
         private Rigidbody2D _rigidbody;
         
         public event Action<IObstacle> OnDespawned;
+
+        public Vector2 Velocity
+        {
+            get => _rigidbody.velocity;
+            set => _rigidbody.velocity = value;
+        }
+
+        public Vector2 Position
+        {
+            get => transform.position;
+            set => transform.position = value;
+        }
 
         private void Awake()
         {
@@ -17,8 +28,8 @@ namespace Project
             _rigidbody = GetComponent<Rigidbody2D>();
         }
 
-        public void SetVelocity(Vector2 velocity) =>
-            _rigidbody.velocity = velocity;
+        public void Despawn() =>
+            OnDespawned?.Invoke(this);
 
         void IPoolerTarget.PoppedFromPool() =>
             UpdateActiveStatus(true);
