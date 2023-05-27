@@ -98,7 +98,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _depth: 10
-  _motionSpeed: 1
-  _motionDamping: 0.5
-  _motionResponsiveness: 2
+  _motionSpeed: 2
+  _motionDamping: 0.7
+  _motionResponsiveness: 1.2
   _player: {fileID: 0}
+  _bottomOffset: 2

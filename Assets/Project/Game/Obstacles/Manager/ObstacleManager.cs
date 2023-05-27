@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Project.Game
@@ -40,8 +37,11 @@ namespace Project.Game
 
         private void Update()
         {
-            foreach (var spawner in _spawners)
+            for (int i = 0; i < _spawners.Length; i++)
+            {
+                var spawner = _spawners[i];
                 _obstacleDespawner.DespawnNecessaryObstacles(spawner.ActiveObstacles);
+            }
         }
 
         private ObstacleSpawnerDataViewport[] CreateSpawnersData()
