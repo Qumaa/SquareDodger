@@ -301,5 +301,21 @@ PrefabInstance:
       propertyPath: _player
       value: 
       objectReference: {fileID: 385998373}
+    - target: {fileID: 8087021621882065587, guid: e75eea9b9257b4d4883aff0bf48fc142, type: 3}
+      propertyPath: _motionSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8087021621882065587, guid: e75eea9b9257b4d4883aff0bf48fc142, type: 3}
+      propertyPath: _bottomOffset
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8087021621882065587, guid: e75eea9b9257b4d4883aff0bf48fc142, type: 3}
+      propertyPath: _motionDamping
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8087021621882065587, guid: e75eea9b9257b4d4883aff0bf48fc142, type: 3}
+      propertyPath: _motionResponsiveness
+      value: 1.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e75eea9b9257b4d4883aff0bf48fc142, type: 3}

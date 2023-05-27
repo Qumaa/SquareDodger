@@ -5,6 +5,6 @@ namespace Project.Game
     public interface IGameCamera
     {
         Vector2 Position { get; set; }
-        float Depth { get; }
+        void Update(float timeStep);
     }
 }

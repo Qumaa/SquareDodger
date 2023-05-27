@@ -10,6 +10,8 @@ namespace Project.Game
         
         public event Action<IObstacle> OnDespawned;
 
+        public float Size => 1;
+
         public Vector2 Velocity
         {
             get => _rigidbody.velocity;

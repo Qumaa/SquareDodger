@@ -4,5 +4,6 @@ namespace Project.Game
     {
         T MakeStep(float timeStep, T destination, T velocity);
         T MakeStep(float timeStep, T destination);
+        void SetInitialValue(T initialValue, T zeroValue);
     }
 }
