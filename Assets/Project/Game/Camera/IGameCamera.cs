@@ -2,9 +2,10 @@
 
 namespace Project.Game
 {
-    public interface IGameCamera
+    public interface IGameCamera : IUpdatable
     {
         Vector2 Position { get; set; }
-        void Update(float timeStep);
+        Camera ControlledCamera { get; }
+        float ViewportDepth { get; }
     }
 }

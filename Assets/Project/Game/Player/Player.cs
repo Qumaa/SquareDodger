@@ -3,26 +3,28 @@ using UnityEngine;
 
 namespace Project.Game
 {
-    public class PlayerScript : MonoBehaviour, IPlayer
+    public class Player : MonoBehaviour, IPlayer
     {
         [SerializeField] private float _movementSpeed;
 
         private bool _directionRight;
-        private IPlayerInputService _inputService;
         private Rigidbody2D _rigidbody;
+        private IPlayerInputService _inputService;
 
         public event Action OnTurned;
 
+        public IPlayerInputService InputService
+        {
+            get => _inputService;
+            set => UpdateInputService(value);
+        }
+
         private void Start()
         {
-            // TODO: move to bootstrap
-            _inputService = GetComponent<IPlayerInputService>();
-            
-            _inputService.OnTurnInput += Turn;
             _rigidbody = GetComponent<Rigidbody2D>();
             UpdateVelocity();
         }
-        
+
         private Vector2 GetDirectionVector() =>
             _directionRight ?
                 new Vector2(_movementSpeed, 0) :
@@ -38,5 +40,17 @@ namespace Project.Game
 
         private void UpdateVelocity() =>
             _rigidbody.velocity = GetDirectionVector();
+
+        private void UpdateInputService(IPlayerInputService newService)
+        {
+            if (_inputService == newService)
+                return;
+            
+            if (_inputService != null)
+                _inputService.OnTurnInput -= Turn;
+            
+            _inputService = newService;
+            _inputService.OnTurnInput += Turn;
+        }
     }
 }

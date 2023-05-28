@@ -2,7 +2,7 @@
 
 namespace Project.Game
 {
-    public class GameCameraLogic : IGameCamera
+    public class GameCamera : IGameCamera
     {
         private Vector2 _position;
         private ProceduralMotionSystemVector2 _motionSystem;
@@ -20,7 +20,10 @@ namespace Project.Game
             set => SetPosition(value);
         }
 
-        public GameCameraLogic(Camera controlledCamera, float viewportDepth, ProceduralMotionSystemVector2 motionSystem,
+        public Camera ControlledCamera => _controlledCamera;
+        public float ViewportDepth => _viewportDepth;
+
+        public GameCamera(Camera controlledCamera, float viewportDepth, ProceduralMotionSystemVector2 motionSystem,
             ICameraOffsetCalculator offsetCalculator, Transform followTarget, float bottomOffset)
         {
             _motionSystem = motionSystem;

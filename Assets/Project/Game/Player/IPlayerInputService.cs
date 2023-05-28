@@ -2,7 +2,7 @@
 
 namespace Project.Game
 {
-    internal interface IPlayerInputService
+    public interface IPlayerInputService
     {
         event Action OnTurnInput;
     }

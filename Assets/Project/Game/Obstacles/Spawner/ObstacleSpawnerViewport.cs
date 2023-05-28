@@ -5,7 +5,6 @@ namespace Project.Game
     public class ObstacleSpawnerViewport : IObstacleSpawnerViewport
     {
         private readonly ObstacleSpawnerDataViewport _data;
-        private int _spawnedObstaclesInternal;
         private List<IObstacle> _activeObstacles;
 
         public int SpawnedObstacles { get; private set; }
@@ -20,7 +19,6 @@ namespace Project.Game
         public ObstacleSpawnerViewport(ObstacleSpawnerDataViewport data)
         {
             _data = data;
-            _spawnedObstaclesInternal = 0;
             _activeObstacles = new List<IObstacle>(_data.Config.ObstaclesToSpawn);
         }
 
@@ -35,12 +33,9 @@ namespace Project.Game
             spawned.Position = _data.Calculator.CalculatePosition();
             spawned.Velocity = _data.Calculator.CalculateVelocity();
 
-            _spawnedObstaclesInternal++;
+            SpawnedObstacles++;
             _activeObstacles.Add(spawned);
         }
-
-        public void RegisterSpawnedObstacles() =>
-            SpawnedObstacles = _spawnedObstaclesInternal;
 
         private void HandleDespawned(IObstacle despawned)
         {
@@ -49,7 +44,7 @@ namespace Project.Game
             _data.Pooler.Push(despawned);
             _activeObstacles.Remove(despawned);
             
-            _spawnedObstaclesInternal = --SpawnedObstacles;
+            SpawnedObstacles = --SpawnedObstacles;
         }
     }
 }

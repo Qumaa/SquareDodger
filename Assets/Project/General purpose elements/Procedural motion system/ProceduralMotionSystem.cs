@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Project.Game
+namespace Project
 {
     public abstract class ProceduralMotionSystem<T> :
         IProceduralMotionSystem<IProceduralMotionSystemOperand<T>>

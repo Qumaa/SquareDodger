@@ -6,6 +6,5 @@
         float SpawningInterval { get; }
         IObstacle[] ActiveObstacles { get; }
         void SpawnAndInit();
-        void RegisterSpawnedObstacles();
     }
 }

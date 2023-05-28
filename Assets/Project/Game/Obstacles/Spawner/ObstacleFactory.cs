@@ -2,7 +2,7 @@
 
 namespace Project.Game
 {
-    public class ObstacleFactory : IFactory<Obstacle>
+    public class ObstacleFactory : IFactory<IObstacle>
     {
         private readonly GameObject _obstaclePrefab;
 
@@ -11,7 +11,7 @@ namespace Project.Game
             _obstaclePrefab = obstaclePrefab;
         }
 
-        public Obstacle CreateNew() =>
+        public IObstacle CreateNew() =>
             GameObject.Instantiate(_obstaclePrefab).GetComponent<Obstacle>();
     }
 }

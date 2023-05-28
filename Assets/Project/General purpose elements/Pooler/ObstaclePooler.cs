@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Project.Game
+namespace Project
 {
     public abstract class Pooler<TTarget> : IPooler<TTarget>
         where TTarget : IPoolerTarget
