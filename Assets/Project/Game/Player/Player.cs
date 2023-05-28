@@ -10,8 +10,11 @@ namespace Project.Game
         private bool _directionRight;
         private Rigidbody2D _rigidbody;
         private IPlayerInputService _inputService;
+        private Material _material;
 
         public event Action OnTurned;
+
+        public Transform Transform => transform;
 
         public IPlayerInputService InputService
         {
@@ -19,8 +22,11 @@ namespace Project.Game
             set => UpdateInputService(value);
         }
 
-        private void Start()
+        public Material Material => _material;
+
+        private void Awake()
         {
+            _material = GetComponent<SpriteRenderer>().material;
             _rigidbody = GetComponent<Rigidbody2D>();
             UpdateVelocity();
         }

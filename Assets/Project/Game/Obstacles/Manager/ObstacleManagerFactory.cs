@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace Project.Game
+﻿namespace Project.Game
 {
     public struct ObstacleManagerFactory : IFactory<IObstacleManager>
     {
@@ -9,7 +7,6 @@ namespace Project.Game
         private IPooler<IObstacle> _obstaclePooler;
         private IFactory<IObstacle> _obstacleFactory;
         private IObstacleDespawner _obstacleDespawner;
-        private MonoBehaviour _coroutineRunner;
 
         private ObstacleSpawnerConfigViewport _topSpawnerConfig => _managerConfig.TopSpawnerConfig;
         private ObstacleSpawnerConfigViewport _leftSpawnerConfig => _managerConfig.LeftSpawnerConfig;
@@ -17,14 +14,13 @@ namespace Project.Game
 
         public ObstacleManagerFactory(ObstacleManagerConfig managerConfig, IGameCamera gameCamera,
             IPooler<IObstacle> obstaclePooler, IFactory<IObstacle> obstacleFactory,
-            IObstacleDespawner obstacleDespawner, MonoBehaviour coroutineRunner)
+            IObstacleDespawner obstacleDespawner)
         {
             _managerConfig = managerConfig;
             _gameCamera = gameCamera;
             _obstaclePooler = obstaclePooler;
             _obstacleFactory = obstacleFactory;
             _obstacleDespawner = obstacleDespawner;
-            _coroutineRunner = coroutineRunner;
         }
 
         public IObstacleManager CreateNew()

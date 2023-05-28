@@ -13,14 +13,16 @@ namespace Project.Architecture
         [SerializeField] private Player _playerPrefab;
 
         private IGameCamera _gameCamera;
-        private Player _player;
+        private IPlayer _player;
+        private IPlayerShaderMaintainer _shaderMaintainer;
         private IObstacleManager _obstacleManager;
 
-        private void Awake()
+        private void Start()
         {
             InitializePlayer();
-            InitializeCamera(_player.transform);
+            InitializeCamera(_player.Transform);
             InitializeObstacleManager();
+            InitializePlayerShaderMaintainer();
         }
 
         private void FixedUpdate()
@@ -31,6 +33,7 @@ namespace Project.Architecture
         private void Update()
         {
             _obstacleManager.Update(Time.deltaTime);
+            _shaderMaintainer.UpdateBuffer(_obstacleManager.ActiveObstacles);
         }
 
         private void InitializePlayer()
@@ -63,8 +66,13 @@ namespace Project.Architecture
             var despawner = new ObstacleDespawnerViewport(_gameCamera.ControlledCamera,
                 new Vector2(0.707f, 0.707f) * _managerConfig.ObstaclePrefab.Size);
             
-            _obstacleManager = new ObstacleManagerFactory(_managerConfig, _gameCamera, pooler, factory, despawner, this)
+            _obstacleManager = new ObstacleManagerFactory(_managerConfig, _gameCamera, pooler, factory, despawner)
                 .CreateNew();
+        }
+
+        private void InitializePlayerShaderMaintainer()
+        {
+            _shaderMaintainer = new PlayerShaderMaintainer(_player.Material);
         }
     }
 }

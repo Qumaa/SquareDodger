@@ -2,5 +2,6 @@
 {
     public interface IObstacleManager : IUpdatable
     {
+        IObstacle[] ActiveObstacles { get; }
     }
 }
