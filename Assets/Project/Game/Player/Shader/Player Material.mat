@@ -22,8 +22,9 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _BlendingRadius: 1
+    - _BlendingLength: 2.2
+    - _BlendingRadius: 0.8
     m_Colors:
-    - _ObstacleColor: {r: 0.9, g: 0, b: 0, a: 1}
-    - _PlayerColor: {r: 0.9, g: 0.9, b: 0.9, a: 1}
+    - _ObstacleColor: {r: 0.8773585, g: 0.13574219, b: 0.13574219, a: 1}
+    - _PlayerColor: {r: 0.8584906, g: 0.8584906, b: 0.8584906, a: 1}
   m_BuildTextureStacks: []

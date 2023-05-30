@@ -3,11 +3,13 @@ using UnityEngine;
 
 namespace Project.Game
 {
-    public interface IPlayer
+    public interface IPlayer : IUpdatable
     {
         public event Action OnTurned;
         public Transform Transform { get; }
         public IPlayerInputService InputService { get; set; }
-        Material Material { get; }
+        IPlayerShaderMaintainer ShaderMaintainer { get; }
+        
+        float MovementSpeed { get; set; }
     }
 }

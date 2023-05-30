@@ -8,11 +8,9 @@ namespace Project.Game
         private List<IObstacle> _activeObstacles;
 
         public int SpawnedObstacles { get; private set; }
-        private ObstacleSpawnerConfigViewport _config => _data.Config;
-        public bool ShouldSpawn => SpawnedObstacles < _config.ObstaclesToSpawn;
-        public float SpawningInterval => _config.SpawnInterval;
-        public IObstacle[] ActiveObstacles => _activeObstacles.ToArray();
-        public float ObstacleSpeed => _config.ObstaclesSpeed;
+        public bool ShouldSpawn => SpawnedObstacles < _data.Config.ObstaclesToSpawn;
+        public float SpawningInterval => _data.Config.SpawnInterval;
+        public IObstacle[] ActiveObstacles { get; private set; }
 
         public ObstacleSpawnerDataViewport Data => _data;
 
@@ -20,6 +18,7 @@ namespace Project.Game
         {
             _data = data;
             _activeObstacles = new List<IObstacle>(_data.Config.ObstaclesToSpawn);
+            UpdateActiveObstaclesProperty();
         }
 
         public void SpawnAndInit()
@@ -35,6 +34,7 @@ namespace Project.Game
 
             SpawnedObstacles++;
             _activeObstacles.Add(spawned);
+            UpdateActiveObstaclesProperty();
         }
 
         private void HandleDespawned(IObstacle despawned)
@@ -43,8 +43,12 @@ namespace Project.Game
             
             _data.Pooler.Push(despawned);
             _activeObstacles.Remove(despawned);
+            UpdateActiveObstaclesProperty();
             
             SpawnedObstacles = --SpawnedObstacles;
         }
+
+        private void UpdateActiveObstaclesProperty() =>
+            ActiveObstacles = _activeObstacles.ToArray();
     }
 }

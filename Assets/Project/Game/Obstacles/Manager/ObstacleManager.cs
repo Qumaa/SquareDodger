@@ -72,7 +72,7 @@ namespace Project.Game
 
         private class SpawnerInfo
         {
-            public IObstacleSpawner Spawner;
+            public readonly IObstacleSpawner Spawner;
             public float Counter;
 
             public SpawnerInfo(IObstacleSpawner spawner)

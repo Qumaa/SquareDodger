@@ -3,38 +3,48 @@ using UnityEngine;
 
 namespace Project.Game
 {
-    public class Player : MonoBehaviour, IPlayer
+    public class Player : IPlayer
     {
-        [SerializeField] private float _movementSpeed;
-
+        // moving
+        public event Action OnTurned;
         private bool _directionRight;
         private Rigidbody2D _rigidbody;
         private IPlayerInputService _inputService;
-        private Material _material;
-
-        public event Action OnTurned;
-
-        public Transform Transform => transform;
-
         public IPlayerInputService InputService
         {
             get => _inputService;
             set => UpdateInputService(value);
         }
+        
+        // shader
+        private IObstacleManager _obstacleManager;
+        public IPlayerShaderMaintainer ShaderMaintainer { get; }
+        public Material Material { get; }
 
-        public Material Material => _material;
-
-        private void Awake()
+        // others
+        private GameObject _gameObject;
+        private float _movementSpeed;
+        public Transform Transform => _gameObject.transform;
+        
+        public float MovementSpeed
         {
-            _material = GetComponent<SpriteRenderer>().material;
-            _rigidbody = GetComponent<Rigidbody2D>();
-            UpdateVelocity();
+            get => _movementSpeed;
+            set => UpdateMovementSpeed(value);
         }
 
-        private Vector2 GetDirectionVector() =>
-            _directionRight ?
-                new Vector2(_movementSpeed, 0) :
-                new Vector2(0, _movementSpeed);
+        public void Update(float timeStep)
+        {
+            ShaderMaintainer.UpdateBuffer(_obstacleManager.ActiveObstacles);
+        }
+
+        public Player(GameObject playerObject, IPlayerShaderMaintainer shaderMaintainer)
+        {
+            _gameObject = playerObject;
+            _rigidbody = _gameObject.GetComponent<Rigidbody2D>();
+            
+            ShaderMaintainer = shaderMaintainer;
+            ShaderMaintainer.Material = Material = _gameObject.GetComponent<Renderer>().material;
+        }
 
         private void Turn()
         {
@@ -45,7 +55,12 @@ namespace Project.Game
         }
 
         private void UpdateVelocity() =>
-            _rigidbody.velocity = GetDirectionVector();
+            _rigidbody.velocity = CalculateVelocity();
+
+        private Vector2 CalculateVelocity() =>
+            _directionRight ?
+                new Vector2(MovementSpeed, 0) :
+                new Vector2(0, MovementSpeed);
 
         private void UpdateInputService(IPlayerInputService newService)
         {
@@ -57,6 +72,12 @@ namespace Project.Game
             
             _inputService = newService;
             _inputService.OnTurnInput += Turn;
+        }
+
+        private void UpdateMovementSpeed(float speed)
+        {
+            _movementSpeed = speed;
+            UpdateVelocity();
         }
     }
 }
