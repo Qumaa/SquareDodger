@@ -29,5 +29,20 @@ namespace Project.Architecture
             _obstacleManager.Update(Time.deltaTime);
             _shaderMaintainer.UpdateBuffer(_obstacleManager.ActiveObstacles);
         }
+
+        public void Pause()
+        {
+            Debug.Log("pause");
+        }
+
+        public void Resume()
+        {
+            Debug.Log("resume");
+        }
+
+        public void Finish()
+        {
+            Debug.Log("finish");
+        }
     }
 }

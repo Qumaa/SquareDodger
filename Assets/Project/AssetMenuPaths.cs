@@ -10,5 +10,6 @@ namespace Project
 
         public const string CAMERA_CONFIG = _PROJECT + "Camera Config";
         public const string PLAYER_CONFIG = _PROJECT + "Player Config";
+        public const string GAME_CONFIG = _PROJECT + "Game Config";
     }
 }

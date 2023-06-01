@@ -7,6 +7,7 @@ namespace Project.Game
     {
         // moving
         public event Action OnTurned;
+        public event Action OnDied;
         private bool _directionRight;
         private Rigidbody2D _rigidbody;
         private IPlayerInputService _inputService;
@@ -19,13 +20,12 @@ namespace Project.Game
         // shader
         private IObstacleManager _obstacleManager;
         public IPlayerShaderMaintainer ShaderMaintainer { get; }
-        public Material Material { get; }
 
         // others
+        private IPlayerCollisionDetector _collisionDetector;
         private GameObject _gameObject;
         private float _movementSpeed;
         public Transform Transform => _gameObject.transform;
-        
         public float MovementSpeed
         {
             get => _movementSpeed;
@@ -37,13 +37,16 @@ namespace Project.Game
             ShaderMaintainer.UpdateBuffer(_obstacleManager.ActiveObstacles);
         }
 
-        public Player(GameObject playerObject, IPlayerShaderMaintainer shaderMaintainer)
+        public Player(GameObject playerObject, IPlayerShaderMaintainer shaderMaintainer, IPlayerCollisionDetector collisionDetector)
         {
             _gameObject = playerObject;
             _rigidbody = _gameObject.GetComponent<Rigidbody2D>();
             
             ShaderMaintainer = shaderMaintainer;
-            ShaderMaintainer.Material = Material = _gameObject.GetComponent<Renderer>().material;
+            ShaderMaintainer.Material = _gameObject.GetComponent<Renderer>().material;
+
+            _collisionDetector = collisionDetector;
+            _collisionDetector.OnCollided += Die;
         }
 
         private void Turn()
@@ -78,6 +81,11 @@ namespace Project.Game
         {
             _movementSpeed = speed;
             UpdateVelocity();
+        }
+
+        private void Die()
+        {
+            OnDied?.Invoke();
         }
     }
 }

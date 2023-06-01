@@ -58,9 +58,10 @@
                 new ObstacleSpawnerDataCalculatorRight(_rightSpawnerConfig, _gameCamera.ControlledCamera, _gameCamera.ViewportDepth)
             };
 
-            var output = new ObstacleSpawnerDataViewport[3];
+            const int len = 3;
+            var output = new ObstacleSpawnerDataViewport[len];
 
-            for (var i = 0; i < 3; i++)
+            for (var i = 0; i < len; i++)
                 output[i] = new ObstacleSpawnerDataViewport(
                     configs[i],
                     _obstaclePooler,

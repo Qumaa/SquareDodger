@@ -4,5 +4,8 @@
     {
         void FixedUpdate();
         void Update();
+        void Pause();
+        void Resume();
+        void Finish();
     }
 }

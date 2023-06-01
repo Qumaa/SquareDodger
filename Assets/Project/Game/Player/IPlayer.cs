@@ -6,6 +6,7 @@ namespace Project.Game
     public interface IPlayer : IUpdatable
     {
         public event Action OnTurned;
+        public event Action OnDied;
         public Transform Transform { get; }
         public IPlayerInputService InputService { get; set; }
         IPlayerShaderMaintainer ShaderMaintainer { get; }

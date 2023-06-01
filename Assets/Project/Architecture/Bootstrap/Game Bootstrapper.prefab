@@ -44,6 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d3db25623bf08f4191872e5822420a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cameraConfig: {fileID: 11400000, guid: 6559751f66dd64d4a91543865ffb8fe5, type: 2}
-  _managerConfig: {fileID: 11400000, guid: 57ce8b500c5ea334eaeaa756ac2aae50, type: 2}
-  _playerConfig: {fileID: 11400000, guid: c6c7763026eabc043b71724812a84c37, type: 2}
+  _gameConfig: {fileID: 11400000, guid: 95caab64dd963224d8a072dd533b0f49, type: 2}

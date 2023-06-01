@@ -6,13 +6,16 @@ namespace Project.Game
     {
         private readonly Camera _camera;
         private Vector2 _positionOffset;
-        private IPlayer _player;
+        private Transform _playerTransform;
+        private float _playerBlendingRadius;
 
-        public ObstacleDespawnerViewportShader(Camera viewportCamera, Vector2 positionOffset, IPlayer player)
+        public ObstacleDespawnerViewportShader(Camera viewportCamera, Vector2 positionOffset, Transform playerTransform,
+            float playerBlendingRadius)
         {
             _camera = viewportCamera;
             _positionOffset = positionOffset;
-            _player = player;
+            _playerTransform = playerTransform;
+            _playerBlendingRadius = playerBlendingRadius;
         }
 
         public void DespawnNecessaryObstacles(IObstacle[] obstacles)
@@ -29,12 +32,12 @@ namespace Project.Game
 
         private bool ShouldDespawn(IObstacle obstacle) =>
             IsBelowScreen(obstacle) &&
-            DoesntBlendPlayer(obstacle, _player);
+            DoesntBlendPlayer(obstacle);
 
         private bool IsBelowScreen(IObstacle obstacle) =>
             _camera.WorldToViewportPoint(obstacle.Position + _positionOffset).y < 0;
 
-        private bool DoesntBlendPlayer(IObstacle obstacle, IPlayer player) =>
-            Vector2.Distance(obstacle.Position, player.Transform.position) > player.ShaderMaintainer.BlendingRadius;
+        private bool DoesntBlendPlayer(IObstacle obstacle) =>
+            Vector2.Distance(obstacle.Position, _playerTransform.position) > _playerBlendingRadius;
     }
 }
