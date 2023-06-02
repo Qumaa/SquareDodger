@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Project.Game;
-
-namespace Project.Game
+﻿namespace Project.Game
 {
     public interface IObstacleSpawner
     {

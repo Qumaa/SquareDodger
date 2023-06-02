@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Project.Game
@@ -32,7 +29,7 @@ namespace Project.Game
             // TODO: move to bootstrap
             _obstaclePooler = new ObstaclePooler();
             _obstacleFactory = new ObstacleFactory(_obstaclePrefab.gameObject);
-            _obstacleDespawner = new ObstacleDespawnerViewport(_viewportCamera);
+            _obstacleDespawner = new ObstacleDespawnerViewport(_viewportCamera, new Vector2(0.707f, 0.707f) * _obstaclePrefab.Size);
 
             var data = CreateSpawnersData();
             CreateSpawners(data);
@@ -40,8 +37,11 @@ namespace Project.Game
 
         private void Update()
         {
-            foreach (var spawner in _spawners)
+            for (int i = 0; i < _spawners.Length; i++)
+            {
+                var spawner = _spawners[i];
                 _obstacleDespawner.DespawnNecessaryObstacles(spawner.ActiveObstacles);
+            }
         }
 
         private ObstacleSpawnerDataViewport[] CreateSpawnersData()
@@ -88,32 +88,5 @@ namespace Project.Game
                 spawner.RegisterSpawnedObstacles();
             }
         }
-    }
-
-    public class ObstacleDespawnerViewport : IObstacleDespawner
-    {
-        private readonly Camera _camera;
-
-        public ObstacleDespawnerViewport(Camera viewportCamera)
-        {
-            _camera = viewportCamera;
-        }
-
-        public void DespawnNecessaryObstacles(IObstacle[] obstacles)
-        {
-            var count = obstacles.Length;
-
-            for (var i = count - 1; i >= 0; i--)
-                if (IsBelowScreen(obstacles[i].Position))
-                    obstacles[i].Despawn();
-        }
-
-        private bool IsBelowScreen(Vector2 obstaclePosition) =>
-            _camera.WorldToViewportPoint(obstaclePosition).y < 0;
-    }
-
-    public interface IObstacleDespawner
-    {
-        void DespawnNecessaryObstacles(IObstacle[] obstacles);
     }
 }
