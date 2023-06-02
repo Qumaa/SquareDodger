@@ -1,0 +1,22 @@
+.back {
+    width: 100%;
+    height: 100%;
+}
+
+.music {
+    width: 10%;
+    height: 10%;
+    justify-content: center;
+    align-items: center;
+    right: auto;
+    left: 15%;
+    bottom: auto;
+    top: 25%;
+}
+
+.buttonset {
+    width: 5%;
+    height: 5%;
+    top: -5%;
+    right: -5%;
+}

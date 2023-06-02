@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Project/Menu/Settings.uss?fileID=7433441132597879392&amp;guid=e22d3c46e59604f4b8be986b6fd5bfc4&amp;type=3#Settings" />
+    <ui:VisualElement name="root" class="back">
+        <ui:MinMaxSlider picking-mode="Ignore" label="Music" min-value="10" max-value="12" low-limit="-10" high-limit="40" class="music" />
+        <ui:Button text="Button" display-tooltip-when-elided="true" name="exit" class="buttonset" />
+    </ui:VisualElement>
+</ui:UXML>

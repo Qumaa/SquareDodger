@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Project/Menu/Menu.uss?fileID=7433441132597879392&amp;guid=8c37aad1b4347a34fa0482e77e9a34ee&amp;type=3#Menu" />
+    <ui:VisualElement name="root" class="backSettings">
+        <ui:VisualElement name="backgroundImage" class="backgroundSettings">
+            <ui:VisualElement name="root" style="bottom: -20%; left: 45%; right: 20px; justify-content: center; align-items: center;">
+                <ui:Button text="play" display-tooltip-when-elided="true" name="play" class="buttonPlay" />
+            </ui:VisualElement>
+            <ui:VisualElement name="logo" class="logoSettings" style="top: -20%;" />
+            <ui:VisualElement name="exit" class="buttonExit" style="height: 23px; right: 132px;">
+                <ui:Button text="Exit" display-tooltip-when-elided="true" name="exit" style="height: 19px; width: 84px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="settingsroot" class="buttonSettings" style="height: 37px; width: 92px;">
+            <ui:Button text="Settings" display-tooltip-when-elided="true" name="settings" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
