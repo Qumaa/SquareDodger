@@ -1,48 +1,69 @@
-﻿using Project.Game;
+﻿using Project.UI;
 using UnityEngine;
 
 namespace Project.Architecture
 {
     public class Game : IGame
     {
-        private IGameCamera _gameCamera;
-        private IPlayer _player;
-        private IPlayerShaderMaintainer _shaderMaintainer;
-        private IObstacleManager _obstacleManager;
+        private IGameLoader _gameLoader;
+        private IGameStateMachine _stateMachine;
 
-        public Game(IPlayer player, IPlayerShaderMaintainer shaderMaintainer, IGameCamera gameCamera,
-            IObstacleManager obstacleManager)
+        private Camera _camera;
+
+        public IGameplay Gameplay { get; set; }
+        public IMainMenu MainMenu { get; set; }
+
+        public Game(IGameLoader gameLoader, Camera camera)
         {
-            _gameCamera = gameCamera;
-            _player = player;
-            _shaderMaintainer = shaderMaintainer;
-            _obstacleManager = obstacleManager;
+            _gameLoader = gameLoader;
+            _camera = camera;
+            InitializeStateMachine();
         }
 
-        public void FixedUpdate()
+        public void Initialize()
         {
-            _gameCamera.Update(Time.deltaTime);
+            MainMenu.SetCamera(_camera);
+            MainMenu.OnGameStartPressed += HandleGameStart;
         }
 
-        public void Update()
+        private void HandleGameStart()
         {
-            _obstacleManager.Update(Time.deltaTime);
-            _shaderMaintainer.UpdateBuffer(_obstacleManager.ActiveObstacles);
+            MainMenu.Hide();
+            Gameplay.Resume();
         }
 
-        public void Pause()
+        public void Run()
         {
-            Debug.Log("pause");
+            _stateMachine.SetState<BootstrapState>();
         }
 
-        public void Resume()
+        private void InitializeStateMachine()
         {
-            Debug.Log("resume");
+            _stateMachine = new GameStateMachine();
+            InitializeStates();
         }
 
-        public void Finish()
+        private void InitializeStates()
         {
-            Debug.Log("finish");
+            var bootstrap = new BootstrapState(_stateMachine);
+            var initializeMenu = new InitializeMenuState(_stateMachine, _gameLoader, this);
+            var menuState = new MenuState(_stateMachine);
+            var gameLoop = new GameLoopState(_stateMachine);
+
+            _stateMachine.AddState(bootstrap)
+                .AddState(initializeMenu)
+                .AddState(menuState)
+                .AddState(gameLoop);
+        }
+
+        public void Update(float timeStep)
+        {
+            Gameplay.Update(timeStep);
+        }
+
+        public void FixedUpdate(float fixedTimeStep)
+        {
+            Gameplay.FixedUpdate(fixedTimeStep);
         }
     }
 }

@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using Project.Architecture;
+using UnityEngine;
 
 namespace Project.Game
 {
-    public class PlayerShaderMaintainer : IPlayerShaderMaintainer
+    public class PlayerShaderMaintainer : PausableAndResettable, IPlayerShaderMaintainer
     {
         private const string _MATERIAL_BLENDING_RADIUS_NAME = "_BlendingRadius";
         private const string _MATERIAL_BLENDING_WIDTH_NAME = "_BlendingLength";
@@ -12,7 +13,7 @@ namespace Project.Game
         private readonly int _blendingLengthNameId = Shader.PropertyToID(_MATERIAL_BLENDING_WIDTH_NAME);
         private const int _STRIDE = 8; // vector2 size in bytes
 
-        private ComputeBuffer _buffer;
+        private ComputeBuffer _allocatedBuffer;
         private int _allocatedBufferLength;
         private Material _material;
 
@@ -24,12 +25,6 @@ namespace Project.Game
 
         public float BlendingRadius { get; private set; }
 
-
-        public PlayerShaderMaintainer()
-        {
-            _allocatedBufferLength = 0;
-        }
-
         private void UpdateMaterial(Material material)
         {
             _material = material;
@@ -38,6 +33,9 @@ namespace Project.Game
 
         public void UpdateBuffer(IObstacle[] data)
         {
+            if (_isPaused)
+                return;
+            
             var bufferDataLength = data.Length + 1;
             
             if (bufferDataLength > _allocatedBufferLength)
@@ -51,7 +49,13 @@ namespace Project.Game
             for (var i = 0; i < data.Length; i++)
                 bufferData[i + 1] = data[i].Position;
             
-            _buffer.SetData(bufferData);
+            _allocatedBuffer.SetData(bufferData);
+        }
+
+        protected override void OnReset()
+        {
+            base.OnReset();
+            Dispose();
         }
 
         private ComputeBuffer AllocateBuffer(int bufferLength)
@@ -62,14 +66,51 @@ namespace Project.Game
 
         private void ReallocateBuffer(int bufferLength)
         {
-            _buffer?.Release();
-            _buffer = AllocateBuffer(bufferLength);
-            Material.SetBuffer(_bufferNameId, _buffer);
+            _allocatedBuffer?.Release();
+            _allocatedBuffer = AllocateBuffer(bufferLength);
+            Material.SetBuffer(_bufferNameId, _allocatedBuffer);
         }
 
         public void Dispose()
         {
-            _buffer?.Dispose();
+            _allocatedBuffer?.Dispose();
+        }
+    }
+    
+    public class PausableAndResettable : IPausableAndResettable
+    {
+        protected bool _isPaused { get; private set; }
+        
+        public void Pause()
+        {
+            _isPaused = true;
+            OnPaused();
+        }
+
+        protected virtual void OnPaused()
+        {
+        }
+
+        public void Resume()
+        {
+            _isPaused = false;
+            OnResumed();
+        }
+
+        protected virtual void OnResumed()
+        {
+        }
+
+        public void Reset()
+        {
+            if (_isPaused)
+                Resume();
+
+            OnReset();
+        }
+
+        protected virtual void OnReset()
+        {
         }
     }
 }

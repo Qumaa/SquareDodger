@@ -2,10 +2,10 @@
 
 namespace Project.Game
 {
-    public class GameCamera : IGameCamera
+    public class GameCamera : PausableAndResettable, IGameCamera
     {
         private Vector2 _position;
-        private ProceduralMotionSystemVector2 _motionSystem;
+        private ProceduralMotionSystem<Vector2> _motionSystem;
         private ICameraOffsetCalculator _offsetCalculator;
 
         private Transform _followTarget;
@@ -21,31 +21,42 @@ namespace Project.Game
         }
 
         public Camera ControlledCamera => _controlledCamera;
+        public Transform Target { get; set; }
         public float ViewportDepth => _viewportDepth;
 
         public GameCamera(Camera controlledCamera, float viewportDepth, ProceduralMotionSystemVector2 motionSystem,
-            ICameraOffsetCalculator offsetCalculator, Transform followTarget, float bottomOffset)
+            ICameraOffsetCalculator offsetCalculator, float bottomOffset)
         {
             _motionSystem = motionSystem;
             _offsetCalculator = offsetCalculator;
-            _followTarget = followTarget;
             _controlledCamera = controlledCamera;
             _viewportDepth = viewportDepth;
             _bottomOffset = bottomOffset;
+        }
+
+        public void FixedUpdate(float fixedTimeStep)
+        {
+            if (_isPaused)
+                return;
+            
+            Position = _motionSystem
+                .MakeStep(fixedTimeStep, new ProceduralMotionSystemOperandVector2(GetPositionWithOffset()))
+                .Value;
+        }
+
+        protected override void OnReset()
+        {
+            ResetPosition();
+        }
+
+        private void ResetPosition()
+        {
+            SetPosition(GetPositionWithOffset());
             
             _motionSystem.SetInitialValue(
                 new ProceduralMotionSystemOperandVector2(Position),
                 new ProceduralMotionSystemOperandVector2()
             );
-            
-            ResetPosition();
-        }
-
-        public void Update(float timeStep)
-        {
-            Position = _motionSystem
-                .MakeStep(timeStep, new ProceduralMotionSystemOperandVector2(GetPositionWithOffset()))
-                .Value;
         }
 
         private void SetPosition(Vector2 position)
@@ -54,10 +65,7 @@ namespace Project.Game
             _controlledCamera.transform.position = new Vector3(_position.x, _position.y, -_viewportDepth);
         }
 
-        private void ResetPosition() =>
-            SetPosition(GetPositionWithOffset());
-
         private Vector2 GetPositionWithOffset() =>
-            (Vector2)_followTarget.transform.position + _offsetCalculator.CalculateOffset(_bottomOffset);
+            (Vector2)Target.transform.position + _offsetCalculator.CalculateOffset(_bottomOffset);
     }
 }

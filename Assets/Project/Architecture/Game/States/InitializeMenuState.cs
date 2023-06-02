@@ -1,33 +1,24 @@
-﻿using System;
-using UnityEngine.SceneManagement;
-
-namespace Project.Architecture
+﻿namespace Project.Architecture
 {
     public class InitializeMenuState : GameState
     {
-        public InitializeMenuState(IGameStateMachine stateMachine) : base(stateMachine)
+        private IGameLoader _gameLoader;
+        private IGame _game;
+
+        public InitializeMenuState(IGameStateMachine stateMachine, IGameLoader gameLoader, Game game) : base(stateMachine)
         {
+            _gameLoader = gameLoader;
+            _game = game;
         }
 
         public override void Enter()
         {
-            LoadMenu();
-            LoadGame();
-        }
-
-        private void LoadGame()
-        {
-            SceneManager.LoadScene(SceneNames.GAME, LoadSceneMode.Additive);
-        }
-        
-        private void LoadMenu()
-        {
-            SceneManager.LoadScene(SceneNames.MENU, LoadSceneMode.Additive);
+            _gameLoader.Load(_game);
+            _stateMachine.SetState<MenuState>();
         }
 
         public override void Exit()
         {
-            throw new NotImplementedException();
         }
     }
 }

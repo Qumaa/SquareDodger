@@ -3,56 +3,43 @@ using UnityEngine;
 
 namespace Project.Game
 {
-    public class Player : IPlayer
+    public class Player : PausableAndResettable, IPlayer
     {
-        // moving
-        public event Action OnTurned;
-        public event Action OnDied;
-        private bool _directionRight;
+        private bool _movingRight;
         private Rigidbody2D _rigidbody;
         private IPlayerInputService _inputService;
+        protected GameObject _gameObject;
+
+        private float _movementSpeed;
+        private float _movementSpeedBeforePausing;
+
+        public Transform Transform => _gameObject.transform;
         public IPlayerInputService InputService
         {
             get => _inputService;
-            set => UpdateInputService(value);
+            set => SetInputService(value);
         }
-        
-        // shader
-        private IObstacleManager _obstacleManager;
-        public IPlayerShaderMaintainer ShaderMaintainer { get; }
-
-        // others
-        private IPlayerCollisionDetector _collisionDetector;
-        private GameObject _gameObject;
-        private float _movementSpeed;
-        public Transform Transform => _gameObject.transform;
         public float MovementSpeed
         {
             get => _movementSpeed;
-            set => UpdateMovementSpeed(value);
+            set => SetMovementSpeed(value);
         }
 
-        public void Update(float timeStep)
-        {
-            ShaderMaintainer.UpdateBuffer(_obstacleManager.ActiveObstacles);
-        }
+        public event Action OnTurned;
+        public event Action OnDied;
 
-        public Player(GameObject playerObject, IPlayerShaderMaintainer shaderMaintainer, IPlayerCollisionDetector collisionDetector)
+        public Player(GameObject playerObject, IPlayerCollisionDetector collisionDetector)
         {
             _gameObject = playerObject;
             _rigidbody = _gameObject.GetComponent<Rigidbody2D>();
-            
-            ShaderMaintainer = shaderMaintainer;
-            ShaderMaintainer.Material = _gameObject.GetComponent<Renderer>().material;
 
-            _collisionDetector = collisionDetector;
-            _collisionDetector.OnCollided += Die;
+            collisionDetector.OnCollided += Die;
         }
 
         private void Turn()
         {
+            _movingRight = !_movingRight;
             UpdateVelocity();
-            _directionRight = !_directionRight;
 
             OnTurned?.Invoke();
         }
@@ -61,31 +48,49 @@ namespace Project.Game
             _rigidbody.velocity = CalculateVelocity();
 
         private Vector2 CalculateVelocity() =>
-            _directionRight ?
+            _movingRight ?
                 new Vector2(MovementSpeed, 0) :
                 new Vector2(0, MovementSpeed);
-
-        private void UpdateInputService(IPlayerInputService newService)
-        {
-            if (_inputService == newService)
-                return;
-            
-            if (_inputService != null)
-                _inputService.OnTurnInput -= Turn;
-            
-            _inputService = newService;
-            _inputService.OnTurnInput += Turn;
-        }
-
-        private void UpdateMovementSpeed(float speed)
-        {
-            _movementSpeed = speed;
-            UpdateVelocity();
-        }
 
         private void Die()
         {
             OnDied?.Invoke();
+        }
+
+        private void SetInputService(IPlayerInputService value)
+        {
+            if (_inputService == value)
+                return;
+
+            if (_inputService != null)
+                _inputService.OnTurnInput -= Turn;
+
+            _inputService = value;
+            _inputService.OnTurnInput += Turn;
+        }
+
+        private void SetMovementSpeed(float value)
+        {
+            _movementSpeed = value;
+            UpdateVelocity();
+        }
+
+        protected override void OnPaused()
+        {
+            _movementSpeedBeforePausing = MovementSpeed;
+            _movementSpeed = 0;
+            UpdateVelocity();
+        }
+
+        protected override void OnResumed()
+        {
+            _movementSpeed = _movementSpeedBeforePausing;
+            UpdateVelocity();
+        }
+
+        protected override void OnReset()
+        {
+            Transform.position = Vector3.zero;
         }
     }
 }

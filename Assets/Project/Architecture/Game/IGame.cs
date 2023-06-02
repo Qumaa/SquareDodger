@@ -1,11 +1,12 @@
-﻿namespace Project.Architecture
+﻿using Project.UI;
+
+namespace Project.Architecture
 {
-    public interface IGame
+    public interface IGame : IUpdatableAnFixedUpdatable
     {
-        void FixedUpdate();
-        void Update();
-        void Pause();
-        void Resume();
-        void Finish();
+        IGameplay Gameplay { get; set; }
+        IMainMenu MainMenu { get; set; }
+        void Initialize();
+        void Run();
     }
 }

@@ -2,50 +2,64 @@
 
 namespace Project.Game
 {
-    public class ObstacleSpawnerViewport : IObstacleSpawnerViewport
+    public class ObstacleSpawnerViewport : IObstacleSpawner
     {
-        private readonly ObstacleSpawnerDataViewport _data;
         private List<IObstacle> _activeObstacles;
+        
+        private ObstacleSpawnerConfigViewport _config;
+        private IPooler<IObstacle> _pooler;
+        private IFactory<IObstacle> _factory;
+        private IObstacleSpawnerDataCalculator _calculator;
 
         public int SpawnedObstacles { get; private set; }
-        public bool ShouldSpawn => SpawnedObstacles < _data.Config.ObstaclesToSpawn;
-        public float SpawningInterval => _data.Config.SpawnInterval;
+        public bool ShouldSpawn => SpawnedObstacles < _config.ObstaclesToSpawn;
+        public float SpawningInterval => _config.SpawnInterval;
         public IObstacle[] ActiveObstacles { get; private set; }
 
-        public ObstacleSpawnerDataViewport Data => _data;
-
-        public ObstacleSpawnerViewport(ObstacleSpawnerDataViewport data)
+        public ObstacleSpawnerViewport(ObstacleSpawnerConfigViewport config, IPooler<IObstacle> pooler,
+            IFactory<IObstacle> factory, IObstacleSpawnerDataCalculator calculator)
         {
-            _data = data;
-            _activeObstacles = new List<IObstacle>(_data.Config.ObstaclesToSpawn);
+            _config = config;
+            _pooler = pooler;
+            _factory = factory;
+            _calculator = calculator;
+            _activeObstacles = new List<IObstacle>(_config.ObstaclesToSpawn);
             UpdateActiveObstaclesProperty();
         }
 
         public void SpawnAndInit()
         {
-            IObstacle spawned;
+            var spawned = SpawnObstacle();
+            InitObstacle(spawned);
+        }
 
-            if (!_data.Pooler.TryPop(out spawned))
-                spawned = _data.Factory.CreateNew();
-
-            spawned.OnDespawned += HandleDespawned;
-            spawned.Position = _data.Calculator.CalculatePosition();
-            spawned.Velocity = _data.Calculator.CalculateVelocity();
+        private IObstacle SpawnObstacle()
+        {
+            if (!_pooler.TryPop(out var spawned))
+                spawned = _factory.CreateNew();
 
             SpawnedObstacles++;
             _activeObstacles.Add(spawned);
             UpdateActiveObstaclesProperty();
+            return spawned;
+        }
+
+        private void InitObstacle(IObstacle spawned)
+        {
+            spawned.Init();
+            spawned.OnDespawned += HandleDespawned;
+            spawned.Position = _calculator.CalculatePosition();
+            spawned.Velocity = _calculator.CalculateVelocity();
         }
 
         private void HandleDespawned(IObstacle despawned)
         {
             despawned.OnDespawned -= HandleDespawned;
             
-            _data.Pooler.Push(despawned);
             _activeObstacles.Remove(despawned);
             UpdateActiveObstaclesProperty();
             
-            SpawnedObstacles = --SpawnedObstacles;
+            SpawnedObstacles--;
         }
 
         private void UpdateActiveObstaclesProperty() =>

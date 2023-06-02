@@ -7,6 +7,8 @@ namespace Project.Game
     {
         private bool _active;
         private Rigidbody2D _rigidbody;
+
+        private Vector2 _velocityBeforePausing;
         
         public event Action<IObstacle> OnDespawned;
 
@@ -30,14 +32,17 @@ namespace Project.Game
             _rigidbody = GetComponent<Rigidbody2D>();
         }
 
-        public void Despawn() =>
-            OnDespawned?.Invoke(this);
-
-        void IPoolerTarget.PoppedFromPool() =>
+        public void Init()
+        {
             UpdateActiveStatus(true);
+        }
 
-        void IPoolerTarget.PushedToPool() =>
+        public void Despawn()
+        {
             UpdateActiveStatus(false);
+            OnDespawned?.Invoke(this);
+        }
+
 
         private void UpdateActiveStatus(bool status)
         {
@@ -47,6 +52,25 @@ namespace Project.Game
             _active = status;
             
             gameObject.SetActive(_active);
+        }
+
+        public void Pause()
+        {
+            _velocityBeforePausing = Velocity;
+            Velocity = Vector2.zero;
+        }
+
+        public void Resume()
+        {
+            Velocity = _velocityBeforePausing;
+        }
+
+        public void PoppedFromPool()
+        {
+        }
+
+        public void PushedToPool()
+        {
         }
     }
 }

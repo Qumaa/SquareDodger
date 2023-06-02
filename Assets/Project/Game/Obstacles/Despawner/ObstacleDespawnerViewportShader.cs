@@ -2,20 +2,21 @@
 
 namespace Project.Game
 {
-    public class ObstacleDespawnerViewportShader : IObstacleDespawner
+    public class ObstacleDespawnerViewportShader : IObstacleDespawnerViewportShader
     {
         private readonly Camera _camera;
         private Vector2 _positionOffset;
-        private Transform _playerTransform;
-        private float _playerBlendingRadius;
+        private readonly ObstaclePooler _obstaclePooler;
 
-        public ObstacleDespawnerViewportShader(Camera viewportCamera, Vector2 positionOffset, Transform playerTransform,
-            float playerBlendingRadius)
+        public Transform Player { get; set; }
+        public float PlayerBlendingRadius { get; set; }
+
+        public ObstacleDespawnerViewportShader(Camera viewportCamera, Vector2 positionOffset,
+            ObstaclePooler obstaclePooler)
         {
             _camera = viewportCamera;
             _positionOffset = positionOffset;
-            _playerTransform = playerTransform;
-            _playerBlendingRadius = playerBlendingRadius;
+            _obstaclePooler = obstaclePooler;
         }
 
         public void DespawnNecessaryObstacles(IObstacle[] obstacles)
@@ -27,7 +28,13 @@ namespace Project.Game
 
             for (int i = count - 1; i >= 0; i--)
                 if (ShouldDespawn(obstacles[i]))
-                    obstacles[i].Despawn();
+                    DespawnSingle(obstacles[i]);
+        }
+
+        public void DespawnSingle(IObstacle obstacle)
+        {
+            _obstaclePooler.Push(obstacle);
+            obstacle.Despawn();
         }
 
         private bool ShouldDespawn(IObstacle obstacle) =>
@@ -38,6 +45,6 @@ namespace Project.Game
             _camera.WorldToViewportPoint(obstacle.Position + _positionOffset).y < 0;
 
         private bool DoesntBlendPlayer(IObstacle obstacle) =>
-            Vector2.Distance(obstacle.Position, _playerTransform.position) > _playerBlendingRadius;
+            Vector2.Distance(obstacle.Position, Player.position) > PlayerBlendingRadius;
     }
 }
