@@ -5,23 +5,30 @@ namespace Project.Architecture
 {
     public class Game : IGame
     {
-        private IGameLoader _gameLoader;
         private IGameStateMachine _stateMachine;
 
+        private GameConfig _gameConfig;
         private Camera _camera;
+        private IDisposer _disposer;
+        private GameObject _uiPrefab;
 
         public IGameplay Gameplay { get; set; }
         public IMainMenu MainMenu { get; set; }
+        public IGameLoader GameLoader { get; set; }
 
-        public Game(IGameLoader gameLoader, Camera camera)
+        public Game(GameConfig gameConfig, Camera camera, IDisposer disposer, GameObject uiPrefab)
         {
-            _gameLoader = gameLoader;
+            _gameConfig = gameConfig;
             _camera = camera;
+            _disposer = disposer;
+            _uiPrefab = uiPrefab;
             InitializeStateMachine();
         }
 
-        public void Initialize()
+        public void Run()
         {
+            GameLoader.Load(this);
+            
             MainMenu.SetCamera(_camera);
             MainMenu.OnGameStartPressed += HandleGameStart;
         }
@@ -32,7 +39,7 @@ namespace Project.Architecture
             Gameplay.Resume();
         }
 
-        public void Run()
+        public void Initialize()
         {
             _stateMachine.SetState<BootstrapState>();
         }
@@ -45,8 +52,8 @@ namespace Project.Architecture
 
         private void InitializeStates()
         {
-            var bootstrap = new BootstrapState(_stateMachine);
-            var initializeMenu = new InitializeMenuState(_stateMachine, _gameLoader, this);
+            var bootstrap = new BootstrapState(_stateMachine, this, _disposer, _gameConfig, _uiPrefab, _camera);
+            var initializeMenu = new InitializeMenuState(_stateMachine, this);
             var menuState = new MenuState(_stateMachine);
             var gameLoop = new GameLoopState(_stateMachine);
 

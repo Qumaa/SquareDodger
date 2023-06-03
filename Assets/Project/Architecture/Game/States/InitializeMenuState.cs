@@ -2,18 +2,16 @@
 {
     public class InitializeMenuState : GameState
     {
-        private IGameLoader _gameLoader;
         private IGame _game;
 
-        public InitializeMenuState(IGameStateMachine stateMachine, IGameLoader gameLoader, Game game) : base(stateMachine)
+        public InitializeMenuState(IGameStateMachine stateMachine, IGame game) : base(stateMachine)
         {
-            _gameLoader = gameLoader;
             _game = game;
         }
 
         public override void Enter()
         {
-            _gameLoader.Load(_game);
+            _game.Run();
             _stateMachine.SetState<MenuState>();
         }
 

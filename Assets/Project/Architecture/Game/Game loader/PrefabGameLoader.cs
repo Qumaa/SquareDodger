@@ -6,7 +6,7 @@ namespace Project.Architecture
     {
         private IFactory<IGameplay> _gameFactory;
         private IFactory<IMainMenu> _menuFactory;
-
+        
         public PrefabGameLoader(IFactory<IGameplay> gameFactory, IFactory<IMainMenu> menuFactory)
         {
             _gameFactory = gameFactory;
@@ -17,7 +17,6 @@ namespace Project.Architecture
         {
             game.Gameplay = _gameFactory.CreateNew();
             game.MainMenu = _menuFactory.CreateNew();
-            game.Initialize();
         }
     }
 }

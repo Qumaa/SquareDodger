@@ -6,7 +6,8 @@ namespace Project.Architecture
     {
         IGameplay Gameplay { get; set; }
         IMainMenu MainMenu { get; set; }
-        void Initialize();
+        IGameLoader GameLoader { get; set; }
         void Run();
+        void Initialize();
     }
 }
