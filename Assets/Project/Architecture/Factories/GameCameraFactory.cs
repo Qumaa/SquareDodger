@@ -1,27 +1,25 @@
 ﻿using Project.Game;
-using UnityEngine;
 
 namespace Project.Architecture
 {
     public struct GameCameraFactory : IFactory<IGameCamera>
     {
         private GameCameraConfig _cameraConfig;
-        private Camera _controlledCamera;
+        private ICameraController _cameraController;
 
-        public GameCameraFactory(GameCameraConfig cameraConfig, Camera controlledCamera)
+        public GameCameraFactory(GameCameraConfig cameraConfig, ICameraController cameraController)
         {
             _cameraConfig = cameraConfig;
-            _controlledCamera = controlledCamera;
+            _cameraController = cameraController;
         }
 
         public IGameCamera CreateNew()
         {
             var gameCamera = new GameCamera(
-                _controlledCamera,
-                _cameraConfig.ViewportDepth,
+                _cameraController,
                 new ProceduralMotionSystemVector2(_cameraConfig.MotionSpeed, _cameraConfig.MotionDamping,
                     _cameraConfig.MotionResponsiveness),
-                new CameraOffsetCalculatorViewport(_controlledCamera),
+                new CameraOffsetCalculatorViewport(_cameraController.ControlledCamera),
                 _cameraConfig.BottomOffset
             );
 

@@ -1,0 +1,41 @@
+﻿using UnityEngine;
+
+namespace Project.Game
+{
+    public class CameraController : ICameraController
+    {
+        public Vector2 Position
+        {
+            get => ControlledCamera.transform.position;
+            set => SetPosition(value);
+        }
+
+
+        private float _widthInUnits;
+        public float WidthInUnits
+        {
+            get => _widthInUnits;
+            set => SetWidthInUnits(value);
+        }
+
+        public Camera ControlledCamera { get; }
+        public float ViewportDepth { get; }
+
+
+        public CameraController(Camera controlledCamera, float viewportDepth)
+        {
+            ControlledCamera = controlledCamera;
+            ViewportDepth = viewportDepth;
+            UpdateViewportDepth();
+        }
+
+        private void SetWidthInUnits(float units) =>
+            ControlledCamera.orthographicSize = units / 2f;
+        
+        private void UpdateViewportDepth() =>
+            SetPosition(Position);
+
+        private void SetPosition(Vector2 position) =>
+            ControlledCamera.transform.position = new Vector3(position.x, position.y, -ViewportDepth);
+    }
+}

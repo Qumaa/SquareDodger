@@ -4,13 +4,14 @@ namespace Project.Game
 {
     public class PlayerWithShader : Player, IPlayerWithShader
     {
-        private IObstacleManager _obstacleManager;
         private IPlayerShaderMaintainer _shaderMaintainer;
         public IPlayerShaderMaintainer ShaderMaintainer
         {
             get => _shaderMaintainer;
             set => SetShaderMaintainer(value);
         }
+
+        public IObstacleManager ObstaclesSource { get; set; }
 
         public PlayerWithShader(GameObject playerObject, IPlayerCollisionDetector collisionDetector) : 
             base(playerObject, collisionDetector)
@@ -19,7 +20,7 @@ namespace Project.Game
 
         public void Update(float timeStep)
         {
-            _shaderMaintainer.UpdateBuffer(_obstacleManager.ActiveObstacles);
+            _shaderMaintainer.UpdateBuffer(ObstaclesSource.ActiveObstacles);
         }
 
         private void SetShaderMaintainer(IPlayerShaderMaintainer value)

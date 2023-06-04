@@ -4,7 +4,7 @@ namespace Project.Game
 {
     public interface IObstacleDespawnerViewportShader : IObstacleDespawner
     {
-        Transform Player { get; set; }
+        Transform PlayerTransform { get; set; }
         float PlayerBlendingRadius { get; set; }
     }
 }
