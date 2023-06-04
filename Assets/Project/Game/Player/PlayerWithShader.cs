@@ -50,7 +50,6 @@ namespace Project.Game
         {
             _shaderMaintainer = value;
             _shaderMaintainer.Material = _material;
-            _trailRenderer.material = _material;
         }
 
         private void SetTrailLength(float length)
