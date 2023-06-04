@@ -1,4 +1,5 @@
-﻿using Project.UI;
+﻿using Project.Game;
+using Project.UI;
 
 namespace Project.Architecture
 {
@@ -6,7 +7,7 @@ namespace Project.Architecture
     {
         IGameplay Gameplay { get; set; }
         IMainMenu MainMenu { get; set; }
-        IGameLoader GameLoader { get; set; }
+        ICameraController CameraController { get; set; }
         void Run();
         void Initialize();
     }

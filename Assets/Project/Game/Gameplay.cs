@@ -7,27 +7,20 @@ namespace Project.Architecture
     public class Gameplay : PausableAndResettable, IGameplay
     {
         private IGameCamera _gameCamera;
-        private IPlayer _player;
-        private IPlayerShaderMaintainer _shaderMaintainer;
+        private IPlayerWithShader _player;
         private IObstacleManager _obstacleManager;
 
         private IPausableAndResettable[] _gameComposites;
 
-        public Gameplay(IPlayer player, IPlayerShaderMaintainer shaderMaintainer, IGameCamera gameCamera,
-            IObstacleManager obstacleManager)
+        public Gameplay(IPlayerWithShader player, IGameCamera gameCamera,
+            IObstacleManager obstacleManager, IGameFinisher gameFinisher)
         {
             _gameCamera = gameCamera;
             _player = player;
-            _shaderMaintainer = shaderMaintainer;
             _obstacleManager = obstacleManager;
 
-            _gameComposites = new IPausableAndResettable[]
-            {
-                _gameCamera,
-                _player,
-                _shaderMaintainer,
-                _obstacleManager
-            };
+            InitializeComposites();
+            InitializeFinisher(gameFinisher);
         }
 
         public void FixedUpdate(float fixedTimeStep)
@@ -43,8 +36,8 @@ namespace Project.Architecture
             if (_isPaused)
                 return;
             
-            _obstacleManager.Update(Time.deltaTime);
-            _shaderMaintainer.UpdateBuffer(_obstacleManager.ActiveObstacles);
+            _obstacleManager.Update(timeStep);
+            _player.Update(timeStep);
         }
 
         protected override void OnPaused()
@@ -63,6 +56,22 @@ namespace Project.Architecture
         {
             base.OnResumed();
             ForeachComposite(x => x.Reset());
+        }
+
+        private void InitializeFinisher(IGameFinisher gameFinisher)
+        {
+            gameFinisher.GameToFinish = this;
+            _player.OnDied += gameFinisher.Finish;
+        }
+
+        private void InitializeComposites()
+        {
+            _gameComposites = new IPausableAndResettable[]
+            {
+                _gameCamera,
+                _player,
+                _obstacleManager
+            };
         }
 
         private void ForeachComposite(Action<IPausableAndResettable> action)

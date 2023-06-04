@@ -3,15 +3,13 @@ using UnityEngine;
 
 namespace Project.Architecture
 {
-    public struct PlayerFactory : IFactory<IPlayerWithShader>
+    public struct PlayerWithShaderFactory : IFactory<IPlayerWithShader>
     {
         private PlayerConfig _playerConfig;
-        private IFactory<IPlayerShaderMaintainer> _shaderFactory;
 
-        public PlayerFactory(PlayerConfig playerConfig, IFactory<IPlayerShaderMaintainer> shaderFactory)
+        public PlayerWithShaderFactory(PlayerConfig playerConfig)
         {
             _playerConfig = playerConfig;
-            _shaderFactory = shaderFactory;
         }
 
         public IPlayerWithShader CreateNew()
@@ -23,7 +21,7 @@ namespace Project.Architecture
             var player = new PlayerWithShader(playerObj, collisionDetector)
             {
                 InputService = inputService,
-                MovementSpeed = _playerConfig.MovementSpeed
+                MovementSpeed = _playerConfig.MovementSpeed,
             };
 
             return player;

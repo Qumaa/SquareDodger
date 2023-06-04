@@ -1,4 +1,5 @@
-﻿using Project.UI;
+﻿using Project.Game;
+using Project.UI;
 using UnityEngine;
 
 namespace Project.Architecture
@@ -14,7 +15,7 @@ namespace Project.Architecture
 
         public IGameplay Gameplay { get; set; }
         public IMainMenu MainMenu { get; set; }
-        public IGameLoader GameLoader { get; set; }
+        public ICameraController CameraController { get; set; }
 
         public Game(GameConfig gameConfig, Camera camera, IDisposer disposer, GameObject uiPrefab)
         {
@@ -27,10 +28,18 @@ namespace Project.Architecture
 
         public void Run()
         {
-            GameLoader.Load(this);
-            
             MainMenu.SetCamera(_camera);
             MainMenu.OnGameStartPressed += HandleGameStart;
+        }
+
+        public void Update(float timeStep)
+        {
+            Gameplay.Update(timeStep);
+        }
+
+        public void FixedUpdate(float fixedTimeStep)
+        {
+            Gameplay.FixedUpdate(fixedTimeStep);
         }
 
         private void HandleGameStart()
@@ -61,16 +70,6 @@ namespace Project.Architecture
                 .AddState(initializeMenu)
                 .AddState(menuState)
                 .AddState(gameLoop);
-        }
-
-        public void Update(float timeStep)
-        {
-            Gameplay.Update(timeStep);
-        }
-
-        public void FixedUpdate(float fixedTimeStep)
-        {
-            Gameplay.FixedUpdate(fixedTimeStep);
         }
     }
 }

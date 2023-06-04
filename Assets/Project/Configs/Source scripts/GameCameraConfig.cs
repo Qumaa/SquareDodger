@@ -6,6 +6,7 @@ namespace Project.Game
     public class GameCameraConfig : ScriptableObject
     {
         [SerializeField] private float _viewportDepth;
+        [SerializeField] private float _viewportWidth;
 
         [SerializeField] private float _motionSpeed;
         [SerializeField] private float _motionDamping;
@@ -15,6 +16,8 @@ namespace Project.Game
         [SerializeField] private float _bottomOffset;
 
         public float ViewportDepth => _viewportDepth;
+
+        public float ViewportWidth => _viewportWidth;
 
         public float MotionSpeed => _motionSpeed;
         public float MotionDamping => _motionDamping;

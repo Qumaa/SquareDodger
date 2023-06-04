@@ -8,7 +8,7 @@ namespace Project.Game
         private Vector2 _positionOffset;
         private readonly ObstaclePooler _obstaclePooler;
 
-        public Transform Player { get; set; }
+        public Transform PlayerTransform { get; set; }
         public float PlayerBlendingRadius { get; set; }
 
         public ObstacleDespawnerViewportShader(Camera viewportCamera, Vector2 positionOffset,
@@ -45,6 +45,6 @@ namespace Project.Game
             _camera.WorldToViewportPoint(obstacle.Position + _positionOffset).y < 0;
 
         private bool DoesntBlendPlayer(IObstacle obstacle) =>
-            Vector2.Distance(obstacle.Position, Player.position) > PlayerBlendingRadius;
+            Vector2.Distance(obstacle.Position, PlayerTransform.position) > PlayerBlendingRadius;
     }
 }

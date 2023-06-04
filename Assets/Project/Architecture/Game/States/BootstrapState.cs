@@ -9,7 +9,7 @@ namespace Project.Architecture
         private IDisposer _disposer;
         private GameConfig _gameConfig;
         private GameObject _uiPrefab;
-        private Camera _controlledCamera;
+        private readonly Camera _controlledCamera;
 
         public BootstrapState(IGameStateMachine stateMachine, IGame gameToInit, IDisposer disposer,
             GameConfig gameConfig, GameObject uiPrefab, Camera controlledCamera)
@@ -24,42 +24,48 @@ namespace Project.Architecture
 
         public override void Enter()
         {
-            InitializeServices();
+            InitializeGameServices();
+            LoadGame();
             MoveToMenu();
-        }
-
-        private void InitializeServices()
-        {
-            _gameToInit.GameLoader = CreateGameLoader(_controlledCamera);
-            // sound, input etc.
-        }
-
-        private void MoveToMenu()
-        {
-            _stateMachine.SetState<InitializeMenuState>();
         }
 
         public override void Exit()
         {
             
         }
-        
-        IGameLoader CreateGameLoader(Camera controlledCamera)
+
+        private void InitializeGameServices()
         {
-            return new PrefabGameLoader(CreateGameplayFactory(controlledCamera), new MainMenuFactory(_uiPrefab));
+            _gameToInit.CameraController = CreateCameraController();
+            // sound, input etc.
         }
-        
-        private IFactory<IGameplay> CreateGameplayFactory(Camera controlledCamera)
+
+        private void LoadGame() =>
+            CreateGameLoader().Load(_gameToInit);
+
+        private void MoveToMenu() =>
+            _stateMachine.SetState<InitializeMenuState>();
+
+        private ICameraController CreateCameraController() =>
+            new CameraController(_controlledCamera, _gameConfig.CameraConfig.ViewportDepth)
+            {
+                WidthInUnits = _gameConfig.CameraConfig.ViewportWidth
+            };
+
+        private IGameLoader CreateGameLoader() =>
+            new PrefabGameLoader(CreateGameplayFactory(_gameToInit.CameraController), new MainMenuFactory(_uiPrefab));
+
+        private IFactory<IGameplay> CreateGameplayFactory(ICameraController cameraController)
         {
-            var gameCamera = new GameCameraFactory(_gameConfig.CameraConfig, controlledCamera).CreateNew();
-            
             var shaderFactory = new PlayerShaderMaintainerFactory(_disposer);
-            var playerFactory = new PlayerFactory(_gameConfig.PlayerConfig, shaderFactory);
+            var playerFactory = new PlayerWithShaderFactory(_gameConfig.PlayerConfig);
+            var gameCameraFactory = new GameCameraFactory(_gameConfig.CameraConfig, cameraController);
             var obstacleManagerFactory = CreateObstacleManagerFactory
-                (_gameConfig.ManagerConfig, controlledCamera, _gameConfig.CameraConfig.ViewportDepth);
+                (_gameConfig.ManagerConfig, cameraController.ControlledCamera, _gameConfig.CameraConfig.ViewportDepth);
+            var gameFinisherFactory = new GameFinisherFactory();
 
             var gameplayFactory =
-                new PausedGameplayFactory(shaderFactory, playerFactory, obstacleManagerFactory, gameCamera);
+                new PausedGameplayFactory(shaderFactory, playerFactory, obstacleManagerFactory, gameCameraFactory, gameFinisherFactory);
 
             return gameplayFactory;
         }
