@@ -9,6 +9,7 @@ namespace Project.Game
         private Rigidbody2D _rigidbody;
         private IPlayerInputService _inputService;
         protected GameObject _gameObject;
+        protected TrailRenderer _trailRenderer;
 
         private float _movementSpeed;
         private float _movementSpeedBeforePausing;
@@ -32,12 +33,16 @@ namespace Project.Game
         {
             _gameObject = playerObject;
             _rigidbody = _gameObject.GetComponent<Rigidbody2D>();
+            _trailRenderer = _gameObject.GetComponent<TrailRenderer>();
 
             collisionDetector.OnCollided += Die;
         }
 
         private void Turn()
         {
+            if (_isPaused)
+                return;
+            
             _movingRight = !_movingRight;
             UpdateVelocity();
 

@@ -11,8 +11,11 @@ Shader "Unlit/Player Shader"
     {
         Tags
         {
-            "RenderType"="Opaque"
+            "RenderType"="Transparent"
+            "Queue"="Transparent" 
         }
+        
+        Blend SrcAlpha OneMinusSrcAlpha
 
         Pass
         {
@@ -30,6 +33,7 @@ Shader "Unlit/Player Shader"
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+                float4 color : COLOR;
             };
 
             struct v2f
@@ -37,8 +41,9 @@ Shader "Unlit/Player Shader"
                 float3 worldPos : TEXCOORD0;
                 UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
+                float4 color : COLOR;
             };
-
+            
             float4 _PlayerColor;
             float4 _ObstacleColor;
             float _BlendingRadius;
@@ -49,14 +54,13 @@ Shader "Unlit/Player Shader"
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex);
+                o.color = v.color;
                 UNITY_TRANSFER_FOG(o, o.vertex);
                 return o;
             }
 
             fixed4 frag(v2f i) : SV_Target
             {
-                float4 col = _PlayerColor;
-
                 int width = buffer[0].x;
 
                 float upperBlendingRadius = _BlendingRadius + _BlendingLength;
@@ -69,7 +73,7 @@ Shader "Unlit/Player Shader"
                 }
                 float blend = (lastDist - _BlendingRadius) / (upperBlendingRadius - _BlendingRadius);
                 blend = saturate(blend);
-                col = lerp(_ObstacleColor, _PlayerColor, blend);
+                float4 col = lerp(_ObstacleColor, _PlayerColor, blend) * i.color;
 
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;
