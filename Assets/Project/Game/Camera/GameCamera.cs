@@ -12,6 +12,7 @@ namespace Project.Game
         private ICameraController _cameraController;
 
         public Transform Target { get; set; }
+        public Vector2 Position => _cameraController.Position;
 
         public GameCamera(ICameraController cameraController, ProceduralMotionSystemVector2 motionSystem,
             ICameraOffsetCalculator offsetCalculator, float bottomOffset)

@@ -63,9 +63,10 @@ namespace Project.Architecture
             var obstacleManagerFactory = CreateObstacleManagerFactory
                 (_gameConfig.ManagerConfig, cameraController.ControlledCamera, _gameConfig.CameraConfig.ViewportDepth);
             var gameFinisherFactory = new GameFinisherFactory();
+            var gameBackgroundFactory = CreateGameBackgroundFactory();
 
-            var gameplayFactory =
-                new PausedGameplayFactory(shaderFactory, playerFactory, obstacleManagerFactory, gameCameraFactory, gameFinisherFactory);
+            var gameplayFactory = new PausedGameplayFactory(shaderFactory, playerFactory, obstacleManagerFactory, 
+                gameCameraFactory, gameFinisherFactory, gameBackgroundFactory);
 
             return gameplayFactory;
         }
@@ -83,6 +84,14 @@ namespace Project.Architecture
             var managerFactory = new ObstacleManagerViewportFactory(spawnerFactory, despawner);
 
             return managerFactory;
+        }
+
+        private IFactory<IParticleGameBackground> CreateGameBackgroundFactory()
+        {
+            var particleFactory =
+                new GameBackgroundParticleSystemFactory(_gameConfig.VisualsConfig.BackgroundParticlesPrefab);
+            var backgroundFactory = new ParticleGameBackgroundFactory(particleFactory);
+            return backgroundFactory;
         }
     }
 }

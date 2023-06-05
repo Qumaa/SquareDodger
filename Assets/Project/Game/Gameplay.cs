@@ -1,6 +1,5 @@
 ﻿using System;
 using Project.Game;
-using UnityEngine;
 
 namespace Project.Architecture
 {
@@ -9,15 +8,17 @@ namespace Project.Architecture
         private IGameCamera _gameCamera;
         private IPlayerWithShader _player;
         private IObstacleManager _obstacleManager;
+        private IGameBackground _gameBackground;
 
         private IPausableAndResettable[] _gameComposites;
 
-        public Gameplay(IPlayerWithShader player, IGameCamera gameCamera,
-            IObstacleManager obstacleManager, IGameFinisher gameFinisher)
+        public Gameplay(IPlayerWithShader player, IGameCamera gameCamera, IObstacleManager obstacleManager, 
+            IGameFinisher gameFinisher, IGameBackground gameBackground)
         {
             _gameCamera = gameCamera;
             _player = player;
             _obstacleManager = obstacleManager;
+            _gameBackground = gameBackground;
 
             InitializeComposites();
             InitializeFinisher(gameFinisher);
@@ -28,7 +29,9 @@ namespace Project.Architecture
             if (_isPaused)
                 return;
             
-            _gameCamera.FixedUpdate(Time.deltaTime);
+            _gameCamera.FixedUpdate(fixedTimeStep);
+            //_gameBackground.FixedUpdate(fixedTimeStep);
+            _gameBackground.CenterPosition = _gameCamera.Position;
         }
 
         public void Update(float timeStep)
@@ -38,6 +41,7 @@ namespace Project.Architecture
             
             _obstacleManager.Update(timeStep);
             _player.Update(timeStep);
+            _gameBackground.Update(timeStep);
         }
 
         protected override void OnPaused()
@@ -70,7 +74,8 @@ namespace Project.Architecture
             {
                 _gameCamera,
                 _player,
-                _obstacleManager
+                _obstacleManager,
+                _gameBackground
             };
         }
 
