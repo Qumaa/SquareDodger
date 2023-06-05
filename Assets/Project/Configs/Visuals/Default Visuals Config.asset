@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Default Visuals Config
   m_EditorClassIdentifier: 
   _backgroundParticlesPrefab: {fileID: 4198457335629493484, guid: fcd6bda17ad4a584f929ef1e61009b45, type: 3}
+  _backgroundParticlesSquareSize: 10
