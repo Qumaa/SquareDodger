@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a5c37f6d4f14b6bb488d249227ab240, type: 3}
   m_Name: Default Visuals Config
   m_EditorClassIdentifier: 
-  _backgroundParticlesPrefab: {fileID: 0}
+  _backgroundParticlesPrefab: {fileID: 4198457335629493484, guid: fcd6bda17ad4a584f929ef1e61009b45, type: 3}
