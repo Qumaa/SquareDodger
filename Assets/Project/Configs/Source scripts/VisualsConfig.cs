@@ -6,7 +6,11 @@ namespace Project.Game
     public class VisualsConfig : ScriptableObject
     {
         [SerializeField] private ParticleSystem _backgroundParticlesPrefab;
+        [SerializeField] private float _backgroundParticlesSquareSize;
+        
 
         public GameObject BackgroundParticlesPrefab => _backgroundParticlesPrefab.gameObject;
+
+        public float BackgroundParticlesSquareSize => _backgroundParticlesSquareSize;
     }
 }

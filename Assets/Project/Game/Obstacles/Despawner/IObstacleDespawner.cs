@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace Project.Game
+﻿namespace Project.Game
 {
     public interface IObstacleDespawner
     {

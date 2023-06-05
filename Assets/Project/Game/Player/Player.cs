@@ -8,11 +8,13 @@ namespace Project.Game
         private bool _movingRight;
         private Rigidbody2D _rigidbody;
         private IPlayerInputService _inputService;
+        private TrailRenderer _trailRenderer;
         protected GameObject _gameObject;
-        protected TrailRenderer _trailRenderer;
 
         private float _movementSpeed;
         private float _movementSpeedBeforePausing;
+        private float _trailLength;
+        private float _trailTime;
 
         public Transform Transform => _gameObject.transform;
         public IPlayerInputService InputService
@@ -24,6 +26,12 @@ namespace Project.Game
         {
             get => _movementSpeed;
             set => SetMovementSpeed(value);
+        }
+
+        public float TrailLength
+        {
+            get => _trailLength;
+            set => SetTrailLength(value);
         }
 
         public event Action OnTurned;
@@ -82,6 +90,7 @@ namespace Project.Game
 
         protected override void OnPaused()
         {
+            _trailRenderer.time = float.PositiveInfinity;
             _movementSpeedBeforePausing = MovementSpeed;
             _movementSpeed = 0;
             UpdateVelocity();
@@ -89,6 +98,7 @@ namespace Project.Game
 
         protected override void OnResumed()
         {
+            _trailRenderer.time = _trailTime;
             _movementSpeed = _movementSpeedBeforePausing;
             UpdateVelocity();
         }
@@ -96,6 +106,11 @@ namespace Project.Game
         protected override void OnReset()
         {
             Transform.position = Vector3.zero;
+        }
+
+        protected void SetTrailLength(float length)
+        {
+            _trailRenderer.time = _trailTime = length / MovementSpeed;
         }
     }
 }

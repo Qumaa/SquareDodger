@@ -90,7 +90,7 @@ namespace Project.Architecture
         {
             var particleFactory =
                 new GameBackgroundParticleSystemFactory(_gameConfig.VisualsConfig.BackgroundParticlesPrefab);
-            var backgroundFactory = new ParticleGameBackgroundFactory(particleFactory);
+            var backgroundFactory = new ParticleGameBackgroundFactory(particleFactory, _gameConfig.VisualsConfig.BackgroundParticlesSquareSize);
             return backgroundFactory;
         }
     }

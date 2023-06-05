@@ -11,5 +11,6 @@ namespace Project.Game
         public Transform Transform { get; }
         public IPlayerInputService InputService { get; set; }
         float MovementSpeed { get; set; }
+        float TrailLength { get; set; }
     }
 }

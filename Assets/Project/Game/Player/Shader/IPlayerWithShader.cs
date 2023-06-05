@@ -4,6 +4,5 @@
     {
         public IPlayerShaderMaintainer ShaderMaintainer { get; set; }
         public IObstacleManager ObstaclesSource { get; set; }
-        public float TrailLength { get; set; }
     }
 }

@@ -30,7 +30,6 @@ namespace Project.Architecture
                 return;
             
             _gameCamera.FixedUpdate(fixedTimeStep);
-            //_gameBackground.FixedUpdate(fixedTimeStep);
             _gameBackground.CenterPosition = _gameCamera.Position;
         }
 

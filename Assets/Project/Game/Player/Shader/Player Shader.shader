@@ -15,8 +15,11 @@ Shader "Unlit/Player Shader"
             "Queue"="Transparent" 
         }
         
+        Cull Off
+		Lighting Off
+		ZWrite Off
         Blend SrcAlpha OneMinusSrcAlpha
-
+        
         Pass
         {
             CGPROGRAM
