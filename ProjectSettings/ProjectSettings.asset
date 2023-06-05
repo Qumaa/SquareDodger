@@ -769,11 +769,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 
+  cloudProjectId: 0d25cc7b-7671-4cb3-921d-a4c3a76b7e43
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: Square Dodger
+  organizationId: mk348437
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 

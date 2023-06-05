@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Default camera config
   m_EditorClassIdentifier: 
   _viewportDepth: 10
+  _viewportWidth: 10
   _motionSpeed: 2
   _motionDamping: 0.7
   _motionResponsiveness: 1.2
-  _bottomOffset: 1
+  _bottomOffset: 3
