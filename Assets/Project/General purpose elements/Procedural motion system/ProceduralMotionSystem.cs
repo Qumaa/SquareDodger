@@ -2,6 +2,11 @@
 
 namespace Project
 {
+    // the implementation is based on a research done by YouTube user t3ssel8r
+    // author's channel: https://www.youtube.com/@t3ssel8r
+    // research video: https://www.youtube.com/watch?v=KPoeNZZ6H4s
+    // author's demo: https://github.com/lomakinsam/stacking-items
+    // author's work is protected by MIT license: https://github.com/lomakinsam/stacking-items/blob/main/LICENSE
     public abstract class ProceduralMotionSystem<T> :
         IProceduralMotionSystem<IProceduralMotionSystemOperand<T>>
     {
