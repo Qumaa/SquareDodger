@@ -9,7 +9,7 @@ namespace Project.Architecture
         private IDisposer _disposer;
         private GameConfig _gameConfig;
         private GameObject _uiPrefab;
-        private readonly Camera _controlledCamera;
+        private Camera _controlledCamera;
 
         public BootstrapState(IGameStateMachine stateMachine, IGame gameToInit, IDisposer disposer,
             GameConfig gameConfig, GameObject uiPrefab, Camera controlledCamera)
@@ -100,10 +100,17 @@ namespace Project.Architecture
 
         private IFactory<IParticleGameBackground> CreateGameBackgroundFactory()
         {
-            var particleFactory =
-                new GameBackgroundParticleSystemFactory(_gameConfig.VisualsConfig.BackgroundParticlesPrefab, _gameConfig.GameColors.BackgroundParticlesColor);
-            var backgroundFactory = 
-                new ParticleGameBackgroundFactory(particleFactory, _gameConfig.VisualsConfig.BackgroundParticlesSquareSize);
+            var particleFactory = new GameBackgroundParticleSystemFactory(
+                _gameConfig.GameBackgroundConfig.BackgroundParticlesPrefab, 
+                _gameConfig.GameColors.BackgroundParticlesColor);
+
+            var backgroundSize = 
+                new ViewportBackgroundSizeCalculator(_controlledCamera, _gameConfig.GameBackgroundConfig.ParticlesAreaExtraSize)
+                .Calculate();
+            var backgroundFactory = new ParticleGameBackgroundFactory(particleFactory, 
+                backgroundSize,
+                _gameConfig.GameBackgroundConfig.DensityPerUnit);
+            
             return backgroundFactory;
         }
     }

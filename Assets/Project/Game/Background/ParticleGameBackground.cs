@@ -7,11 +7,18 @@ namespace Project.Game
         private ParticleSystem _particleSystem;
         private ParticleSystem.Particle[] _particles;
         private Vector2 _centerPosition;
+        private float _particlesPerUnit;
 
         public Vector2 CenterPosition
         {
             get => _centerPosition;
             set => SetCenterPosition(value);
+        }
+
+        public float ParticlesPerUnit
+        {
+            get => _particlesPerUnit;
+            set => SetParticlesDensity(value);
         }
 
         public Vector2 Size { get; set; }
@@ -60,17 +67,30 @@ namespace Project.Game
             return _particleSystem.transform.TransformPoint(localSpace);
         }
 
+        private void ReallocateParticlesBufferIfNeeded()
+        {
+            var max = _particleSystem.main.maxParticles;
+            if (_particles == null || _particles.Length < max)
+                _particles = new ParticleSystem.Particle[max];
+        }
+
         private void SetCenterPosition(Vector2 position)
         {
             _centerPosition = position;
             _particleSystem.transform.position = position;
         }
 
-        private void ReallocateParticlesBufferIfNeeded()
+        private void SetParticlesDensity(float density)
         {
-            var max = _particleSystem.main.maxParticles;
-            if (_particles == null || _particles.Length < max)
-                _particles = new ParticleSystem.Particle[max];
+            var lifetimeCurve = _particleSystem.main.startLifetime;
+            var lifetimeAvg = (lifetimeCurve.constantMin + lifetimeCurve.constantMax) / 2f;
+
+            var area = Size.x * Size.y;
+
+            var emissionRate = density * area / lifetimeAvg;
+
+            var emissionModule = _particleSystem.emission;
+            emissionModule.rateOverTime = new ParticleSystem.MinMaxCurve(emissionRate);
         }
 
         public void Pause()

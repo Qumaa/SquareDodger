@@ -6,18 +6,22 @@ namespace Project.Architecture
     public struct ParticleGameBackgroundFactory : IFactory<IParticleGameBackground>
     {
         private IFactory<ParticleSystem> _particleFactory;
-        private float _size;
+        private Vector2 _backgroundSize;
+        private float _particlesPerUnit;
 
-        public ParticleGameBackgroundFactory(IFactory<ParticleSystem> particleFactory, float size)
+        public ParticleGameBackgroundFactory(IFactory<ParticleSystem> particleFactory, Vector2 backgroundSize, 
+            float particlesPerUnit)
         {
             _particleFactory = particleFactory;
-            _size = size;
+            _backgroundSize = backgroundSize;
+            _particlesPerUnit = particlesPerUnit;
         }
 
         public IParticleGameBackground CreateNew()
         {
             var background = new ParticleGameBackground(_particleFactory.CreateNew());
-            background.Size = new Vector2(_size, _size);
+            background.Size = _backgroundSize;
+            background.ParticlesPerUnit = _particlesPerUnit;
             return background;
         }
     }
