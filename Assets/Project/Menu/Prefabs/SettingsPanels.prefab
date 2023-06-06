@@ -231,6 +231,8 @@ MonoBehaviour:
   quitButton: {fileID: 0}
   settingsButton: {fileID: 0}
   returnButton: {fileID: 0}
+  backmenuButton: {fileID: 0}
+  backgameButton: {fileID: 0}
 --- !u!1 &279290144670047388
 GameObject:
   m_ObjectHideFlags: 0
