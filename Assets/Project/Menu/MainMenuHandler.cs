@@ -12,12 +12,21 @@ namespace Project.UI
         [SerializeField] private Button quitButton;
         [SerializeField] private Button settingsButton;
         [SerializeField] private Button returnButton;
+        [SerializeField] private Button backmenuButton;
+        [SerializeField] private Button backgameButton;
+        
         private Canvas _canvas;
+       
+        
 
         public event Action OnGameStartPressed;
         public event Action OnApplicationQuitPressed;
         public event Action OnOpenSettingsPressed;
         public event Action OnBackMenuPressed;
+        public event Action OnMenuPressed;
+        public event Action OnGameReturnPressed;
+        
+        
 
         private void Awake()
         {
@@ -26,7 +35,8 @@ namespace Project.UI
             quitButton.onClick.AddListener(QuitGame);
             settingsButton.onClick.AddListener(Settings);
             returnButton.onClick.AddListener(ReturnToMenu);
-            
+            backmenuButton.onClick.AddListener(BackToMenu);
+            backgameButton.onClick.AddListener(BackToGame);
             _canvas = GetComponent<Canvas>();
         }
 
@@ -46,6 +56,15 @@ namespace Project.UI
             
         }
 
+        private void BackToMenu()
+        {
+            OnMenuPressed?.Invoke();
+        }
+        
+        private void BackToGame()
+        {
+            OnGameReturnPressed?.Invoke();
+        }
         private void Settings()
         {
             OnOpenSettingsPressed?.Invoke();

@@ -11,6 +11,10 @@ namespace Project.UI
     {
         private MainMenuHandler mainMenu;
         public GameObject SettingsPanels;
+        public GameObject UI;
+        public GameObject PauseMenu;
+        private bool settingsOpen = false;
+       
     
         private void Start()
         {
@@ -20,6 +24,8 @@ namespace Project.UI
             mainMenu.OnGameStartPressed += StartGame;
             mainMenu.OnApplicationQuitPressed += QuitGame;
             mainMenu.OnBackMenuPressed += ReturnToMenu;
+            mainMenu.OnMenuPressed += BackToMenu;
+            mainMenu.OnGameReturnPressed += BackToGame;
         }
     
         private void StartGame()
@@ -39,12 +45,30 @@ namespace Project.UI
         {
             SettingsPanels.SetActive(true);
             Debug.Log("Настройки");
+            
         }
 
         private void ReturnToMenu()
         {
             SettingsPanels.SetActive(false);
             Debug.Log("Пусти обратно");
+            
+          
         }
+
+        private void BackToMenu()
+        {
+            Debug.Log("Вернулся в меню");
+            UI.SetActive(true);
+            PauseMenu.SetActive(false);
+            
+            
+        }
+        private void BackToGame()
+        {
+           Debug.Log("Я вернулся в игру");
+          
+        }
+
     }
 }
