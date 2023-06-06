@@ -15,6 +15,7 @@ namespace Project.Game
         public bool ShouldSpawn => SpawnedObstacles < _config.ObstaclesToSpawn;
         public float SpawningInterval => _config.SpawnInterval;
         public IObstacle[] ActiveObstacles { get; private set; }
+        public IObstacleColorSource ColorSource { get; set; }
 
         public ObstacleSpawnerViewport(ObstacleSpawnerConfigViewport config, IPooler<IObstacle> pooler,
             IFactory<IObstacle> factory, IObstacleSpawnerDataCalculator calculator)
@@ -47,6 +48,7 @@ namespace Project.Game
         private void InitObstacle(IObstacle spawned)
         {
             spawned.Init();
+            spawned.Color = ColorSource.ObstacleColor;
             spawned.OnDespawned += HandleDespawned;
             spawned.Position = _calculator.CalculatePosition();
             spawned.Velocity = _calculator.CalculateVelocity();

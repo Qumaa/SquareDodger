@@ -9,6 +9,8 @@ namespace Project.Game
         [SerializeField] private ObstacleManagerConfig _managerConfig;
         [SerializeField] private PlayerConfig _playerConfig;
         [SerializeField] private VisualsConfig _visualsConfig;
+        [SerializeField] private GameColorsConfig _gameColors;
+        
         
 
         public GameCameraConfig CameraConfig => _cameraConfig;
@@ -18,5 +20,7 @@ namespace Project.Game
         public PlayerConfig PlayerConfig => _playerConfig;
 
         public VisualsConfig VisualsConfig => _visualsConfig;
+
+        public GameColorsConfig GameColors => _gameColors;
     }
 }

@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c266c5af8b141139a8673a286a5b467, type: 3}
-  m_Name: Default Game Colors Config
+  m_Name: Default Game Colors Config 1
   m_EditorClassIdentifier: 
   _playerColor:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4291422005
   _obstaclesColor:
     serializedVersion: 2
-    rgba: 4280032463
+    rgba: 4290190543
   _backgroundColor:
     serializedVersion: 2
-    rgba: 4280690214
+    rgba: 4291480266
   _backgroundParticlesColor:
     serializedVersion: 2
-    rgba: 4281479730
+    rgba: 4292927712

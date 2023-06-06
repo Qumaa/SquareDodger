@@ -10,6 +10,7 @@ namespace Project.Game
         float Size { get; }
         Vector2 Velocity { get; set; }
         Vector2 Position { get; set; }
+        Color32 Color { get; set; }
         void Init();
         void Despawn();
     }

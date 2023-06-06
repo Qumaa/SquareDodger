@@ -16,3 +16,4 @@ MonoBehaviour:
   _movementSpeed: 4
   _playerMaterial: {fileID: 2100000, guid: 8663d2032c8e54943a502ab7416b1e30, type: 2}
   _trailLength: 5
+  _trailMaterial: {fileID: 2100000, guid: d9c64911b905c5e428d9e8d9dd124b31, type: 2}

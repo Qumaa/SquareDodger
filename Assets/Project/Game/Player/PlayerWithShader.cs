@@ -5,7 +5,7 @@ namespace Project.Game
     public class PlayerWithShader : Player, IPlayerWithShader
     {
         private IPlayerShaderMaintainer _shaderMaintainer;
-        private Material _material;
+        private Material _playerMaterial;
 
         public IPlayerShaderMaintainer ShaderMaintainer
         {
@@ -15,10 +15,12 @@ namespace Project.Game
 
         public IObstacleManager ObstaclesSource { get; set; }
 
-        public PlayerWithShader(GameObject playerObject, IPlayerCollisionDetector collisionDetector, Material material) : 
-            base(playerObject, collisionDetector)
+        public PlayerWithShader(GameObject playerObject, IPlayerCollisionDetector collisionDetector,
+            Material trailMaterial, Material playerMaterial) : 
+            base(playerObject, collisionDetector, trailMaterial)
         {
-            _material = material;
+            _playerMaterial = playerMaterial;
+            playerObject.GetComponent<Renderer>().material = playerMaterial;
         }
 
         public void Update(float timeStep)
@@ -32,7 +34,7 @@ namespace Project.Game
         private void SetShaderMaintainer(IPlayerShaderMaintainer value)
         {
             _shaderMaintainer = value;
-            _shaderMaintainer.Material = _material;
+            _shaderMaintainer.Material = _playerMaterial;
         }
     }
 }

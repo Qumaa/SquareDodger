@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Project.Game
 {
     public class ObstacleManagerViewport : PausableAndResettable, IObstacleManagerViewport
@@ -10,12 +12,16 @@ namespace Project.Game
 
         public IObstacleDespawnerViewportShader ObstacleDespawner => _despawner;
 
-        public ObstacleManagerViewport(IObstacleSpawner[] spawners, IObstacleDespawnerViewportShader despawner)
+        public Color32 ObstacleColor { get; }
+
+        public ObstacleManagerViewport(IObstacleSpawner[] spawners, IObstacleDespawnerViewportShader despawner, 
+            Color32 obstacleColor)
         {
+            ObstacleColor = obstacleColor;
             _spawners = spawners;
             _despawner = despawner;
 
-            CreateSpawnersInfo();
+            InitializeSpawners();
         }
 
         public void Update(float timeStep)
@@ -55,11 +61,14 @@ namespace Project.Game
                 obstacle.Despawn();
         }
 
-        private void CreateSpawnersInfo()
+        private void InitializeSpawners()
         {
             _spawnerInfos = new SpawnerInfo[_spawners.Length];
             for (var i = 0; i < _spawnerInfos.Length; i++)
+            {
+                _spawners[i].ColorSource = this;
                 _spawnerInfos[i] = new SpawnerInfo(_spawners[i]);
+            }
         }
 
         private void UpdateSpawner(SpawnerInfo info, float timeStep)
@@ -81,7 +90,6 @@ namespace Project.Game
         }
 
         // this is called every frame. DO NOT use linq, foreach or whatever else that allocates
-
         private IObstacle[] GetActiveObstacles()
         {
             var length = 0;

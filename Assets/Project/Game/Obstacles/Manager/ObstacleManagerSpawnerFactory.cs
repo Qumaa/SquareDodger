@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Project.Game;
+using UnityEngine;
 
-namespace Project.Game
+namespace Project.Architecture
 {
     public struct ObstacleManagerSpawnerFactory : IFactory<IObstacleSpawner[]>
     {

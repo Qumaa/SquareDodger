@@ -9,6 +9,8 @@ namespace Project.Game
         [SerializeField] private float _movementSpeed;
         [SerializeField] private Material _playerMaterial;
         [SerializeField] private float _trailLength;
+        [SerializeField] private Material _trailMaterial;
+        
         
 
         public GameObject PlayerPrefab => _playerPrefab;
@@ -18,5 +20,6 @@ namespace Project.Game
         public Material PlayerMaterial => _playerMaterial;
 
         public float TrailLength => _trailLength;
+        public Material TrailMaterial => _trailMaterial;
     }
 }

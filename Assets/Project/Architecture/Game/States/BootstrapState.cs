@@ -46,11 +46,16 @@ namespace Project.Architecture
         private void MoveToMenu() =>
             _stateMachine.SetState<InitializeMenuState>();
 
-        private ICameraController CreateCameraController() =>
-            new CameraController(_controlledCamera, _gameConfig.CameraConfig.ViewportDepth)
+        private ICameraController CreateCameraController()
+        {
+            var controller = new CameraController(_controlledCamera, _gameConfig.CameraConfig.ViewportDepth)
             {
                 WidthInUnits = _gameConfig.CameraConfig.ViewportWidth
             };
+
+            controller.ControlledCamera.backgroundColor = _gameConfig.GameColors.BackgroundColor;
+            return controller;
+        }
 
         private IGameLoader CreateGameLoader() =>
             new PrefabGameLoader(CreateGameplayFactory(_gameToInit.CameraController), new MainMenuFactory(_uiPrefab));
@@ -58,11 +63,17 @@ namespace Project.Architecture
         private IFactory<IGameplay> CreateGameplayFactory(ICameraController cameraController)
         {
             var shaderFactory = new PlayerShaderMaintainerFactory(_disposer);
-            var playerFactory = new PlayerWithShaderFactory(_gameConfig.PlayerConfig);
+            
+            var playerFactory = new PlayerWithShaderFactory
+                (_gameConfig.PlayerConfig, _gameConfig.GameColors.PlayerColor, _gameConfig.GameColors.ObstaclesColor);
+            
             var gameCameraFactory = new GameCameraFactory(_gameConfig.CameraConfig, cameraController);
+            
             var obstacleManagerFactory = CreateObstacleManagerFactory
                 (_gameConfig.ManagerConfig, cameraController.ControlledCamera, _gameConfig.CameraConfig.ViewportDepth);
+            
             var gameFinisherFactory = new GameFinisherFactory();
+            
             var gameBackgroundFactory = CreateGameBackgroundFactory();
 
             var gameplayFactory = new PausedGameplayFactory(shaderFactory, playerFactory, obstacleManagerFactory, 
@@ -81,7 +92,8 @@ namespace Project.Architecture
 
             var spawnerFactory = new ObstacleManagerSpawnerFactory
                 (managerConfig, controlledCamera, cameraViewportDepth, pooler, factory);
-            var managerFactory = new ObstacleManagerViewportFactory(spawnerFactory, despawner);
+            var managerFactory = new ObstacleManagerViewportFactory
+                (spawnerFactory, despawner, _gameConfig.GameColors.ObstaclesColor);
 
             return managerFactory;
         }
@@ -89,8 +101,9 @@ namespace Project.Architecture
         private IFactory<IParticleGameBackground> CreateGameBackgroundFactory()
         {
             var particleFactory =
-                new GameBackgroundParticleSystemFactory(_gameConfig.VisualsConfig.BackgroundParticlesPrefab);
-            var backgroundFactory = new ParticleGameBackgroundFactory(particleFactory, _gameConfig.VisualsConfig.BackgroundParticlesSquareSize);
+                new GameBackgroundParticleSystemFactory(_gameConfig.VisualsConfig.BackgroundParticlesPrefab, _gameConfig.GameColors.BackgroundParticlesColor);
+            var backgroundFactory = 
+                new ParticleGameBackgroundFactory(particleFactory, _gameConfig.VisualsConfig.BackgroundParticlesSquareSize);
             return backgroundFactory;
         }
     }

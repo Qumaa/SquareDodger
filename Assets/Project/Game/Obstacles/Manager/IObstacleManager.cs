@@ -2,7 +2,7 @@
 
 namespace Project.Game
 {
-    public interface IObstacleManager : IUpdatable, IPausableAndResettable
+    public interface IObstacleManager : IUpdatable, IPausableAndResettable, IObstacleColorSource
     {
         IObstacle[] ActiveObstacles { get; }
     }

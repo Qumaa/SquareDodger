@@ -7,6 +7,7 @@ namespace Project.Game
     {
         private bool _active;
         private Rigidbody2D _rigidbody;
+        private SpriteRenderer _renderer;
 
         private Vector2 _velocityBeforePausing;
         
@@ -26,10 +27,17 @@ namespace Project.Game
             set => transform.position = value;
         }
 
+        public Color32 Color
+        {
+            get => _renderer.color;
+            set => _renderer.color = value;
+        }
+
         private void Awake()
         {
             _active = true;
             _rigidbody = GetComponent<Rigidbody2D>();
+            _renderer = GetComponent<SpriteRenderer>();
         }
 
         public void Init()
@@ -63,14 +71,6 @@ namespace Project.Game
         public void Resume()
         {
             Velocity = _velocityBeforePausing;
-        }
-
-        public void PoppedFromPool()
-        {
-        }
-
-        public void PushedToPool()
-        {
         }
     }
 }
