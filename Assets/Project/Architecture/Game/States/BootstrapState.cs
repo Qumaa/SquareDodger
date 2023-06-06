@@ -7,17 +7,17 @@ namespace Project.Architecture
     {
         private IGame _gameToInit;
         private IDisposer _disposer;
-        private GameConfig _gameConfig;
+        private GameRuntimeData _gameData;
         private GameObject _uiPrefab;
         private Camera _controlledCamera;
 
         public BootstrapState(IGameStateMachine stateMachine, IGame gameToInit, IDisposer disposer,
-            GameConfig gameConfig, GameObject uiPrefab, Camera controlledCamera)
+            GameRuntimeData gameData, GameObject uiPrefab, Camera controlledCamera)
             : base(stateMachine)
         {
             _gameToInit = gameToInit;
             _disposer = disposer;
-            _gameConfig = gameConfig;
+            _gameData = gameData;
             _uiPrefab = uiPrefab;
             _controlledCamera = controlledCamera;
         }
@@ -48,12 +48,12 @@ namespace Project.Architecture
 
         private ICameraController CreateCameraController()
         {
-            var controller = new CameraController(_controlledCamera, _gameConfig.CameraConfig.ViewportDepth)
+            var controller = new CameraController(_controlledCamera, _gameData.GameCameraData.ViewportDepth)
             {
-                WidthInUnits = _gameConfig.CameraConfig.ViewportWidth
+                WidthInUnits = _gameData.GameCameraData.ViewportWidth
             };
 
-            controller.ControlledCamera.backgroundColor = _gameConfig.GameColors.BackgroundColor;
+            controller.ControlledCamera.backgroundColor = _gameData.GameColorsData.BackgroundColor;
             return controller;
         }
 
@@ -65,12 +65,12 @@ namespace Project.Architecture
             var shaderFactory = new PlayerShaderMaintainerFactory(_disposer);
             
             var playerFactory = new PlayerWithShaderFactory
-                (_gameConfig.PlayerConfig, _gameConfig.GameColors.PlayerColor, _gameConfig.GameColors.ObstaclesColor);
+                (_gameData.PlayerData, _gameData.GameColorsData.PlayerColor, _gameData.GameColorsData.ObstaclesColor);
             
-            var gameCameraFactory = new GameCameraFactory(_gameConfig.CameraConfig, cameraController);
+            var gameCameraFactory = new GameCameraFactory(_gameData.GameCameraData, cameraController);
             
             var obstacleManagerFactory = CreateObstacleManagerFactory
-                (_gameConfig.ManagerConfig, cameraController.ControlledCamera, _gameConfig.CameraConfig.ViewportDepth);
+                (_gameData.ObstacleManagerData, cameraController.ControlledCamera, _gameData.GameCameraData.ViewportDepth);
             
             var gameFinisherFactory = new GameFinisherFactory();
             
@@ -82,7 +82,7 @@ namespace Project.Architecture
             return gameplayFactory;
         }
 
-        private ObstacleManagerViewportFactory CreateObstacleManagerFactory(ObstacleManagerConfig managerConfig,
+        private ObstacleManagerViewportFactory CreateObstacleManagerFactory(ObstacleManagerRuntimeData managerConfig,
             Camera controlledCamera, float cameraViewportDepth)
         {
             var pooler = new ObstaclePooler();
@@ -93,7 +93,7 @@ namespace Project.Architecture
             var spawnerFactory = new ObstacleManagerSpawnerFactory
                 (managerConfig, controlledCamera, cameraViewportDepth, pooler, factory);
             var managerFactory = new ObstacleManagerViewportFactory
-                (spawnerFactory, despawner, _gameConfig.GameColors.ObstaclesColor);
+                (spawnerFactory, despawner, _gameData.GameColorsData.ObstaclesColor);
 
             return managerFactory;
         }
@@ -101,15 +101,15 @@ namespace Project.Architecture
         private IFactory<IParticleGameBackground> CreateGameBackgroundFactory()
         {
             var particleFactory = new GameBackgroundParticleSystemFactory(
-                _gameConfig.GameBackgroundConfig.BackgroundParticlesPrefab, 
-                _gameConfig.GameColors.BackgroundParticlesColor);
+                _gameData.GameBackgroundData.BackgroundParticlesPrefab, 
+                _gameData.GameColorsData.BackgroundParticlesColor);
 
             var backgroundSize = 
-                new ViewportBackgroundSizeCalculator(_controlledCamera, _gameConfig.GameBackgroundConfig.ParticlesAreaExtraSize)
+                new ViewportBackgroundSizeCalculator(_controlledCamera, _gameData.GameBackgroundData.ParticlesAreaExtraSize)
                 .Calculate();
             var backgroundFactory = new ParticleGameBackgroundFactory(particleFactory, 
                 backgroundSize,
-                _gameConfig.GameBackgroundConfig.DensityPerUnit);
+                _gameData.GameBackgroundData.DensityPerUnit);
             
             return backgroundFactory;
         }

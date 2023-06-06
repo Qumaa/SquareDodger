@@ -13,7 +13,7 @@ namespace Project.Architecture
         private IPooler<IObstacle> _obstaclePooler;
         private IFactory<IObstacle> _obstacleFactory;
 
-        public ObstacleManagerSpawnerFactory(ObstacleManagerConfig managerConfig, Camera controlledCamera, 
+        public ObstacleManagerSpawnerFactory(ObstacleManagerRuntimeData managerConfig, Camera controlledCamera, 
             float cameraViewportDepth, IPooler<IObstacle> obstaclePooler, IFactory<IObstacle> obstacleFactory)
         {
             _topSpawnerConfig = managerConfig.TopSpawnerConfig;

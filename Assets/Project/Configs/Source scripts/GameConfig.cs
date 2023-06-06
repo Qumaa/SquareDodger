@@ -10,8 +10,6 @@ namespace Project.Game
         [SerializeField] private PlayerConfig _playerConfig;
         [SerializeField] private GameBackgroundConfig _gameBackgroundConfig;
         [SerializeField] private GameColorsConfig _gameColors;
-        
-        
 
         public GameCameraConfig CameraConfig => _cameraConfig;
 

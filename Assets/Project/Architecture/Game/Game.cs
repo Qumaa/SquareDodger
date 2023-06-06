@@ -8,7 +8,7 @@ namespace Project.Architecture
     {
         private IGameStateMachine _stateMachine;
 
-        private GameConfig _gameConfig;
+        private GameRuntimeData _gameData;
         private Camera _camera;
         private IDisposer _disposer;
         private GameObject _uiPrefab;
@@ -17,9 +17,10 @@ namespace Project.Architecture
         public IMainMenu MainMenu { get; set; }
         public ICameraController CameraController { get; set; }
 
-        public Game(GameConfig gameConfig, Camera camera, IDisposer disposer, GameObject uiPrefab)
+        public Game(GameRuntimeData gameData, Camera camera, IDisposer disposer, GameObject uiPrefab)
         {
-            _gameConfig = gameConfig;
+            _gameData = gameData;
+            
             _camera = camera;
             _disposer = disposer;
             _uiPrefab = uiPrefab;
@@ -61,7 +62,7 @@ namespace Project.Architecture
 
         private void InitializeStates()
         {
-            var bootstrap = new BootstrapState(_stateMachine, this, _disposer, _gameConfig, _uiPrefab, _camera);
+            var bootstrap = new BootstrapState(_stateMachine, this, _disposer, _gameData, _uiPrefab, _camera);
             var initializeMenu = new InitializeMenuState(_stateMachine, this);
             var menuState = new MenuState(_stateMachine);
             var gameLoop = new GameLoopState(_stateMachine);

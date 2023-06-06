@@ -15,7 +15,16 @@ namespace Project.Architecture
         {
             var controlledCamera = Camera.main;
             _disposer = new Disposer();
-            _game = new Game(_gameConfig, controlledCamera, _disposer, _uiPrefab);
+
+            CreateGame(controlledCamera);
+        }
+
+        private void CreateGame(Camera controlledCamera)
+        {
+            var gameData = new GameRuntimeData();
+            gameData.Load(_gameConfig);
+
+            _game = new Game(gameData, controlledCamera, _disposer, _uiPrefab);
             _game.Initialize();
         }
 

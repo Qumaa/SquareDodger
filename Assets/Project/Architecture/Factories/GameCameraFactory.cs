@@ -4,12 +4,12 @@ namespace Project.Architecture
 {
     public struct GameCameraFactory : IFactory<IGameCamera>
     {
-        private GameCameraConfig _cameraConfig;
+        private GameCameraRuntimeData _cameraData;
         private ICameraController _cameraController;
 
-        public GameCameraFactory(GameCameraConfig cameraConfig, ICameraController cameraController)
+        public GameCameraFactory(GameCameraRuntimeData cameraData, ICameraController cameraController)
         {
-            _cameraConfig = cameraConfig;
+            _cameraData = cameraData;
             _cameraController = cameraController;
         }
 
@@ -17,10 +17,10 @@ namespace Project.Architecture
         {
             var gameCamera = new GameCamera(
                 _cameraController,
-                new ProceduralMotionSystemVector2(_cameraConfig.MotionSpeed, _cameraConfig.MotionDamping,
-                    _cameraConfig.MotionResponsiveness),
+                new ProceduralMotionSystemVector2(_cameraData.MotionSpeed, _cameraData.MotionDamping,
+                    _cameraData.MotionResponsiveness),
                 new CameraOffsetCalculatorViewport(_cameraController.ControlledCamera),
-                _cameraConfig.BottomOffset
+                _cameraData.BottomOffset
             );
 
             return gameCamera;
