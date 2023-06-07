@@ -21,7 +21,7 @@ namespace Project.Architecture
             _gameBackground = gameBackground;
 
             InitializeComposites();
-            InitializeFinisher(gameFinisher);
+            SetFinisher(gameFinisher);
         }
 
         public void FixedUpdate(float fixedTimeStep)
@@ -61,7 +61,7 @@ namespace Project.Architecture
             ForeachComposite(x => x.Reset());
         }
 
-        private void InitializeFinisher(IGameFinisher gameFinisher)
+        private void SetFinisher(IGameFinisher gameFinisher)
         {
             gameFinisher.GameToFinish = this;
             _player.OnDied += gameFinisher.Finish;

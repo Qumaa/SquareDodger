@@ -4,14 +4,14 @@ namespace Project.Architecture
 {
     public struct PausedGameplayFactory : IFactory<IGameplay>
     {
-        private IFactory<IPlayerShaderMaintainer> _shaderMaintainerFactory;
+        private IFactory<IPlayerBlendingShaderMaintainer> _shaderMaintainerFactory;
         private IFactory<IPlayerWithShader> _playerFactory;
         private IFactory<IGameCamera> _gameCameraFactory;
         private IFactory<IObstacleManagerViewport> _obstacleManagerFactory;
         private IFactory<IGameFinisher> _gameFinisherFactory;
         private IFactory<IParticleGameBackground> _gameBackgroundFactory;
 
-        public PausedGameplayFactory(IFactory<IPlayerShaderMaintainer> shaderMaintainerFactory,
+        public PausedGameplayFactory(IFactory<IPlayerBlendingShaderMaintainer> shaderMaintainerFactory,
             IFactory<IPlayerWithShader> playerFactory,
             IFactory<IObstacleManagerViewport> obstacleManagerFactory, IFactory<IGameCamera> gameCameraFactory,
             IFactory<IGameFinisher> gameFinisherFactory, IFactory<IParticleGameBackground> gameBackgroundFactory)
@@ -30,7 +30,7 @@ namespace Project.Architecture
             var player = CreatePlayer(shaderMaintainer);
             var obstacleManager = CreateObstacleManager(player, shaderMaintainer);
             var gameCamera = CreateGameCamera(player);
-            var gameFinisher = CreateGameFinisher();
+            var gameFinisher = CreateGameFinisher(player, gameCamera.CameraController, shaderMaintainer.MaintainedShader);
             var background = CreateGameBackground();
 
             var game = new Gameplay(player, gameCamera, obstacleManager, gameFinisher, background);
@@ -39,9 +39,15 @@ namespace Project.Architecture
             return game;
         }
 
-        private IGameFinisher CreateGameFinisher()
+        private IGameFinisher CreateGameFinisher(IPlayer player,
+            ICameraController cameraController,
+            IPlayerBlendingShader playerShader)
         {
-            return _gameFinisherFactory.CreateNew();
+            var finisher = _gameFinisherFactory.CreateNew() as IAnimatedGameFinisher;
+            finisher!.Player = player;
+            finisher!.CameraController = cameraController;
+            finisher!.PlayerShader = playerShader;
+            return finisher;
         }
 
         private IGameCamera CreateGameCamera(IPlayerWithShader player)
@@ -53,25 +59,27 @@ namespace Project.Architecture
         }
 
         private IObstacleManagerViewport CreateObstacleManager(IPlayerWithShader player,
-            IPlayerShaderMaintainer shaderMaintainer)
+            IPlayerBlendingShaderMaintainer shaderMaintainer)
         {
             var obstacleManager = _obstacleManagerFactory.CreateNew();
             obstacleManager.ObstacleDespawner.PlayerTransform = player.Transform;
-            obstacleManager.ObstacleDespawner.PlayerBlendingRadius = shaderMaintainer.BlendingRadius;
+            obstacleManager.ObstacleDespawner.PlayerBlendingRadius = shaderMaintainer.MaintainedShader.BlendingRadius;
             player.ObstaclesSource = obstacleManager;
             return obstacleManager;
         }
 
-        private IPlayerWithShader CreatePlayer(IPlayerShaderMaintainer shaderMaintainer)
+        private IPlayerWithShader CreatePlayer(IPlayerBlendingShaderMaintainer shaderMaintainer)
         {
             var player = _playerFactory.CreateNew();
             player.ShaderMaintainer = shaderMaintainer;
             return player;
         }
 
-        private IPlayerShaderMaintainer CreateShaderMaintainer()
+        private IPlayerBlendingShaderMaintainer CreateShaderMaintainer()
         {
-            return _shaderMaintainerFactory.CreateNew();
+            var shaderMaintainer = _shaderMaintainerFactory.CreateNew();
+            shaderMaintainer.MaintainedShader = new PlayerBlendingShader();
+            return shaderMaintainer;
         }
 
         private IParticleGameBackground CreateGameBackground()

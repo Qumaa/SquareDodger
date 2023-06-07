@@ -11,6 +11,7 @@ namespace Project.Game
 
         private ICameraController _cameraController;
 
+        public ICameraController CameraController => _cameraController;
         public Transform Target { get; set; }
         public Vector2 Position => _cameraController.Position;
 

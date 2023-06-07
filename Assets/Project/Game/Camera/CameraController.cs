@@ -29,9 +29,13 @@ namespace Project.Game
             UpdateViewportDepth();
         }
 
-        private void SetWidthInUnits(float units) =>
-            ControlledCamera.orthographicSize = units / 2f;
-        
+        private void SetWidthInUnits(float units)
+        {
+            _widthInUnits = units;
+
+            ControlledCamera.orthographicSize = _widthInUnits / (2 * ControlledCamera.aspect);
+        }
+
         private void UpdateViewportDepth() =>
             SetPosition(Position);
 

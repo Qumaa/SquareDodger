@@ -2,7 +2,7 @@
 
 namespace Project.Architecture
 {
-    public struct PlayerShaderMaintainerFactory : IFactory<IPlayerShaderMaintainer>
+    public struct PlayerShaderMaintainerFactory : IFactory<IPlayerBlendingShaderMaintainer>
     {
         private IDisposer _disposer;
 
@@ -11,9 +11,9 @@ namespace Project.Architecture
             _disposer = disposer;
         }
 
-        public IPlayerShaderMaintainer CreateNew()
+        public IPlayerBlendingShaderMaintainer CreateNew()
         {
-            var shaderMaintainer = new PlayerShaderMaintainer();
+            var shaderMaintainer = new PlayerBlendingShaderMaintainer();
             _disposer.Register(shaderMaintainer);
 
             return shaderMaintainer;

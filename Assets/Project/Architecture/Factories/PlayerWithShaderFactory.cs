@@ -31,7 +31,8 @@ namespace Project.Architecture
             _playerData.PlayerMaterial.SetColor(_PLAYER_COLOR_PROPERTY_NAME, _playerColor);
             _playerData.PlayerMaterial.SetColor(_OBSTACLE_COLOR_PROPERTY_NAME, _blendingColor);
             
-            var player = new PlayerWithShader(playerObj, collisionDetector, _playerData.TrailMaterial, _playerData.PlayerMaterial)
+            var player = new PlayerWithShader(playerObj, collisionDetector, _playerData.TrailMaterial, 
+                _playerData.PlayerMaterial, _playerData.BlendingRadius, _playerData.BlendingLength)
             {
                 InputService = inputService,
                 MovementSpeed = _playerData.MovementSpeed,

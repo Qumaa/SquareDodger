@@ -13,7 +13,7 @@
         
         public void Load(GameCameraConfig data)
         {
-            ViewportDepth = data.ViewportWidth;
+            ViewportDepth = data.ViewportDepth;
             ViewportWidth = data.ViewportWidth;
             MotionSpeed = data.MotionSpeed;
             MotionDamping = data.MotionDamping;

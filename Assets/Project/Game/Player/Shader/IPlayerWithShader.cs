@@ -2,7 +2,7 @@
 {
     public interface IPlayerWithShader : IPlayer, IUpdatable
     {
-        public IPlayerShaderMaintainer ShaderMaintainer { get; set; }
+        public IPlayerBlendingShaderMaintainer ShaderMaintainer { get; set; }
         public IObstacleManager ObstaclesSource { get; set; }
     }
 }

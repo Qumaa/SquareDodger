@@ -4,10 +4,12 @@ namespace Project.Game
 {
     public class PlayerWithShader : Player, IPlayerWithShader
     {
-        private IPlayerShaderMaintainer _shaderMaintainer;
+        private IPlayerBlendingShaderMaintainer _shaderMaintainer;
         private Material _playerMaterial;
+        private readonly float _blendingRadius;
+        private readonly float _blendingLength;
 
-        public IPlayerShaderMaintainer ShaderMaintainer
+        public IPlayerBlendingShaderMaintainer ShaderMaintainer
         {
             get => _shaderMaintainer;
             set => SetShaderMaintainer(value);
@@ -16,10 +18,12 @@ namespace Project.Game
         public IObstacleManager ObstaclesSource { get; set; }
 
         public PlayerWithShader(GameObject playerObject, IPlayerCollisionDetector collisionDetector,
-            Material trailMaterial, Material playerMaterial) : 
+            Material trailMaterial, Material playerMaterial, float blendingRadius, float blendingLength) : 
             base(playerObject, collisionDetector, trailMaterial)
         {
             _playerMaterial = playerMaterial;
+            _blendingRadius = blendingRadius;
+            _blendingLength = blendingLength;
             playerObject.GetComponent<Renderer>().material = playerMaterial;
         }
 
@@ -28,13 +32,26 @@ namespace Project.Game
             if (_isPaused)
                 return;
             
-            _shaderMaintainer.UpdateBuffer(ObstaclesSource.ActiveObstacles);
+            _shaderMaintainer.UpdateShader(ObstaclesSource.ActiveObstacles);
         }
 
-        private void SetShaderMaintainer(IPlayerShaderMaintainer value)
+        private void SetShaderMaintainer(IPlayerBlendingShaderMaintainer value)
         {
             _shaderMaintainer = value;
-            _shaderMaintainer.Material = _playerMaterial;
+            _shaderMaintainer.MaintainedShader.Material = _playerMaterial;
+            ResetBlendingValues();
+        }
+
+        protected override void OnReset()
+        {
+            base.OnReset();
+            ResetBlendingValues();
+        }
+
+        private void ResetBlendingValues()
+        {
+            _shaderMaintainer.MaintainedShader.BlendingRadius = _blendingRadius;
+            _shaderMaintainer.MaintainedShader.BlendingLength = _blendingLength;
         }
     }
 }

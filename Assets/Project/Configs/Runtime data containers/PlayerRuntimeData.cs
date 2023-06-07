@@ -7,6 +7,8 @@ namespace Project.Game
         public GameObject PlayerPrefab { get; private set; }
         public float MovementSpeed { get; private set; }
         public Material PlayerMaterial { get; private set; }
+        public float BlendingRadius { get; private set; }
+        public float BlendingLength { get; private set; }
         public float TrailLength { get; private set; }
         public Material TrailMaterial { get; private set; }
         
@@ -17,6 +19,8 @@ namespace Project.Game
             PlayerMaterial = data.PlayerMaterial;
             TrailLength = data.TrailLength;
             TrailMaterial = data.TrailMaterial;
+            BlendingRadius = data.BlendingRadius;
+            BlendingLength = data.BlendingLength;
         }
     }
 }

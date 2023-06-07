@@ -15,5 +15,7 @@ MonoBehaviour:
   _playerPrefab: {fileID: 4874008977332005159, guid: 2383fd609dc066b43bb963a082c00365, type: 3}
   _movementSpeed: 4
   _playerMaterial: {fileID: 2100000, guid: 8663d2032c8e54943a502ab7416b1e30, type: 2}
+  _blendingRadius: 0.8
+  _blendingLength: 1.2
   _trailLength: 5
   _trailMaterial: {fileID: 2100000, guid: d9c64911b905c5e428d9e8d9dd124b31, type: 2}

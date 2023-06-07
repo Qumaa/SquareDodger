@@ -1,4 +1,5 @@
-﻿using Project.Game;
+﻿using DG.Tweening;
+using Project.Game;
 using UnityEngine;
 
 namespace Project.Architecture
@@ -36,6 +37,7 @@ namespace Project.Architecture
 
         private void InitializeGameServices()
         {
+            DOTween.Init();
             _gameToInit.CameraController = CreateCameraController();
             // sound, input etc.
         }
@@ -72,7 +74,7 @@ namespace Project.Architecture
             var obstacleManagerFactory = CreateObstacleManagerFactory
                 (_gameData.ObstacleManagerData, cameraController.ControlledCamera, _gameData.GameCameraData.ViewportDepth);
             
-            var gameFinisherFactory = new GameFinisherFactory();
+            var gameFinisherFactory = new DoTweenGameFinisherFactory();
             
             var gameBackgroundFactory = CreateGameBackgroundFactory();
 
