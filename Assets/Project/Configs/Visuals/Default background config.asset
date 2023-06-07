@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: Default background config
   m_EditorClassIdentifier: 
   _backgroundParticlesPrefab: {fileID: 4198457335629493484, guid: fcd6bda17ad4a584f929ef1e61009b45, type: 3}
-  _backgroundParticlesSquareSize: 10
+  _particlesAreaExtraSize: {x: 3, y: 1}
+  _density: 7
+  _densityReferenceSize: {x: 10, y: 10}

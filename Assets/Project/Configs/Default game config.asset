@@ -15,5 +15,5 @@ MonoBehaviour:
   _cameraConfig: {fileID: 11400000, guid: 6559751f66dd64d4a91543865ffb8fe5, type: 2}
   _managerConfig: {fileID: 11400000, guid: 57ce8b500c5ea334eaeaa756ac2aae50, type: 2}
   _playerConfig: {fileID: 11400000, guid: c6c7763026eabc043b71724812a84c37, type: 2}
-  _visualsConfig: {fileID: 11400000, guid: 4a48e1b03f5baae4fb7315abac8d3d42, type: 2}
+  _gameBackgroundConfig: {fileID: 11400000, guid: 4a48e1b03f5baae4fb7315abac8d3d42, type: 2}
   _gameColors: {fileID: 11400000, guid: 3ba67032e95b67d4b8c4957d1669bad4, type: 2}

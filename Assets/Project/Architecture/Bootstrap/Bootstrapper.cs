@@ -21,7 +21,8 @@ namespace Project.Architecture
 
         private void CreateGame(Camera controlledCamera)
         {
-            var gameData = new GameRuntimeData();
+            var resolver = new TempThemeResolver();
+            var gameData = new GameRuntimeData(resolver);
             gameData.Load(_gameConfig);
 
             _game = new Game(gameData, controlledCamera, _disposer, _uiPrefab);

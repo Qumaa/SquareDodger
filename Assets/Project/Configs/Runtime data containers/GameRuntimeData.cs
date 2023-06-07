@@ -1,7 +1,16 @@
-﻿namespace Project.Game
+﻿using Project.Architecture;
+
+namespace Project.Game
 {
     public class GameRuntimeData : ILoadableFrom<GameConfig>
     {
+        private IThemeResolver _themeResolver;
+
+        public GameRuntimeData(IThemeResolver themeResolver)
+        {
+            _themeResolver = themeResolver;
+        }
+
         public GameCameraRuntimeData GameCameraData { get; private set; }
         public ObstacleManagerRuntimeData ObstacleManagerData { get; private set; }
         public PlayerRuntimeData PlayerData { get; private set; }
@@ -22,8 +31,7 @@
             GameBackgroundData = new GameBackgroundRuntimeData();
             GameBackgroundData.Load(data.GameBackgroundConfig);
 
-            GameColorsData = new GameColorsRuntimeData();
-            GameColorsData.Load(data.GameColors);
+            GameColorsData = _themeResolver.Resolve();
         }
     }
 }
