@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerColor:
     serializedVersion: 2
-    rgba: 4281545523
+    rgba: 4294967295
   _obstaclesColor:
     serializedVersion: 2
     rgba: 4281285597
   _backgroundColor:
     serializedVersion: 2
-    rgba: 4291480266
+    rgba: 4290822336
   _backgroundParticlesColor:
     serializedVersion: 2
-    rgba: 4292927712
+    rgba: 4288651167
