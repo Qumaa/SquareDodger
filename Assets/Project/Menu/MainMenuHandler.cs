@@ -1,70 +1,42 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Project.UI
 {
-    public class MainMenuHandler : MonoBehaviour, IMainMenu
+    public class MainMenuHandler : CanvasGameUI, IMainMenu
     {
-        [SerializeField] private Button playButton;
-        [SerializeField] private Button quitButton;
-        [SerializeField] private Button settingsButton;
-        [SerializeField] private Button returnButton;
-        private Canvas _canvas;
+        [SerializeField] private Button _playButton;
+        [SerializeField] private Button _quitButton;
+        [SerializeField] private Button _settingsButton;
 
         public event Action OnGameStartPressed;
         public event Action OnApplicationQuitPressed;
         public event Action OnOpenSettingsPressed;
-        public event Action OnBackMenuPressed;
 
-        private void Awake()
+        protected override void OnAwake()
         {
-           
-            playButton.onClick.AddListener(GameStart);
-            quitButton.onClick.AddListener(QuitGame);
-            settingsButton.onClick.AddListener(Settings);
-            returnButton.onClick.AddListener(ReturnToMenu);
-            
-            _canvas = GetComponent<Canvas>();
+            _playButton.onClick.AddListener(GameStart);
+            _quitButton.onClick.AddListener(QuitGame);
+            _settingsButton.onClick.AddListener(Settings);
         }
 
         private void GameStart()
         {
-            OnGameStartPressed.Invoke();
+            Debug.Log("Игра начинается!");
+            OnGameStartPressed?.Invoke();
         }
 
         private void QuitGame()
         {
+            Debug.Log("Выход из игры");
             OnApplicationQuitPressed?.Invoke();
         }
-
-        private void ReturnToMenu()
-        {
-            OnBackMenuPressed?.Invoke();
-            
-        }
-
+        
         private void Settings()
         {
+            Debug.Log("Настройки");
             OnOpenSettingsPressed?.Invoke();
-        }
-
-        public void SetCamera(Camera uiCamera)
-        {
-            _canvas.worldCamera = uiCamera;
-            _canvas.planeDistance = 1;
-        }
-
-        public void Show()
-        {
-            _canvas.gameObject.SetActive(true);
-        }
-
-        public void Hide()
-        {
-            _canvas.gameObject.SetActive(false);
         }
     }
 }
