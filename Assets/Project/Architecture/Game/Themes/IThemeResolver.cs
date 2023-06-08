@@ -4,6 +4,6 @@ namespace Project.Architecture
 {
     public interface IThemeResolver
     {
-        GameColorsRuntimeData Resolve();
+        GameColorsConfig Resolve();
     }
 }

@@ -7,10 +7,16 @@ namespace Project.Architecture
 {
     public class DoTweenGameFinisher : IAnimatedGameFinisher
     {
+        private IPlayer _player;
+        
         public IGameplay GameToFinish { get; set; }
         public ICameraController CameraController { get; set; }
         public IPlayerBlendingShader PlayerShader { get; set; }
-        public IPlayer Player { get; set; }
+        public IPlayer Player
+        {
+            get => _player;
+            set => SetPlayer(value);
+        }
 
         public void Finish()
         {
@@ -36,6 +42,12 @@ namespace Project.Architecture
         {
             DOTween.To(() => PlayerShader.BlendingRadius, x => PlayerShader.BlendingRadius = x,
                 2, 0.8f);
+        }
+
+        private void SetPlayer(IPlayer player)
+        {
+            _player = player;
+            _player.OnDied += Finish;
         }
     }
 }

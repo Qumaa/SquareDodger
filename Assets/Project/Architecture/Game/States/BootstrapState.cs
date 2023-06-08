@@ -6,17 +6,15 @@ namespace Project.Architecture
 {
     public class BootstrapState : GameState
     {
-        private IGame _gameToInit;
         private IDisposer _disposer;
         private GameRuntimeData _gameData;
         private GameObject _uiPrefab;
         private Camera _controlledCamera;
 
-        public BootstrapState(IGameStateMachine stateMachine, IGame gameToInit, IDisposer disposer,
+        public BootstrapState(IGameStateMachine stateMachine, IGame game, IDisposer disposer,
             GameRuntimeData gameData, GameObject uiPrefab, Camera controlledCamera)
-            : base(stateMachine)
+            : base(stateMachine, game)
         {
-            _gameToInit = gameToInit;
             _disposer = disposer;
             _gameData = gameData;
             _uiPrefab = uiPrefab;
@@ -38,12 +36,12 @@ namespace Project.Architecture
         private void InitializeGameServices()
         {
             DOTween.Init();
-            _gameToInit.CameraController = CreateCameraController();
+            _game.CameraController = CreateCameraController();
             // sound, input etc.
         }
 
         private void LoadGame() =>
-            CreateGameLoader().Load(_gameToInit);
+            CreateGameLoader().Load(_game);
 
         private void MoveToMenu() =>
             _stateMachine.SetState<InitializeMenuState>();
@@ -60,14 +58,17 @@ namespace Project.Architecture
         }
 
         private IGameLoader CreateGameLoader() =>
-            new PrefabGameLoader(CreateGameplayFactory(_gameToInit.CameraController), new MainMenuFactory(_uiPrefab));
+            new PrefabGameLoader(CreateGameplayFactory(_game.CameraController), new MainMenuFactory(_uiPrefab));
 
         private IFactory<IGameplay> CreateGameplayFactory(ICameraController cameraController)
         {
-            var shaderFactory = new PlayerShaderMaintainerFactory(_disposer);
+            var shaderData = _gameData.PlayerData.ShaderData;
+            var shaderFactory = new BlendingShaderFactory(shaderData.BlendingRadius, shaderData.BlendingLength,
+                _gameData.GameColorsData.PlayerColor, _gameData.GameColorsData.ObstaclesColor);
+            var maintainerFactory = new PlayerBlendingShaderMaintainerFactory(_disposer, shaderFactory,
+                shaderData.BlendingRadius, shaderData.BlendingLength);
             
-            var playerFactory = new PlayerWithShaderFactory
-                (_gameData.PlayerData, _gameData.GameColorsData.PlayerColor, _gameData.GameColorsData.ObstaclesColor);
+            var playerFactory = new PlayerWithShaderFactory(_gameData.PlayerData);
             
             var gameCameraFactory = new GameCameraFactory(_gameData.GameCameraData, cameraController);
             
@@ -78,7 +79,7 @@ namespace Project.Architecture
             
             var gameBackgroundFactory = CreateGameBackgroundFactory();
 
-            var gameplayFactory = new PausedGameplayFactory(shaderFactory, playerFactory, obstacleManagerFactory, 
+            var gameplayFactory = new PausedGameplayFactory(maintainerFactory, playerFactory, obstacleManagerFactory, 
                 gameCameraFactory, gameFinisherFactory, gameBackgroundFactory);
 
             return gameplayFactory;

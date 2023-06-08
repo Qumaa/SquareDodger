@@ -4,7 +4,7 @@ namespace Project.Architecture
 {
     public class RestartGameState : GameState
     {
-        public RestartGameState(IGameStateMachine stateMachine) : base(stateMachine)
+        public RestartGameState(IGameStateMachine stateMachine, IGame game) : base(stateMachine, game)
         {
         }
 

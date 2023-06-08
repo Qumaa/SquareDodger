@@ -10,9 +10,16 @@ namespace Project.Game
         private float _bottomOffset;
 
         private ICameraController _cameraController;
+        private Transform _target;
 
         public ICameraController CameraController => _cameraController;
-        public Transform Target { get; set; }
+
+        public Transform Target
+        {
+            get => _target;
+            set => SetTarget(value);
+        }
+
         public Vector2 Position => _cameraController.Position;
 
         public GameCamera(ICameraController cameraController, ProceduralMotionSystemVector2 motionSystem,
@@ -58,5 +65,11 @@ namespace Project.Game
 
         private Vector2 GetPositionWithOffset() =>
             (Vector2)Target.transform.position + _offsetCalculator.CalculateOffset(_bottomOffset);
+
+        private void SetTarget(Transform target)
+        {
+            _target = target;
+            ResetPosition();
+        }
     }
 }

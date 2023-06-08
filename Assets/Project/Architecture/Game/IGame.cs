@@ -8,7 +8,6 @@ namespace Project.Architecture
         IGameplay Gameplay { get; set; }
         IMainMenu MainMenu { get; set; }
         ICameraController CameraController { get; set; }
-        void Run();
         void Initialize();
     }
 }

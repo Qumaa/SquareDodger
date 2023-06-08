@@ -12,7 +12,16 @@ namespace Project.Game
         private ComputeBuffer _allocatedBuffer;
         private int _allocatedBufferLength;
 
+        private readonly float _defaultBlendingRadius;
+        private readonly float _defaultBlendingLength;
+
         public IPlayerBlendingShader MaintainedShader { get; set; }
+
+        public PlayerBlendingShaderMaintainer(float defaultBlendingRadius, float defaultBlendingLength)
+        {
+            _defaultBlendingRadius = defaultBlendingRadius;
+            _defaultBlendingLength = defaultBlendingLength;
+        }
 
         public void UpdateShader(IObstacle[] data)
         {
@@ -38,6 +47,7 @@ namespace Project.Game
         protected override void OnReset()
         {
             base.OnReset();
+            ResetShaderValues();
             Dispose();
         }
 
@@ -52,6 +62,12 @@ namespace Project.Game
             _allocatedBuffer?.Release();
             _allocatedBuffer = AllocateBuffer(bufferLength);
             MaintainedShader.Material.SetBuffer(_bufferNameId, _allocatedBuffer);
+        }
+
+        private void ResetShaderValues()
+        {
+            MaintainedShader.BlendingRadius = _defaultBlendingRadius;
+            MaintainedShader.BlendingLength = _defaultBlendingLength;
         }
 
         public void Dispose()

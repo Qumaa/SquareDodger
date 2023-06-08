@@ -4,7 +4,7 @@ namespace Project.Architecture
 {
     public class StartGameFromMenuState : GameState
     {
-        public StartGameFromMenuState(IGameStateMachine stateMachine) : base(stateMachine)
+        public StartGameFromMenuState(IGameStateMachine stateMachine, IGame game) : base(stateMachine, game)
         {
         }
 

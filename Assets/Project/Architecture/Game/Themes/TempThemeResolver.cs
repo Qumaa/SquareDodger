@@ -7,14 +7,11 @@ namespace Project.Architecture
     {
         private const string _THEME = ResourcesPaths.Themes._DEFAULT_DARK;
         
-        public GameColorsRuntimeData Resolve()
+        public GameColorsConfig Resolve()
         {
-            var data = new GameColorsRuntimeData();
             var theme = Resources.Load<GameColorsConfig>(_THEME);
-            
-            data.Load(theme);
 
-            return data;
+            return theme;
         }
     }
 }

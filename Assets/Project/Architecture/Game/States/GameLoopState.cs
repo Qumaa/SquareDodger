@@ -4,13 +4,14 @@ namespace Project.Architecture
 {
     public class GameLoopState : GameState
     {
-        public GameLoopState(IGameStateMachine stateMachine) : base(stateMachine)
+
+        public GameLoopState(IGameStateMachine stateMachine, IGame game) : base(stateMachine, game)
         {
         }
 
         public override void Enter()
         {
-            throw new NotImplementedException();
+            _game.Gameplay.Resume();
         }
 
         public override void Exit()

@@ -27,12 +27,6 @@ namespace Project.Architecture
             InitializeStateMachine();
         }
 
-        public void Run()
-        {
-            MainMenu.SetCamera(_camera);
-            MainMenu.OnGameStartPressed += HandleGameStart;
-        }
-
         public void Update(float timeStep)
         {
             Gameplay.Update(timeStep);
@@ -41,12 +35,6 @@ namespace Project.Architecture
         public void FixedUpdate(float fixedTimeStep)
         {
             Gameplay.FixedUpdate(fixedTimeStep);
-        }
-
-        private void HandleGameStart()
-        {
-            MainMenu.Hide();
-            Gameplay.Resume();
         }
 
         public void Initialize()
@@ -64,8 +52,8 @@ namespace Project.Architecture
         {
             var bootstrap = new BootstrapState(_stateMachine, this, _disposer, _gameData, _uiPrefab, _camera);
             var initializeMenu = new InitializeMenuState(_stateMachine, this);
-            var menuState = new MenuState(_stateMachine);
-            var gameLoop = new GameLoopState(_stateMachine);
+            var menuState = new MenuState(_stateMachine, this);
+            var gameLoop = new GameLoopState(_stateMachine, this);
 
             _stateMachine.AddState(bootstrap)
                 .AddState(initializeMenu)

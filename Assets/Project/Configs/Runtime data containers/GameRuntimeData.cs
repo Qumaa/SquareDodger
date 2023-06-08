@@ -19,19 +19,27 @@ namespace Project.Game
         
         public void Load(GameConfig data)
         {
+            var theme = _themeResolver.Resolve();
+            
             GameCameraData = new GameCameraRuntimeData();
             GameCameraData.Load(data.CameraConfig);
 
             ObstacleManagerData = new ObstacleManagerRuntimeData();
             ObstacleManagerData.Load(data.ManagerConfig);
 
+            var shaderData = new PlayerShaderRuntimeData();
+            shaderData.Load(data.PlayerConfig);
+            shaderData.Load(theme);
+            
             PlayerData = new PlayerRuntimeData();
             PlayerData.Load(data.PlayerConfig);
+            PlayerData.Load(shaderData);
 
             GameBackgroundData = new GameBackgroundRuntimeData();
             GameBackgroundData.Load(data.GameBackgroundConfig);
 
-            GameColorsData = _themeResolver.Resolve();
+            GameColorsData = new GameColorsRuntimeData();
+            GameColorsData.Load(theme);
         }
     }
 }
