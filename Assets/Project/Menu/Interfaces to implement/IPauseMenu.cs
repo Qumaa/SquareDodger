@@ -2,7 +2,7 @@
 
 namespace Project.UI
 {
-    public interface IPauseMenu : IGameUI, IOpenSettingsUI, IReturnToMenuUI
+    public interface IPauseMenu : IGameCanvasUI, IOpenSettingsUI, IReturnToMenuUI
     {
         event Action OnContinuePressed;
     }

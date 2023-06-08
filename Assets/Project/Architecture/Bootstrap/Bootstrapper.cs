@@ -6,7 +6,6 @@ namespace Project.Architecture
     public class Bootstrapper : MonoBehaviour
     {
         [SerializeField] private GameConfig _gameConfig;
-        [SerializeField] private GameObject _uiPrefab;
 
         private IGame _game;
         private IDisposer _disposer;
@@ -25,7 +24,7 @@ namespace Project.Architecture
             var gameData = new GameRuntimeData(resolver);
             gameData.Load(_gameConfig);
 
-            _game = new Game(gameData, controlledCamera, _disposer, _uiPrefab);
+            _game = new Game(gameData, controlledCamera, _disposer);
             _game.Initialize();
         }
 

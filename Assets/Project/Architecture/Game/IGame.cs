@@ -6,7 +6,7 @@ namespace Project.Architecture
     public interface IGame : IUpdatableAnFixedUpdatable
     {
         IGameplay Gameplay { get; set; }
-        IMainMenu MainMenu { get; set; }
+        IGameCanvasUIRenderer GameCanvasUI { get; set; }
         ICameraController CameraController { get; set; }
         void Initialize();
     }

@@ -2,10 +2,10 @@ using UnityEngine;
 
 namespace Project.UI
 {
-    public interface IGameUI 
+    public interface IGameCanvasUI 
     {
         void Show();
         void Hide();
-        void SetCamera(Camera uiCamera);
+        void SetCanvas(Canvas canvas);
     }
 }

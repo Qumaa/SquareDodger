@@ -8,16 +8,14 @@ namespace Project.Architecture
     {
         private IDisposer _disposer;
         private GameRuntimeData _gameData;
-        private GameObject _uiPrefab;
         private Camera _controlledCamera;
 
         public BootstrapState(IGameStateMachine stateMachine, IGame game, IDisposer disposer,
-            GameRuntimeData gameData, GameObject uiPrefab, Camera controlledCamera)
+            GameRuntimeData gameData, Camera controlledCamera)
             : base(stateMachine, game)
         {
             _disposer = disposer;
             _gameData = gameData;
-            _uiPrefab = uiPrefab;
             _controlledCamera = controlledCamera;
         }
 
@@ -58,7 +56,7 @@ namespace Project.Architecture
         }
 
         private IGameLoader CreateGameLoader() =>
-            new PrefabGameLoader(CreateGameplayFactory(_game.CameraController), new MainMenuFactory(_uiPrefab));
+            new PrefabGameLoader(CreateGameplayFactory(_game.CameraController), new CanvasUIRendererFactory(_gameData.GameUIData.UICanvasPrefab));
 
         private IFactory<IGameplay> CreateGameplayFactory(ICameraController cameraController)
         {

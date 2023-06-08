@@ -1,21 +1,25 @@
-﻿namespace Project.Architecture
+﻿using Project.UI;
+
+namespace Project.Architecture
 {
     public class MenuState : GameState
     {
+        private IMainMenu _mainMenu;
 
-        public MenuState(IGameStateMachine stateMachine, IGame game) : base(stateMachine, game)
+        public MenuState(IGameStateMachine stateMachine, IGame game, IMainMenu mainMenu) : base(stateMachine, game)
         {
+            _mainMenu = mainMenu;
         }
 
         public override void Enter()
         {
-            _game.MainMenu.Show();
-            _game.MainMenu.OnGameStartPressed += HandleGameStart;
+            _mainMenu.Show();
+            _mainMenu.OnGameStartPressed += HandleGameStart;
         }
 
         public override void Exit()
         {
-            _game.MainMenu.Hide();
+            _mainMenu.Hide();
         }
 
         private void HandleGameStart()

@@ -2,7 +2,7 @@
 
 namespace Project.UI
 {
-    public interface ISettingsMenu : IGameUI
+    public interface ISettingsMenu : IGameCanvasUI
     {
         event Action OnClosePressed;
     }

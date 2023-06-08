@@ -16,6 +16,7 @@ namespace Project.Game
         public PlayerRuntimeData PlayerData { get; private set; }
         public GameBackgroundRuntimeData GameBackgroundData { get; private set; }
         public GameColorsRuntimeData GameColorsData { get; private set; }
+        public GameUIRuntimeData GameUIData { get; private set; }
         
         public void Load(GameConfig data)
         {
@@ -40,6 +41,9 @@ namespace Project.Game
 
             GameColorsData = new GameColorsRuntimeData();
             GameColorsData.Load(theme);
+
+            GameUIData = new GameUIRuntimeData();
+            GameUIData.Load(data.GameUIConfig);
         }
     }
 }

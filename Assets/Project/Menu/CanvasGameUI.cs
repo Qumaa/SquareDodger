@@ -1,39 +1,32 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Project.UI
 {
-    public abstract class CanvasGameUI : MonoBehaviour, IGameUI
+    public abstract class CanvasGameUI : MonoBehaviour, IGameCanvasUI
     {
-        protected Canvas _canvas { get; private set; }
-
-        public virtual void Hide()
-        {
-            _canvas.gameObject.SetActive(false);
-        }
-
-        public virtual void Show()
-        {
-            _canvas.gameObject.SetActive(true);
-        }
+        private RectTransform _transform;
 
         private void Awake()
         {
-            _canvas = GetComponent<Canvas>();
+            _transform = (RectTransform) transform;
             OnAwake();
         }
 
-        protected abstract void OnAwake();
-
-        public void SetCamera(Camera uiCamera)
+        public void Show()
         {
-            if (_canvas == null)
-                _canvas = GetComponent<Canvas>();
-
-            _canvas.worldCamera = uiCamera;
-            _canvas.planeDistance = 1;
+            _transform.gameObject.SetActive(true);
         }
+
+        public void Hide()
+        {
+            _transform.gameObject.SetActive(false);
+        }
+
+        public void SetCanvas(Canvas canvas)
+        {
+            _transform.SetParent(canvas.transform, false);
+        }
+
+        protected abstract void OnAwake();
     }
 }
