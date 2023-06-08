@@ -23,19 +23,16 @@ namespace Project.UI
 
         private void GameStart()
         {
-            Debug.Log("Игра начинается!");
             OnGameStartPressed?.Invoke();
         }
 
         private void QuitGame()
         {
-            Debug.Log("Выход из игры");
             OnApplicationQuitPressed?.Invoke();
         }
         
         private void Settings()
         {
-            Debug.Log("Настройки");
             OnOpenSettingsPressed?.Invoke();
         }
     }
