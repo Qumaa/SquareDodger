@@ -4,39 +4,39 @@ using UnityEngine.UI;
 
 namespace Project.UI
 {
-    public class MainMenuHandler : MonoBehaviour, IMainMenu
+    public class MainMenuHandler : CanvasGameUI, IMainMenu
     {
-        private Canvas _canvas;
+        [SerializeField] private Button _playButton;
+        [SerializeField] private Button _quitButton;
+        [SerializeField] private Button _settingsButton;
 
         public event Action OnGameStartPressed;
         public event Action OnApplicationQuitPressed;
         public event Action OnOpenSettingsPressed;
 
-        private void Awake()
+        protected override void OnAwake()
         {
-            GetComponentInChildren<Button>().onClick.AddListener(GameStart);
-            _canvas = GetComponent<Canvas>();
+            _playButton.onClick.AddListener(GameStart);
+            _quitButton.onClick.AddListener(QuitGame);
+            _settingsButton.onClick.AddListener(Settings);
         }
 
         private void GameStart()
         {
-            OnGameStartPressed.Invoke();
+            Debug.Log("Игра начинается!");
+            OnGameStartPressed?.Invoke();
         }
 
-        public void SetCamera(Camera uiCamera)
+        private void QuitGame()
         {
-            _canvas.worldCamera = uiCamera;
-            _canvas.planeDistance = 1;
+            Debug.Log("Выход из игры");
+            OnApplicationQuitPressed?.Invoke();
         }
-
-        public void Show()
+        
+        private void Settings()
         {
-            _canvas.gameObject.SetActive(true);
-        }
-
-        public void Hide()
-        {
-            _canvas.gameObject.SetActive(false);
+            Debug.Log("Настройки");
+            OnOpenSettingsPressed?.Invoke();
         }
     }
 }
