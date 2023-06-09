@@ -17,6 +17,7 @@ namespace Project.UI
 
         private void HandleCloseSettingsPressed()
         {
+            Hide();
             OnClosePressed?.Invoke();
         }
     }
