@@ -4,9 +4,9 @@
     {
         public Obstacle ObstaclePrefab { get; private set; }
         
-        public ObstacleSpawnerConfigViewport RightSpawnerConfig { get; private set; }
-        public ObstacleSpawnerConfigViewport TopSpawnerConfig { get; private set; }
-        public ObstacleSpawnerConfigViewport LeftSpawnerConfig { get; private set; }
+        public ObstacleViewportSpawnerConfig RightSpawnerConfig { get; private set; }
+        public ObstacleViewportSpawnerConfig TopSpawnerConfig { get; private set; }
+        public ObstacleViewportSpawnerConfig LeftSpawnerConfig { get; private set; }
         
         public void Load(ObstacleManagerConfig data)
         {

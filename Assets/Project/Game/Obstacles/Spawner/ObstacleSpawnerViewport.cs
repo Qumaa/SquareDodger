@@ -6,7 +6,7 @@ namespace Project.Game
     {
         private List<IObstacle> _activeObstacles;
         
-        private ObstacleSpawnerConfigViewport _config;
+        private ObstacleViewportSpawnerConfig _config;
         private IPooler<IObstacle> _pooler;
         private IFactory<IObstacle> _factory;
         private IObstacleSpawnerDataCalculator _calculator;
@@ -17,7 +17,7 @@ namespace Project.Game
         public IObstacle[] ActiveObstacles { get; private set; }
         public IObstacleColorSource ColorSource { get; set; }
 
-        public ObstacleSpawnerViewport(ObstacleSpawnerConfigViewport config, IPooler<IObstacle> pooler,
+        public ObstacleSpawnerViewport(ObstacleViewportSpawnerConfig config, IPooler<IObstacle> pooler,
             IFactory<IObstacle> factory, IObstacleSpawnerDataCalculator calculator)
         {
             _config = config;

@@ -48,12 +48,9 @@ namespace Project.Architecture
 
         private void InitializeStates()
         {
-            // TODO: move this the fuck outta here
-            var mainMenu = GameObject.Instantiate(_gameData.GameUIData.MainMenuPrefab).GetComponent<IMainMenu>();
-            
             var bootstrap = new BootstrapState(_stateMachine, this, _disposer, _gameData, _camera);
-            var initializeMenu = new InitializeMenuState(_stateMachine, this, mainMenu);
-            var menuState = new MenuState(_stateMachine, this, mainMenu);
+            var initializeMenu = new InitializeUIState(_stateMachine, this, _gameData.GameUIData);
+            var menuState = new MenuState(_stateMachine, this);
             var gameLoop = new GameLoopState(_stateMachine, this);
 
             _stateMachine.AddState(bootstrap)

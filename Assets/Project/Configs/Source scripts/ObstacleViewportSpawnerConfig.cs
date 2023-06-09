@@ -3,7 +3,7 @@
 namespace Project.Game
 {
     [CreateAssetMenu(menuName = AssetMenuPaths.OBSTACLE_SPAWNER, fileName = "New Obstacle Spawner Config")]
-    public class ObstacleSpawnerConfigViewport : ObstacleSpawnerConfig
+    public class ObstacleViewportSpawnerConfig : ObstacleSpawnerConfig
     {
         [Header("Viewport-specific settings")] 
         [SerializeField] private Vector2 _viewportFrom;

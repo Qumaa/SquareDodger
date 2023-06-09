@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Project.UI
 {
-    public class SettingsMenuHandler : CanvasGameUI, ISettingsMenu
+    public class SettingsMenuHandler : GameCanvasUI, ISettingsMenu
     {
         [SerializeField] private Button _closeSettingsButton;
 

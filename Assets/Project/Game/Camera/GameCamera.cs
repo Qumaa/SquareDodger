@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Project.Architecture;
+using UnityEngine;
 
 namespace Project.Game
 {

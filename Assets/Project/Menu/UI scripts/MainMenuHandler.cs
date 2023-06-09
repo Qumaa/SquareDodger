@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Project.UI
 {
-    public class MainMenuHandler : CanvasGameUI, IMainMenu
+    public class MainMenuHandler : GameCanvasUI, IMainMenu
     {
         [SerializeField] private Button _playButton;
         [SerializeField] private Button _quitButton;

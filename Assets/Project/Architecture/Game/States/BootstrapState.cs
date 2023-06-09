@@ -23,7 +23,7 @@ namespace Project.Architecture
         {
             InitializeGameServices();
             LoadGame();
-            MoveToMenu();
+            MoveNext();
         }
 
         public override void Exit()
@@ -39,10 +39,10 @@ namespace Project.Architecture
         }
 
         private void LoadGame() =>
-            CreateGameLoader().Load(_game);
+            _game.Gameplay = CreateGameplayFactory().CreateNew();
 
-        private void MoveToMenu() =>
-            _stateMachine.SetState<InitializeMenuState>();
+        private void MoveNext() =>
+            _stateMachine.SetState<InitializeUIState>();
 
         private ICameraController CreateCameraController()
         {
@@ -55,10 +55,7 @@ namespace Project.Architecture
             return controller;
         }
 
-        private IGameLoader CreateGameLoader() =>
-            new PrefabGameLoader(CreateGameplayFactory(_game.CameraController), new CanvasUIRendererFactory(_gameData.GameUIData.UICanvasPrefab));
-
-        private IFactory<IGameplay> CreateGameplayFactory(ICameraController cameraController)
+        private IFactory<IGameplay> CreateGameplayFactory()
         {
             var shaderData = _gameData.PlayerData.ShaderData;
             var shaderFactory = new BlendingShaderFactory(shaderData.BlendingRadius, shaderData.BlendingLength,
@@ -68,10 +65,10 @@ namespace Project.Architecture
             
             var playerFactory = new PlayerWithShaderFactory(_gameData.PlayerData);
             
-            var gameCameraFactory = new GameCameraFactory(_gameData.GameCameraData, cameraController);
+            var gameCameraFactory = new GameCameraFactory(_gameData.GameCameraData, _game.CameraController);
             
             var obstacleManagerFactory = CreateObstacleManagerFactory
-                (_gameData.ObstacleManagerData, cameraController.ControlledCamera, _gameData.GameCameraData.ViewportDepth);
+                (_gameData.ObstacleManagerData, _game.CameraController.ControlledCamera, _gameData.GameCameraData.ViewportDepth);
             
             var gameFinisherFactory = new DoTweenGameFinisherFactory();
             

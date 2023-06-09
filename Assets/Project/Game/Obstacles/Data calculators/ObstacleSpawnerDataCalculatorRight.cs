@@ -4,7 +4,7 @@ namespace Project.Game
 {
     class ObstacleSpawnerDataCalculatorRight : ObstacleSpawnerDataCalculatorViewport
     {
-        public ObstacleSpawnerDataCalculatorRight(ObstacleSpawnerConfigViewport config, Camera viewportCamera, float depth) : base(config, viewportCamera, depth)
+        public ObstacleSpawnerDataCalculatorRight(ObstacleViewportSpawnerConfig config, Camera viewportCamera, float depth) : base(config, viewportCamera, depth)
         {
         }
 

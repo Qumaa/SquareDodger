@@ -6,25 +6,30 @@ namespace Project.Architecture
     {
         private IMainMenu _mainMenu;
 
-        public MenuState(IGameStateMachine stateMachine, IGame game, IMainMenu mainMenu) : base(stateMachine, game)
+        public MenuState(IGameStateMachine stateMachine, IGame game) : base(stateMachine, game)
         {
-            _mainMenu = mainMenu;
         }
 
         public override void Enter()
         {
-            _mainMenu.Show();
-            _mainMenu.OnGameStartPressed += HandleGameStart;
+            var menu = GetMenu();
+            menu.Show();
+            menu.OnGameStartPressed += HandleGameStart;
         }
 
         public override void Exit()
         {
-            _mainMenu.Hide();
+            var menu = GetMenu();
+            menu.Hide();
+            menu.OnGameStartPressed -= HandleGameStart;
         }
 
         private void HandleGameStart()
         {
             _stateMachine.SetState<GameLoopState>();
         }
+
+        private IMainMenu GetMenu() =>
+            _mainMenu ??= _game.GameCanvasUI.Get<IMainMenu>();
     }
 }

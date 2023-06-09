@@ -2,7 +2,7 @@
 
 namespace Project.UI
 {
-    public abstract class CanvasGameUI : MonoBehaviour, IGameCanvasUI
+    public abstract class GameCanvasUI : MonoBehaviour, IGameCanvasUI
     {
         private RectTransform _transform;
 

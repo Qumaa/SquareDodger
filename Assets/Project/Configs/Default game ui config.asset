@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e45eb8426814e75b5a2896005f41acd, type: 3}
   m_Name: Default game ui config
   m_EditorClassIdentifier: 
-  _uiCanvas: {fileID: 0}
-  _mainMenu: {fileID: 0}
+  _uiCanvas: {fileID: 2572837649754309612, guid: 4e701608ec90ba54cb694d7ca6d5273f, type: 3}
+  _mainMenu: {fileID: 57307519695793593, guid: 58c4ecb5d713a4d4fbe5df0b85eb4508, type: 3}

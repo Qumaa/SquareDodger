@@ -7,16 +7,16 @@ namespace Project.Game
     {
         [SerializeField] private Obstacle _obstaclePrefab;
         
-        [SerializeField] private ObstacleSpawnerConfigViewport _topSpawnerConfig;
-        [SerializeField] private ObstacleSpawnerConfigViewport _leftSpawnerConfig;
-        [SerializeField] private ObstacleSpawnerConfigViewport _rightSpawnerConfig;
+        [SerializeField] private ObstacleViewportSpawnerConfig _topSpawnerConfig;
+        [SerializeField] private ObstacleViewportSpawnerConfig _leftSpawnerConfig;
+        [SerializeField] private ObstacleViewportSpawnerConfig _rightSpawnerConfig;
 
         public Obstacle ObstaclePrefab => _obstaclePrefab;
 
-        public ObstacleSpawnerConfigViewport TopSpawnerConfig => _topSpawnerConfig;
+        public ObstacleViewportSpawnerConfig TopSpawnerConfig => _topSpawnerConfig;
 
-        public ObstacleSpawnerConfigViewport LeftSpawnerConfig => _leftSpawnerConfig;
+        public ObstacleViewportSpawnerConfig LeftSpawnerConfig => _leftSpawnerConfig;
 
-        public ObstacleSpawnerConfigViewport RightSpawnerConfig => _rightSpawnerConfig;
+        public ObstacleViewportSpawnerConfig RightSpawnerConfig => _rightSpawnerConfig;
     }
 }

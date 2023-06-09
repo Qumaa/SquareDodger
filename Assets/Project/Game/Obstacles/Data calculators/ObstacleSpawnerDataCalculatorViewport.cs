@@ -4,7 +4,7 @@ namespace Project.Game
 {
     public abstract class ObstacleSpawnerDataCalculatorViewport : IObstacleSpawnerDataCalculator
     {
-        private readonly ObstacleSpawnerConfigViewport _config;
+        private readonly ObstacleViewportSpawnerConfig _config;
         private readonly float _depth;
         private readonly Camera _viewportCamera;
 
@@ -13,7 +13,7 @@ namespace Project.Game
         private Vector3 _offset => _config.Offset;
 
         protected ObstacleSpawnerDataCalculatorViewport(
-            ObstacleSpawnerConfigViewport config,
+            ObstacleViewportSpawnerConfig config,
             Camera viewportCamera,
             float depth)
         {

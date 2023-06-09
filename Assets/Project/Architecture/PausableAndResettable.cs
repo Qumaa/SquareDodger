@@ -1,6 +1,4 @@
-﻿using Project.Architecture;
-
-namespace Project.Game
+﻿namespace Project.Architecture
 {
     public class PausableAndResettable : IPausableAndResettable
     {
