@@ -370,8 +370,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _continueGameButton: {fileID: 4438956205774175451}
-  _returnToMenuButton: {fileID: 6357023534266228776}
-  _settingsButton: {fileID: 8870512102705649015}
+  _returnToMenuButton: {fileID: 0}
+  _settingsButton: {fileID: 0}
 --- !u!1001 &8593189469667117288
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -382,6 +382,10 @@ PrefabInstance:
     - target: {fileID: 697965563813340035, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
       propertyPath: m_Name
       value: BottonGroup
+      objectReference: {fileID: 0}
+    - target: {fileID: 3896700268537872667, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4649080257199250153, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
       propertyPath: m_Pivot.x
@@ -474,25 +478,3 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4649080257199250153, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
   m_PrefabInstance: {fileID: 8593189469667117288}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6357023534266228776 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3420918715714005184, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
-  m_PrefabInstance: {fileID: 8593189469667117288}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8870512102705649015 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 890384005788081567, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
-  m_PrefabInstance: {fileID: 8593189469667117288}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
