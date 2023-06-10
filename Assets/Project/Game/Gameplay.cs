@@ -8,9 +8,12 @@ namespace Project.Game
         private IGameCamera _gameCamera;
         private IPlayerWithShader _player;
         private IObstacleManager _obstacleManager;
+        private IGameFinisher _gameFinisher;
         private IGameBackground _gameBackground;
 
         private IPausableAndResettable[] _gameComposites;
+        
+        public event Action OnEnded;
 
         public Gameplay(IPlayerWithShader player, IGameCamera gameCamera, IObstacleManager obstacleManager, 
             IGameFinisher gameFinisher, IGameBackground gameBackground)
@@ -18,10 +21,11 @@ namespace Project.Game
             _gameCamera = gameCamera;
             _player = player;
             _obstacleManager = obstacleManager;
+            _gameFinisher = gameFinisher;
             _gameBackground = gameBackground;
 
             InitializeComposites();
-            SetFinisher(gameFinisher);
+            SetFinisher();
         }
 
         public void FixedUpdate(float fixedTimeStep)
@@ -61,10 +65,16 @@ namespace Project.Game
             ForeachComposite(x => x.Reset());
         }
 
-        private void SetFinisher(IGameFinisher gameFinisher)
+        private void SetFinisher()
         {
-            gameFinisher.GameToFinish = this;
-            _player.OnDied += gameFinisher.Finish;
+            _gameFinisher.GameToFinish = this;
+            _player.OnDied += End;
+        }
+
+        private void End()
+        {
+            _gameFinisher.Finish();
+            OnEnded?.Invoke();
         }
 
         private void InitializeComposites()

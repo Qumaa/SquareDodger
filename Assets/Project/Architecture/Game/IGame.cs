@@ -1,4 +1,5 @@
-﻿using Project.Game;
+﻿using System;
+using Project.Game;
 using Project.UI;
 
 namespace Project.Architecture
@@ -6,7 +7,7 @@ namespace Project.Architecture
     public interface IGame : IUpdatableAnFixedUpdatable
     {
         IGameplay Gameplay { get; set; }
-        IGameCanvasUIRenderer GameCanvasUI { get; set; }
+        IGameCanvasUIRenderer UI { get; set; }
         ICameraController CameraController { get; set; }
         IGameInputService InputService { get; set; }
         void Initialize();

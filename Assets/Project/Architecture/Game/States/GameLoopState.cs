@@ -12,11 +12,21 @@ namespace Project.Architecture
         public override void Enter()
         {
             _game.Gameplay.Resume();
+            _game.Gameplay.OnEnded += HandleGameEnd;
+        }
+
+        private void HandleGameEnd()
+        {
+            _stateMachine.SetState<GameEndState>();
+        }
+
+        private void HandleGamePause()
+        {
+            _stateMachine.SetState<GamePauseState>();
         }
 
         public override void Exit()
         {
-            throw new NotImplementedException();
         }
     }
 }

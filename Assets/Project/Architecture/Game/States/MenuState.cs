@@ -12,16 +12,18 @@ namespace Project.Architecture
 
         public override void Enter()
         {
-            var menu = GetMenu();
-            menu.Show();
-            menu.OnGameStartPressed += HandleGameStart;
+            GetMenuIfNecessary();
+            
+            _mainMenu.Show();
+            _mainMenu.OnGameStartPressed += HandleGameStart;
+            _mainMenu.OnApplicationQuitPressed += HandleQuit;
+            _mainMenu.OnOpenSettingsPressed += HandleSettings;
         }
 
         public override void Exit()
         {
-            var menu = GetMenu();
-            menu.Hide();
-            menu.OnGameStartPressed -= HandleGameStart;
+            _mainMenu.Hide();
+            _mainMenu.OnGameStartPressed -= HandleGameStart;
         }
 
         private void HandleGameStart()
@@ -29,7 +31,17 @@ namespace Project.Architecture
             _stateMachine.SetState<GameLoopState>();
         }
 
-        private IMainMenu GetMenu() =>
-            _mainMenu ??= _game.GameCanvasUI.Get<IMainMenu>();
+        private void HandleQuit()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void HandleSettings()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void GetMenuIfNecessary() =>
+            _mainMenu ??= _game.UI.Get<IMainMenu>();
     }
 }

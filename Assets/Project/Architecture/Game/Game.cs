@@ -1,4 +1,5 @@
-﻿using Project.Game;
+﻿using System;
+using Project.Game;
 using Project.UI;
 using UnityEngine;
 
@@ -12,8 +13,10 @@ namespace Project.Architecture
         private Camera _camera;
         private IDisposer _disposer;
 
+        public event Action OnEnded;
+        
         public IGameplay Gameplay { get; set; }
-        public IGameCanvasUIRenderer GameCanvasUI { get; set; }
+        public IGameCanvasUIRenderer UI { get; set; }
         public ICameraController CameraController { get; set; }
         public IGameInputService InputService { get; set; }
 
@@ -53,11 +56,17 @@ namespace Project.Architecture
             var initializeMenu = new InitializeUIState(_stateMachine, this, _gameData.GameUIData);
             var menuState = new MenuState(_stateMachine, this);
             var gameLoop = new GameLoopState(_stateMachine, this);
+            var gamePaused = new GamePauseState(_stateMachine, this);
+            var gameEnd = new GameEndState(_stateMachine, this);
+            var gameRestart = new RestartGameState(_stateMachine, this);
 
             _stateMachine.AddState(bootstrap)
                 .AddState(initializeMenu)
                 .AddState(menuState)
-                .AddState(gameLoop);
+                .AddState(gameLoop)
+                .AddState(gamePaused)
+                .AddState(gameEnd)
+                .AddState(gameRestart);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Project.Architecture
         public void Load(IGame game)
         {
             game.Gameplay = _gameFactory.CreateNew();
-            game.GameCanvasUI = _uiFactory.CreateNew();
+            game.UI = _uiFactory.CreateNew();
         }
     }
 }
