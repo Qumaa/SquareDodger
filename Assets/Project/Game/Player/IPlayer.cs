@@ -9,7 +9,7 @@ namespace Project.Game
         public event Action OnTurned;
         public event Action OnDied;
         public Transform Transform { get; }
-        public IPlayerInputService InputService { get; set; }
+        public IGameInputService InputService { get; set; }
         float MovementSpeed { get; set; }
         float TrailLength { get; set; }
     }

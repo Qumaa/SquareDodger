@@ -8,6 +8,7 @@ namespace Project.Architecture
         IGameplay Gameplay { get; set; }
         IGameCanvasUIRenderer GameCanvasUI { get; set; }
         ICameraController CameraController { get; set; }
+        IGameInputService InputService { get; set; }
         void Initialize();
     }
 }

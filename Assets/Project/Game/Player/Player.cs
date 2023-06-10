@@ -8,7 +8,7 @@ namespace Project.Game
     {
         private bool _movingRight;
         private Rigidbody2D _rigidbody;
-        private IPlayerInputService _inputService;
+        private IGameInputService _inputService;
         private TrailRenderer _trailRenderer;
         protected GameObject _gameObject;
 
@@ -18,7 +18,7 @@ namespace Project.Game
         private float _trailTime;
 
         public Transform Transform => _gameObject.transform;
-        public IPlayerInputService InputService
+        public IGameInputService InputService
         {
             get => _inputService;
             set => SetInputService(value);
@@ -72,16 +72,16 @@ namespace Project.Game
             OnDied?.Invoke();
         }
 
-        private void SetInputService(IPlayerInputService value)
+        private void SetInputService(IGameInputService value)
         {
             if (_inputService == value)
                 return;
 
             if (_inputService != null)
-                _inputService.OnTurnInput -= Turn;
+                _inputService.OnScreenTouchInput -= Turn;
 
             _inputService = value;
-            _inputService.OnTurnInput += Turn;
+            _inputService.OnScreenTouchInput += Turn;
         }
 
         private void SetMovementSpeed(float value)

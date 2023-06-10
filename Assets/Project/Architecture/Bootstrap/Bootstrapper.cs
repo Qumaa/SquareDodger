@@ -25,6 +25,7 @@ namespace Project.Architecture
             gameData.Load(_gameConfig);
 
             _game = new Game(gameData, controlledCamera, _disposer);
+            _game.InputService = GetComponent<IGameInputService>();
             _game.Initialize();
         }
 

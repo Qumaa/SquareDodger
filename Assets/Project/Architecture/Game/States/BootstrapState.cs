@@ -63,7 +63,7 @@ namespace Project.Architecture
             var maintainerFactory = new PlayerBlendingShaderMaintainerFactory(_disposer, shaderFactory,
                 shaderData.BlendingRadius, shaderData.BlendingLength);
             
-            var playerFactory = new PlayerWithShaderFactory(_gameData.PlayerData);
+            var playerFactory = new PlayerWithShaderFactory(_gameData.PlayerData, _game.InputService);
             
             var gameCameraFactory = new GameCameraFactory(_gameData.GameCameraData, _game.CameraController);
             
