@@ -1,7 +1,7 @@
 ﻿using System;
-using Project.Game;
+using Project.Architecture;
 
-namespace Project.Architecture
+namespace Project.Game
 {
     public class Gameplay : PausableAndResettable, IGameplay
     {

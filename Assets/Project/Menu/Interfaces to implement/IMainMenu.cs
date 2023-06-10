@@ -2,7 +2,7 @@
 
 namespace Project.UI
 {
-    public interface IMainMenu : IGameCanvasUI, IOpenSettingsUI
+    public interface IMainMenu : IGameInputCanvasUI, IOpenSettingsUI
     {
         event Action OnGameStartPressed;
         event Action OnApplicationQuitPressed;

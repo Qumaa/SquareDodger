@@ -1,4 +1,4 @@
-﻿namespace Project.Architecture
+﻿namespace Project
 {
     public class PausableAndResettable : IPausableAndResettable
     {

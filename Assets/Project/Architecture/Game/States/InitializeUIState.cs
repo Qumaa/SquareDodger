@@ -15,7 +15,7 @@ namespace Project.Architecture
 
         public override void Enter()
         {
-            CreateUI(_uiData);
+            CreateUI(_uiData, _game.InputService);
             _game.GameCanvasUI.SetCamera(_game.CameraController.ControlledCamera);
             _game.GameCanvasUI.Add(_mainMenu);
             MoveNext();
@@ -30,10 +30,12 @@ namespace Project.Architecture
             _stateMachine.SetState<MenuState>();
         }
 
-        private void CreateUI(GameUIRuntimeData uiData)
+        private void CreateUI(GameUIRuntimeData uiData, IGameInputService inputService)
         {
             _game.GameCanvasUI = new CanvasUIRendererFactory(uiData.UICanvasPrefab).CreateNew();
+            
             _mainMenu = new MainMenuFactory(uiData.MainMenuPrefab).CreateNew();
+            _mainMenu.InputService = inputService;
         }
     }
 }

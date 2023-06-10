@@ -18,10 +18,7 @@ namespace Project.Game
         private void Update()
         {
             if (HasTouched() && NotOverUI())
-            {
                 OnScreenTouchInput?.Invoke();
-                Debug.Log("touch input");
-            }
         }
 
         private bool NotOverUI()

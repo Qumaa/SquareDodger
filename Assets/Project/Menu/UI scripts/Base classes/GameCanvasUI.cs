@@ -5,6 +5,7 @@ namespace Project.UI
     public abstract class GameCanvasUI : MonoBehaviour, IGameCanvasUI
     {
         private RectTransform _transform;
+        protected bool _visible => _transform.gameObject.activeSelf;
 
         private void Awake()
         {
@@ -12,12 +13,12 @@ namespace Project.UI
             OnAwake();
         }
 
-        public void Show()
+        public virtual void Show()
         {
             _transform.gameObject.SetActive(true);
         }
 
-        public void Hide()
+        public virtual void Hide()
         {
             _transform.gameObject.SetActive(false);
         }

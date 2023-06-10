@@ -1,4 +1,6 @@
-﻿namespace Project.Architecture
+﻿using Project.Game;
+
+namespace Project.Architecture
 {
     public interface IGameFinisher
     {

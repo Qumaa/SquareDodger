@@ -4,12 +4,11 @@ using UnityEngine;
 
 namespace Project.Game
 {
-    public interface IPlayer : IPausableAndResettable
+    public interface IPlayer : IPausableAndResettable, IGameInputServiceConsumer
     {
         public event Action OnTurned;
         public event Action OnDied;
         public Transform Transform { get; }
-        public IGameInputService InputService { get; set; }
         float MovementSpeed { get; set; }
         float TrailLength { get; set; }
     }
