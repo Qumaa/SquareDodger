@@ -5,8 +5,6 @@ namespace Project.Game
 {
     public class ObstacleSpawnerViewport : IObstacleSpawner
     {
-        private List<IObstacle> _activeObstacles;
-        
         private ObstacleViewportSpawnerConfig _config;
         private IPooler<IObstacle> _pooler;
         private IFactory<IObstacle> _factory;
@@ -26,7 +24,6 @@ namespace Project.Game
             _pooler = pooler;
             _factory = factory;
             _calculator = calculator;
-            _activeObstacles = new List<IObstacle>(_config.ObstaclesToSpawn);
         }
 
         public void SpawnAndInit()
@@ -42,7 +39,6 @@ namespace Project.Game
                 spawned = _factory.CreateNew();
 
             _spawnedObstacles++;
-            _activeObstacles.Add(spawned);
             return spawned;
         }
 
@@ -59,7 +55,6 @@ namespace Project.Game
         {
             despawned.OnDespawned -= HandleDespawned;
             
-            _activeObstacles.Remove(despawned);
             _spawnedObstacles--;
         }
     }
