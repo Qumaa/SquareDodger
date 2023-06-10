@@ -1,8 +1,11 @@
-﻿namespace Project.Game
+﻿using System;
+using System.Collections.Generic;
+
+namespace Project.Game
 {
     public interface IObstacleDespawner
     {
-        void DespawnNecessaryObstacles(IObstacle[] obstacles);
-        void DespawnSingle(IObstacle obstacle);
+        event Action<IObstacle> OnDespawned;
+        void DespawnNecessaryObstacles(List<IObstacle> obstacles);
     }
 }

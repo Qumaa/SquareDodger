@@ -37,19 +37,19 @@ namespace Project.Architecture
             set => SetBlendingColor(value);
         }
 
-        public float BlendingRadius
+        public float HardBlendingRadius
         {
             get => _blendingRadius;
             set => SetBlendingRadius(value);
         }
 
-        public float BlendingLength
+        public float SoftBlendingLength
         {
             get => _blendingLength;
             set => SetBlendingLength(value);
         }
 
-        public float TotalBlendingLength => BlendingRadius + BlendingLength;
+        public float TotalBlendingRadius => HardBlendingRadius + SoftBlendingLength;
 
         private void SetMaterial(Material material)
         {

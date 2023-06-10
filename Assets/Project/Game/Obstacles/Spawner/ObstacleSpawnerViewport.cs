@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Project.Game
 {
@@ -10,12 +11,13 @@ namespace Project.Game
         private IPooler<IObstacle> _pooler;
         private IFactory<IObstacle> _factory;
         private IObstacleSpawnerDataCalculator _calculator;
+        private int _spawnedObstacles;
 
-        public int SpawnedObstacles { get; private set; }
-        public bool ShouldSpawn => SpawnedObstacles < _config.ObstaclesToSpawn;
+        public bool ShouldSpawn => _spawnedObstacles < _config.ObstaclesToSpawn;
         public float SpawningInterval => _config.SpawnInterval;
-        public IObstacle[] ActiveObstacles { get; private set; }
         public IObstacleColorSource ColorSource { get; set; }
+        
+        public event Action<IObstacle> OnSpawned;
 
         public ObstacleSpawnerViewport(ObstacleViewportSpawnerConfig config, IPooler<IObstacle> pooler,
             IFactory<IObstacle> factory, IObstacleSpawnerDataCalculator calculator)
@@ -25,13 +27,13 @@ namespace Project.Game
             _factory = factory;
             _calculator = calculator;
             _activeObstacles = new List<IObstacle>(_config.ObstaclesToSpawn);
-            UpdateActiveObstaclesProperty();
         }
 
         public void SpawnAndInit()
         {
             var spawned = SpawnObstacle();
             InitObstacle(spawned);
+            OnSpawned?.Invoke(spawned);
         }
 
         private IObstacle SpawnObstacle()
@@ -39,9 +41,8 @@ namespace Project.Game
             if (!_pooler.TryPop(out var spawned))
                 spawned = _factory.CreateNew();
 
-            SpawnedObstacles++;
+            _spawnedObstacles++;
             _activeObstacles.Add(spawned);
-            UpdateActiveObstaclesProperty();
             return spawned;
         }
 
@@ -59,12 +60,7 @@ namespace Project.Game
             despawned.OnDespawned -= HandleDespawned;
             
             _activeObstacles.Remove(despawned);
-            UpdateActiveObstaclesProperty();
-            
-            SpawnedObstacles--;
+            _spawnedObstacles--;
         }
-
-        private void UpdateActiveObstaclesProperty() =>
-            ActiveObstacles = _activeObstacles.ToArray();
     }
 }

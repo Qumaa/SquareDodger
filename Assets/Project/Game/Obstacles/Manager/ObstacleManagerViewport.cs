@@ -1,4 +1,4 @@
-using Project.Architecture;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Project.Game
@@ -6,22 +6,24 @@ namespace Project.Game
     public class ObstacleManagerViewport : PausableAndResettable, IObstacleManagerViewport
     {
         private IObstacleSpawner[] _spawners;
-        private IObstacleDespawnerViewportShader _despawner;
         private SpawnerInfo[] _spawnerInfos;
+        private List<IObstacle> _activeObstacles;
 
-        public IObstacle[] ActiveObstacles => GetActiveObstacles();
+        public IEnumerable<IObstacle> ActiveObstacles => _activeObstacles;
 
-        public IObstacleDespawnerViewportShader ObstacleDespawner => _despawner;
+        public IObstacleDespawnerViewportShader ObstacleDespawner { get; }
 
         public Color32 ObstacleColor { get; }
 
-        public ObstacleManagerViewport(IObstacleSpawner[] spawners, IObstacleDespawnerViewportShader despawner, 
+        public ObstacleManagerViewport(IObstacleSpawner[] spawners, IObstacleDespawnerViewportShader despawner,
             Color32 obstacleColor)
         {
             ObstacleColor = obstacleColor;
             _spawners = spawners;
-            _despawner = despawner;
+            ObstacleDespawner = despawner;
+            ObstacleDespawner.OnDespawned += HandleDespawned;
 
+            _activeObstacles = new List<IObstacle>();
             InitializeSpawners();
         }
 
@@ -29,36 +31,35 @@ namespace Project.Game
         {
             if (_isPaused)
                 return;
-            
+
             for (var i = 0; i < _spawners.Length; i++)
             {
-                var spawner = _spawners[i];
                 var info = _spawnerInfos[i];
-                
-                _despawner.DespawnNecessaryObstacles(spawner.ActiveObstacles);
+
                 UpdateSpawner(info, timeStep);
             }
-            
+
+            ObstacleDespawner.DespawnNecessaryObstacles(_activeObstacles);
         }
 
         protected override void OnPaused()
         {
             base.OnPaused();
-            foreach(var obstacle in ActiveObstacles)
+            foreach (var obstacle in ActiveObstacles)
                 obstacle.Pause();
         }
 
         protected override void OnResumed()
         {
             base.OnResumed();
-            foreach(var obstacle in ActiveObstacles)
+            foreach (var obstacle in ActiveObstacles)
                 obstacle.Resume();
         }
 
         protected override void OnReset()
         {
             base.OnReset();
-            foreach(var obstacle in ActiveObstacles)
+            foreach (var obstacle in ActiveObstacles)
                 obstacle.Despawn();
         }
 
@@ -69,6 +70,8 @@ namespace Project.Game
             {
                 _spawners[i].ColorSource = this;
                 _spawnerInfos[i] = new SpawnerInfo(_spawners[i]);
+
+                _spawners[i].OnSpawned += HandleSpawned;
             }
         }
 
@@ -82,35 +85,18 @@ namespace Project.Game
 
             var spawner = info.Spawner;
 
-            if (spawner.ShouldSpawn)
-            {
-                spawner.SpawnAndInit();
-                
-                info.Counter += spawner.SpawningInterval;
-            }
+            if (!spawner.ShouldSpawn)
+                return;
+
+            spawner.SpawnAndInit();
+            info.Counter += spawner.SpawningInterval;
         }
 
-        // this is called every frame. DO NOT use linq, foreach or whatever else that allocates
-        private IObstacle[] GetActiveObstacles()
-        {
-            var length = 0;
+        private void HandleSpawned(IObstacle spawned) =>
+            _activeObstacles.Add(spawned);
 
-            for (var i = 0; i < _spawners.Length; i++)
-                length += _spawners[i].ActiveObstacles.Length;
-
-            var obstacles = new IObstacle[length];
-
-            var counter = 0;
-            for (var i = 0; i < _spawners.Length; i++)
-            {
-                for (var y = 0; y < _spawners[i].ActiveObstacles.Length; y++)
-                {
-                    obstacles[counter++] = _spawners[i].ActiveObstacles[y];
-                }
-            }
-
-            return obstacles;
-        }
+        private void HandleDespawned(IObstacle despawned) =>
+            _activeObstacles.Remove(despawned);
 
         private class SpawnerInfo
         {

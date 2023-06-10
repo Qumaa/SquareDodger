@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Project.Game
 {
@@ -11,6 +13,8 @@ namespace Project.Game
         public Transform PlayerTransform { get; set; }
         public float PlayerBlendingRadius { get; set; }
 
+        public event Action<IObstacle> OnDespawned;
+
         public ObstacleDespawnerViewportShader(Camera viewportCamera, Vector2 positionOffset,
             ObstaclePooler obstaclePooler)
         {
@@ -19,27 +23,32 @@ namespace Project.Game
             _obstaclePooler = obstaclePooler;
         }
 
-        public void DespawnNecessaryObstacles(IObstacle[] obstacles)
+        public void DespawnNecessaryObstacles(List<IObstacle> obstacles)
         {
             if (obstacles == null)
                 return;
             
-            var count = obstacles.Length;
+            var count = obstacles.Count;
 
             for (int i = count - 1; i >= 0; i--)
-                if (ShouldDespawn(obstacles[i]))
-                    DespawnSingle(obstacles[i]);
-        }
+            {
+                var obstacle = obstacles[i];
 
-        public void DespawnSingle(IObstacle obstacle)
-        {
-            _obstaclePooler.Push(obstacle);
-            obstacle.Despawn();
+                if (ShouldDespawn(obstacle))
+                    DespawnSingle(obstacle);
+            }
         }
 
         private bool ShouldDespawn(IObstacle obstacle) =>
             IsBelowScreen(obstacle) &&
             DoesntBlendPlayer(obstacle);
+
+        private void DespawnSingle(IObstacle obstacle)
+        {
+            _obstaclePooler.Push(obstacle);
+            obstacle.Despawn();
+            OnDespawned?.Invoke(obstacle);
+        }
 
         private bool IsBelowScreen(IObstacle obstacle) =>
             _camera.WorldToViewportPoint(obstacle.Position + _positionOffset).y < 0;

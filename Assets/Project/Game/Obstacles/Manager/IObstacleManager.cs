@@ -1,9 +1,9 @@
-﻿using Project.Architecture;
+﻿using System.Collections.Generic;
 
 namespace Project.Game
 {
     public interface IObstacleManager : IUpdatable, IPausableAndResettable, IObstacleColorSource
     {
-        IObstacle[] ActiveObstacles { get; }
+        IEnumerable<IObstacle> ActiveObstacles { get; }
     }
 }

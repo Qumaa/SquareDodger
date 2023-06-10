@@ -40,7 +40,7 @@ namespace Project.Architecture
 
         private void AnimateShader()
         {
-            DOTween.To(() => PlayerShader.BlendingRadius, x => PlayerShader.BlendingRadius = x,
+            DOTween.To(() => PlayerShader.HardBlendingRadius, x => PlayerShader.HardBlendingRadius = x,
                 2, 0.8f);
         }
 

@@ -66,8 +66,8 @@ namespace Project.Game
 
         private void ResetShaderValues()
         {
-            MaintainedShader.BlendingRadius = _defaultBlendingRadius;
-            MaintainedShader.BlendingLength = _defaultBlendingLength;
+            MaintainedShader.HardBlendingRadius = _defaultBlendingRadius;
+            MaintainedShader.SoftBlendingLength = _defaultBlendingLength;
         }
 
         public void Dispose()

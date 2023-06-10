@@ -57,7 +57,7 @@ namespace Project.Architecture
             // obstacle manager
             var despawner = _context.ObstacleManager.ObstacleDespawner;
             despawner.PlayerTransform = _context.Player.Transform;
-            despawner.PlayerBlendingRadius = _context.ShaderMaintainer.MaintainedShader.TotalBlendingLength;
+            despawner.PlayerBlendingRadius = _context.ShaderMaintainer.MaintainedShader.TotalBlendingRadius;
             
             // game camera
             _context.GameCamera.Target = _context.Player.Transform;

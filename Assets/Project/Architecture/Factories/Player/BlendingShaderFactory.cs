@@ -21,8 +21,8 @@ namespace Project.Architecture
         {
             var shader = new PlayerBlendingShader
             {
-                BlendingRadius = _blendingRadius,
-                BlendingLength = _blendingLength,
+                HardBlendingRadius = _blendingRadius,
+                SoftBlendingLength = _blendingLength,
                 PlayerColor = _playerColor,
                 BlendingColor = _blendingColor
             };
