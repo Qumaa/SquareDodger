@@ -29,9 +29,9 @@ namespace Project.Game
             if (_isPaused)
                 return;
             
-            _shaderMaintainer.UpdateShader(ObstaclesSource.ActiveObstacles
-                .Where(ObstacleBlendsPlayer)
-                .ToArray());
+            _shaderMaintainer.UpdateShader(ObstaclesSource.ActiveObstacles);
+                // .Where(ObstacleBlendsPlayer)
+                // .ToArray());
         }
 
         private bool ObstacleBlendsPlayer(IObstacle obstacle)

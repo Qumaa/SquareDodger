@@ -7,9 +7,8 @@ namespace Project.Game
     {
         private IObstacleSpawner[] _spawners;
         private SpawnerInfo[] _spawnerInfos;
-        private List<IObstacle> _activeObstacles;
 
-        public IEnumerable<IObstacle> ActiveObstacles => _activeObstacles;
+        public List<IObstacle> ActiveObstacles { get; }
 
         public IObstacleDespawnerViewportShader ObstacleDespawner { get; }
 
@@ -23,7 +22,7 @@ namespace Project.Game
             ObstacleDespawner = despawner;
             ObstacleDespawner.OnDespawned += HandleDespawned;
 
-            _activeObstacles = new List<IObstacle>();
+            ActiveObstacles = new List<IObstacle>();
             InitializeSpawners();
         }
 
@@ -39,7 +38,7 @@ namespace Project.Game
                 UpdateSpawner(info, timeStep);
             }
 
-            ObstacleDespawner.DespawnNecessaryObstacles(_activeObstacles);
+            ObstacleDespawner.DespawnNecessaryObstacles(ActiveObstacles);
         }
 
         protected override void OnPaused()
@@ -93,10 +92,10 @@ namespace Project.Game
         }
 
         private void HandleSpawned(IObstacle spawned) =>
-            _activeObstacles.Add(spawned);
+            ActiveObstacles.Add(spawned);
 
         private void HandleDespawned(IObstacle despawned) =>
-            _activeObstacles.Remove(despawned);
+            ActiveObstacles.Remove(despawned);
 
         private class SpawnerInfo
         {

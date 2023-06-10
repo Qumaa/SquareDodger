@@ -1,4 +1,5 @@
-﻿using Project.Architecture;
+﻿using System.Collections.Generic;
+using Project.Architecture;
 using UnityEngine;
 
 namespace Project.Game
@@ -10,6 +11,7 @@ namespace Project.Game
         private const int _STRIDE = 8; // vector2 size in bytes
 
         private ComputeBuffer _allocatedBuffer;
+        private Vector2[] _allocatedBufferData;
         private int _allocatedBufferLength;
 
         private readonly float _defaultBlendingRadius;
@@ -23,25 +25,24 @@ namespace Project.Game
             _defaultBlendingLength = defaultBlendingLength;
         }
 
-        public void UpdateShader(IObstacle[] data)
+        public void UpdateShader(List<IObstacle> data)
         {
             if (_isPaused)
                 return;
-            
-            var bufferDataLength = data.Length + 1;
+
+            var dataLength = data.Count;
+            var bufferDataLength = dataLength + 1;
             
             if (bufferDataLength > _allocatedBufferLength)
                 ReallocateBuffer(bufferDataLength);
             
-            var bufferData = new Vector2[bufferDataLength];
-
             // 0th element's X contains the size of the buffer
-            bufferData[0].x = data.Length;
+            _allocatedBufferData[0].x = dataLength;
 
-            for (var i = 0; i < data.Length; i++)
-                bufferData[i + 1] = data[i].Position;
+            for (var i = 0; i < dataLength; i++)
+                _allocatedBufferData[i + 1] = data[i].Position;
             
-            _allocatedBuffer.SetData(bufferData);
+            _allocatedBuffer.SetData(_allocatedBufferData);
         }
 
         protected override void OnReset()
@@ -62,6 +63,8 @@ namespace Project.Game
             _allocatedBuffer?.Release();
             _allocatedBuffer = AllocateBuffer(bufferLength);
             MaintainedShader.Material.SetBuffer(_bufferNameId, _allocatedBuffer);
+
+            _allocatedBufferData = new Vector2[bufferLength];
         }
 
         private void ResetShaderValues()

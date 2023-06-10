@@ -4,6 +4,6 @@ namespace Project.Game
 {
     public interface IObstacleManager : IUpdatable, IPausableAndResettable, IObstacleColorSource
     {
-        IEnumerable<IObstacle> ActiveObstacles { get; }
+        List<IObstacle> ActiveObstacles { get; }
     }
 }
