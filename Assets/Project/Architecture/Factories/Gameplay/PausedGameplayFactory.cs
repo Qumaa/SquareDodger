@@ -10,13 +10,15 @@ namespace Project.Architecture
         private IFactory<IObstacleManagerViewport> _obstacleManagerFactory;
         private IFactory<IAnimatedGameFinisher> _gameFinisherFactory;
         private IFactory<IParticleGameBackground> _gameBackgroundFactory;
+        private IFactory<IPlayerPositionScoreCalculator> _calculatorFactory;
 
         private CreatedObjects _context;
 
         public PausedGameplayFactory(IFactory<IPlayerBlendingShaderMaintainer> shaderMaintainerFactory,
             IFactory<IPlayerWithShader> playerFactory,
             IFactory<IObstacleManagerViewport> obstacleManagerFactory, IFactory<IGameCamera> gameCameraFactory,
-            IFactory<IAnimatedGameFinisher> gameFinisherFactory, IFactory<IParticleGameBackground> gameBackgroundFactory)
+            IFactory<IAnimatedGameFinisher> gameFinisherFactory,
+            IFactory<IParticleGameBackground> gameBackgroundFactory, IFactory<IPlayerPositionScoreCalculator> calculatorFactory)
         {
             _shaderMaintainerFactory = shaderMaintainerFactory;
             _playerFactory = playerFactory;
@@ -24,6 +26,7 @@ namespace Project.Architecture
             _gameCameraFactory = gameCameraFactory;
             _gameFinisherFactory = gameFinisherFactory;
             _gameBackgroundFactory = gameBackgroundFactory;
+            _calculatorFactory = calculatorFactory;
             
             _context = new CreatedObjects();
         }
@@ -44,7 +47,8 @@ namespace Project.Architecture
                 GameCamera = _gameCameraFactory.CreateNew(),
                 GameFinisher = _gameFinisherFactory.CreateNew(),
                 ObstacleManager = _obstacleManagerFactory.CreateNew(),
-                Player = _playerFactory.CreateNew()
+                Player = _playerFactory.CreateNew(),
+                ScoreCalculator = _calculatorFactory.CreateNew()
             };
         }
 
@@ -67,6 +71,9 @@ namespace Project.Architecture
             animatedFinisher.Player = _context.Player;
             animatedFinisher.CameraController = _context.GameCamera.CameraController;
             animatedFinisher.PlayerShader = _context.ShaderMaintainer.MaintainedShader;
+            
+            // score calculator
+            _context.ScoreCalculator.PlayerTransform = _context.Player.Transform;
         }
 
         private IGameplay CreateNewPausedGame()
@@ -76,7 +83,8 @@ namespace Project.Architecture
                 _context.GameCamera,
                 _context.ObstacleManager,
                 _context.GameFinisher,
-                _context.Background
+                _context.Background,
+                _context.ScoreCalculator
             );
 
             game.Pause();
@@ -92,6 +100,7 @@ namespace Project.Architecture
             public IGameCamera GameCamera;
             public IAnimatedGameFinisher GameFinisher;
             public IParticleGameBackground Background;
+            public IPlayerPositionScoreCalculator ScoreCalculator;
         }
     }
 }

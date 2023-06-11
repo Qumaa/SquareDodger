@@ -74,8 +74,10 @@ namespace Project.Architecture
             
             var gameBackgroundFactory = CreateGameBackgroundFactory();
 
+            var calculatorFactory = new ScoreCalculatorFactory();
+
             var gameplayFactory = new PausedGameplayFactory(maintainerFactory, playerFactory, obstacleManagerFactory, 
-                gameCameraFactory, gameFinisherFactory, gameBackgroundFactory);
+                gameCameraFactory, gameFinisherFactory, gameBackgroundFactory, calculatorFactory);
 
             return gameplayFactory;
         }

@@ -8,6 +8,7 @@ namespace Project.Game
         public GameObject MainMenuPrefab { get; private set; }
         public GameObject PauseMenuPrefab { get; private set; }
         public GameObject GameEndMenuPrefab { get; private set; }
+        public GameObject GameplayUIPrefab { get; private set; }
 
 
         public void Load(GameUIConfig data)
@@ -16,6 +17,7 @@ namespace Project.Game
             MainMenuPrefab = data.MainMenuPrefab;
             PauseMenuPrefab = data.PauseMenuPrefab;
             GameEndMenuPrefab = data.GameEndMenuPrefab;
+            GameplayUIPrefab = data.GameplayUIPrefab;
         }
     }
 }

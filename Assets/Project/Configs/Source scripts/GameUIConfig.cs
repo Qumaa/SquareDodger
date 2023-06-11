@@ -10,11 +10,12 @@ namespace Project.Game
         [SerializeField] private MainMenuHandler _mainMenu;
         [SerializeField] private PauseMenuHandler _pauseMenu;
         [SerializeField] private GameEndMenuHandler _gameEndMenu;
+        [SerializeField] private GameplayUIHandler _gameplayUI;
         
-
         public GameObject UICanvasPrefab => _uiCanvas.gameObject;
         public GameObject MainMenuPrefab => _mainMenu.gameObject;
         public GameObject PauseMenuPrefab => _pauseMenu.gameObject;
         public GameObject GameEndMenuPrefab => _gameEndMenu.gameObject;
+        public GameObject GameplayUIPrefab => _gameplayUI.gameObject;
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Project.Game
+﻿namespace Project
 {
     public interface ILoadableFrom<T>
     {

@@ -10,19 +10,23 @@ namespace Project.Game
         private IObstacleManager _obstacleManager;
         private IAnimatedGameFinisher _gameFinisher;
         private IGameBackground _gameBackground;
+        private IGameScoreCalculator _scoreCalculator;
 
         private IPausableAndResettable[] _gameComposites;
         
         public event Action OnEnded;
 
+        public float Score => _scoreCalculator.CalculateScore();
+
         public Gameplay(IPlayerWithShader player, IGameCamera gameCamera, IObstacleManager obstacleManager, 
-            IAnimatedGameFinisher gameFinisher, IGameBackground gameBackground)
+            IAnimatedGameFinisher gameFinisher, IGameBackground gameBackground, IGameScoreCalculator scoreCalculator)
         {
             _gameCamera = gameCamera;
             _player = player;
             _obstacleManager = obstacleManager;
             _gameFinisher = gameFinisher;
             _gameBackground = gameBackground;
+            _scoreCalculator = scoreCalculator;
 
             InitializeComposites();
             SetFinisher();

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using Project.Game;
 using Project.UI;
 using UnityEngine;
@@ -13,8 +13,9 @@ namespace Project.Architecture
         private Camera _camera;
         private IDisposer _disposer;
 
-        public event Action OnEnded;
-        
+        private List<IUpdatable> _updatables;
+        private List<IFixedUpdatable> _fixedUpdatables;
+
         public IGameplay Gameplay { get; set; }
         public IGameCanvasUIRenderer UI { get; set; }
         public ICameraController CameraController { get; set; }
@@ -27,21 +28,29 @@ namespace Project.Architecture
             _camera = camera;
             _disposer = disposer;
             InitializeStateMachine();
+            
+            _updatables = new List<IUpdatable>();
+            _fixedUpdatables = new List<IFixedUpdatable>();
         }
 
         public void Update(float timeStep)
         {
-            Gameplay.Update(timeStep);
+            foreach(var updatable in _updatables)
+                updatable.Update(timeStep);
         }
 
         public void FixedUpdate(float fixedTimeStep)
         {
-            Gameplay.FixedUpdate(fixedTimeStep);
+            foreach(var fixedUpdatable in _fixedUpdatables)
+                fixedUpdatable.FixedUpdate(fixedTimeStep);
         }
 
         public void Initialize()
         {
             _stateMachine.SetState<BootstrapState>();
+            
+            _updatables.Add(Gameplay);
+            _fixedUpdatables.Add(Gameplay);
         }
 
         private void InitializeStateMachine()
@@ -68,5 +77,17 @@ namespace Project.Architecture
                 .AddState(gameEnd)
                 .AddState(gameRestart);
         }
+
+        public void Add(IUpdatable item) =>
+            _updatables.Add(item);
+
+        public void Remove(IUpdatable item) =>
+            _updatables.Remove(item);
+
+        public void Add(IFixedUpdatable item) =>
+            _fixedUpdatables.Add(item);
+
+        public void Remove(IFixedUpdatable item) =>
+            _fixedUpdatables.Remove(item);
     }
 }

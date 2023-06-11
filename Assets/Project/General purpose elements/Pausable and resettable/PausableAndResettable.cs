@@ -6,6 +6,9 @@
         
         public void Pause()
         {
+            if (_isPaused)
+                return;
+            
             _isPaused = true;
             OnPaused();
         }
@@ -16,6 +19,9 @@
 
         public void Resume()
         {
+            if (!_isPaused)
+                return;
+            
             _isPaused = false;
             OnResumed();
         }

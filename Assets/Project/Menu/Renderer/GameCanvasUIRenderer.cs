@@ -33,11 +33,5 @@ namespace Project.UI
         {
             return (T)_uis[typeof(T)];
         }
-
-        public bool Contains<T>()
-            where T : IGameCanvasUI
-        {
-            return _uis.ContainsKey(typeof(T));
-        }
     }
 }

@@ -12,6 +12,8 @@ namespace Project.Architecture
 
         public override void Enter()
         {
+            _game.Gameplay.Pause();
+            
             GetMenuIfNecessary();
             
             _mainMenu.Show();

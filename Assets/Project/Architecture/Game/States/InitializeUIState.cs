@@ -43,6 +43,10 @@ namespace Project.Architecture
             pauseMenu.InputService = inputService;
             pauseMenu.Hide();
             _game.UI.Add(pauseMenu);
+
+            var gameplayUi = new GameplayUIFactory(_uiData.GameplayUIPrefab).CreateNew();
+            gameplayUi.Hide();
+            _game.UI.Add(gameplayUi);
         }
 
         private void MoveNext()
