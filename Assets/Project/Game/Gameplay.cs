@@ -8,7 +8,7 @@ namespace Project.Game
         private IGameCamera _gameCamera;
         private IPlayerWithShader _player;
         private IObstacleManager _obstacleManager;
-        private IGameFinisher _gameFinisher;
+        private IAnimatedGameFinisher _gameFinisher;
         private IGameBackground _gameBackground;
 
         private IPausableAndResettable[] _gameComposites;
@@ -16,7 +16,7 @@ namespace Project.Game
         public event Action OnEnded;
 
         public Gameplay(IPlayerWithShader player, IGameCamera gameCamera, IObstacleManager obstacleManager, 
-            IGameFinisher gameFinisher, IGameBackground gameBackground)
+            IAnimatedGameFinisher gameFinisher, IGameBackground gameBackground)
         {
             _gameCamera = gameCamera;
             _player = player;
@@ -62,6 +62,7 @@ namespace Project.Game
         protected override void OnReset()
         {
             base.OnResumed();
+            _gameFinisher.Reset();
             ForeachComposite(x => x.Reset());
         }
 
@@ -81,8 +82,8 @@ namespace Project.Game
         {
             _gameComposites = new IPausableAndResettable[]
             {
-                _gameCamera,
                 _player,
+                _gameCamera,
                 _obstacleManager,
                 _gameBackground
             };
@@ -90,8 +91,11 @@ namespace Project.Game
 
         private void ForeachComposite(Action<IPausableAndResettable> action)
         {
-            foreach (var composite in _gameComposites)
+            for (var i = 0; i < _gameComposites.Length; i++)
+            {
+                var composite = _gameComposites[i];
                 action(composite);
+            }
         }
     }
 }

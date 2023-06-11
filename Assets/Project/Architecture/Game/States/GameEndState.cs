@@ -32,6 +32,7 @@ namespace Project.Architecture
 
         private void HandleReturnToMenu()
         {
+            _game.Gameplay.Reset();
             _stateMachine.SetState<MenuState>();
         }
 

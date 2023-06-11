@@ -26,9 +26,6 @@
 
         public void Reset()
         {
-            if (_isPaused)
-                Resume();
-
             OnReset();
         }
 

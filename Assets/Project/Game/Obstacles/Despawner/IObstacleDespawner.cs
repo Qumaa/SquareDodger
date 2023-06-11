@@ -7,5 +7,6 @@ namespace Project.Game
     {
         event Action<IObstacle> OnDespawned;
         void DespawnNecessaryObstacles(List<IObstacle> obstacles);
+        void DespawnSingle(IObstacle obstacle);
     }
 }

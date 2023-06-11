@@ -20,7 +20,8 @@ namespace Project.Architecture
                 new ProceduralMotionSystemVector2(_cameraData.MotionSpeed, _cameraData.MotionDamping,
                     _cameraData.MotionResponsiveness),
                 new CameraOffsetCalculatorViewport(_cameraController.ControlledCamera),
-                _cameraData.BottomOffset
+                _cameraData.BottomOffset,
+                _cameraData.ViewportWidth
             );
 
             return gameCamera;

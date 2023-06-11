@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Project.Architecture
+﻿namespace Project.Architecture
 {
     public class RestartGameState : GameState
     {
@@ -10,12 +8,12 @@ namespace Project.Architecture
 
         public override void Enter()
         {
-            throw new NotImplementedException();
+            _game.Gameplay.Reset();
+            _stateMachine.SetState<GameLoopState>();
         }
 
         public override void Exit()
         {
-            throw new NotImplementedException();
         }
     }
 }

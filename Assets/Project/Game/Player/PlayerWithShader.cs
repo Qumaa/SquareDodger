@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Project.Game
 {
@@ -30,16 +29,6 @@ namespace Project.Game
                 return;
             
             _shaderMaintainer.UpdateShader(ObstaclesSource.ActiveObstacles);
-                // .Where(ObstacleBlendsPlayer)
-                // .ToArray());
-        }
-
-        private bool ObstacleBlendsPlayer(IObstacle obstacle)
-        {
-            var distance = Vector2.Distance(obstacle.Position, Transform.position);
-            var blendingRadius = _shaderMaintainer.MaintainedShader.TotalBlendingRadius;
-            
-            return distance <= blendingRadius;
         }
 
         private void SetShaderMaintainer(IPlayerBlendingShaderMaintainer value)

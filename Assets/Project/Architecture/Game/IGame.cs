@@ -1,5 +1,4 @@
-﻿using System;
-using Project.Game;
+﻿using Project.Game;
 using Project.UI;
 
 namespace Project.Architecture

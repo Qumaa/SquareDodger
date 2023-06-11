@@ -58,8 +58,8 @@ namespace Project.Game
         protected override void OnReset()
         {
             base.OnReset();
-            foreach (var obstacle in ActiveObstacles)
-                obstacle.Despawn();
+            for (var i = ActiveObstacles.Count - 1; i >= 0; i--)
+                ObstacleDespawner.DespawnSingle(ActiveObstacles[i]);
         }
 
         private void InitializeSpawners()

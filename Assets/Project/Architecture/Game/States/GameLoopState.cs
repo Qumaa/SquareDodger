@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Project.Architecture
+﻿namespace Project.Architecture
 {
     public class GameLoopState : GameState
     {

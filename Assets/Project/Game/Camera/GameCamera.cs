@@ -1,5 +1,4 @@
-﻿using Project.Architecture;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Project.Game
 {
@@ -9,6 +8,7 @@ namespace Project.Game
         private ICameraOffsetCalculator _offsetCalculator;
         
         private float _bottomOffset;
+        private float _defaultWidth;
 
         private ICameraController _cameraController;
         private Transform _target;
@@ -24,12 +24,13 @@ namespace Project.Game
         public Vector2 Position => _cameraController.Position;
 
         public GameCamera(ICameraController cameraController, ProceduralMotionSystemVector2 motionSystem,
-            ICameraOffsetCalculator offsetCalculator, float bottomOffset)
+            ICameraOffsetCalculator offsetCalculator, float bottomOffset, float defaultWidth)
         {
             _cameraController = cameraController;
             _motionSystem = motionSystem;
             _offsetCalculator = offsetCalculator;
             _bottomOffset = bottomOffset;
+            _defaultWidth = defaultWidth;
         }
 
         public void FixedUpdate(float fixedTimeStep)
@@ -47,6 +48,7 @@ namespace Project.Game
         protected override void OnReset()
         {
             ResetPosition();
+            ResetWidth();
         }
 
         private void ResetPosition()
@@ -57,6 +59,11 @@ namespace Project.Game
                 new ProceduralMotionSystemOperandVector2(_cameraController.Position),
                 new ProceduralMotionSystemOperandVector2()
             );
+        }
+
+        private void ResetWidth()
+        {
+            _cameraController.WidthInUnits = _defaultWidth;
         }
 
         private void SetPosition(Vector2 position)

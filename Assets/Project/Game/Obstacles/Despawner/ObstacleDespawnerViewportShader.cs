@@ -39,16 +39,16 @@ namespace Project.Game
             }
         }
 
-        private bool ShouldDespawn(IObstacle obstacle) =>
-            IsBelowScreen(obstacle) &&
-            DoesntBlendPlayer(obstacle);
-
-        private void DespawnSingle(IObstacle obstacle)
+        public void DespawnSingle(IObstacle obstacle)
         {
             _obstaclePooler.Push(obstacle);
             obstacle.Despawn();
             OnDespawned?.Invoke(obstacle);
         }
+
+        private bool ShouldDespawn(IObstacle obstacle) =>
+            IsBelowScreen(obstacle) &&
+            DoesntBlendPlayer(obstacle);
 
         private bool IsBelowScreen(IObstacle obstacle) =>
             _camera.WorldToViewportPoint(obstacle.Position + _positionOffset).y < 0;

@@ -42,14 +42,17 @@ namespace Project.Game
             for (var i = 0; i < dataLength; i++)
                 _allocatedBufferData[i + 1] = data[i].Position;
             
-            _allocatedBuffer.SetData(_allocatedBufferData);
+            UpdateBuffer();
         }
+
+        private void UpdateBuffer() =>
+            _allocatedBuffer.SetData(_allocatedBufferData);
 
         protected override void OnReset()
         {
             base.OnReset();
             ResetShaderValues();
-            Dispose();
+            ResetBuffer();
         }
 
         private ComputeBuffer AllocateBuffer(int bufferLength)
@@ -71,6 +74,12 @@ namespace Project.Game
         {
             MaintainedShader.HardBlendingRadius = _defaultBlendingRadius;
             MaintainedShader.SoftBlendingLength = _defaultBlendingLength;
+        }
+
+        private void ResetBuffer()
+        {
+            _allocatedBufferData[0].x = 0;
+            UpdateBuffer();
         }
 
         public void Dispose()

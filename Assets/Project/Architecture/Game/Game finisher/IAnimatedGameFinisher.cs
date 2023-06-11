@@ -2,7 +2,7 @@
 
 namespace Project.Architecture
 {
-    public interface IAnimatedGameFinisher : IGameFinisher
+    public interface IAnimatedGameFinisher : IGameFinisher, IResettable
     {
         IPlayer Player { get; set; }
         ICameraController CameraController { get; set; }

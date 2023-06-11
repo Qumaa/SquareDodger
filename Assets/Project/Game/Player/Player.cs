@@ -1,5 +1,4 @@
 using System;
-using Project.Architecture;
 using UnityEngine;
 
 namespace Project.Game
@@ -64,8 +63,8 @@ namespace Project.Game
 
         private Vector2 CalculateVelocity() =>
             _movingRight ?
-                new Vector2(MovementSpeed, 0) :
-                new Vector2(0, MovementSpeed);
+                new Vector2(_movementSpeed, 0) :
+                new Vector2(0, _movementSpeed);
 
         private void Die()
         {
@@ -93,7 +92,7 @@ namespace Project.Game
         protected override void OnPaused()
         {
             _trailRenderer.time = float.PositiveInfinity;
-            _movementSpeedBeforePausing = MovementSpeed;
+            _movementSpeedBeforePausing = _movementSpeed;
             _movementSpeed = 0;
             UpdateVelocity();
         }
@@ -107,12 +106,14 @@ namespace Project.Game
 
         protected override void OnReset()
         {
+            _movingRight = false;
             Transform.position = Vector3.zero;
+            _trailRenderer.Clear();
         }
 
-        protected void SetTrailLength(float length)
+        private void SetTrailLength(float length)
         {
-            _trailRenderer.time = _trailTime = length / MovementSpeed;
+            _trailRenderer.time = _trailTime = length / _movementSpeed;
         }
     }
 }

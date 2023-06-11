@@ -24,6 +24,8 @@ namespace Project.Architecture
         {
             _mainMenu.Hide();
             _mainMenu.OnGameStartPressed -= HandleGameStart;
+            _mainMenu.OnApplicationQuitPressed -= HandleQuit;
+            _mainMenu.OnOpenSettingsPressed -= HandleSettings;
         }
 
         private void HandleGameStart()
