@@ -7,19 +7,17 @@ namespace Project.Architecture
     {
         private IObstacleDespawnerViewportShader _obstacleDespawner;
         private IFactory<IObstacleSpawner[]> _spawnerFactory;
-        private Color32 _obstacleColor;
 
         public ObstacleManagerViewportFactory(IFactory<IObstacleSpawner[]> spawnerFactory, 
-            IObstacleDespawnerViewportShader obstacleDespawner, Color32 obstacleColor)
+            IObstacleDespawnerViewportShader obstacleDespawner)
         {
             _spawnerFactory = spawnerFactory;
             _obstacleDespawner = obstacleDespawner;
-            _obstacleColor = obstacleColor;
         }
 
         public IObstacleManagerViewport CreateNew()
         {
-            return new ObstacleManagerViewport(_spawnerFactory.CreateNew(), _obstacleDespawner, _obstacleColor);
+            return new ObstacleManagerViewport(_spawnerFactory.CreateNew(), _obstacleDespawner);
         }
     }
 }

@@ -7,22 +7,21 @@ namespace Project.Game
     {
         private IObstacleSpawner[] _spawners;
         private SpawnerInfo[] _spawnerInfos;
+        private List<IObstacle> _allObstacles;
+        private Color32 _obstaclesColor;
 
         public List<IObstacle> ActiveObstacles { get; }
 
         public IObstacleDespawnerViewportShader ObstacleDespawner { get; }
 
-        public Color32 ObstacleColor { get; }
-
-        public ObstacleManagerViewport(IObstacleSpawner[] spawners, IObstacleDespawnerViewportShader despawner,
-            Color32 obstacleColor)
+        public ObstacleManagerViewport(IObstacleSpawner[] spawners, IObstacleDespawnerViewportShader despawner)
         {
-            ObstacleColor = obstacleColor;
             _spawners = spawners;
             ObstacleDespawner = despawner;
             ObstacleDespawner.OnDespawned += HandleDespawned;
 
             ActiveObstacles = new List<IObstacle>();
+            _allObstacles = new List<IObstacle>();
             InitializeSpawners();
         }
 
@@ -31,14 +30,18 @@ namespace Project.Game
             if (_isPaused)
                 return;
 
-            for (var i = 0; i < _spawners.Length; i++)
-            {
-                var info = _spawnerInfos[i];
-
+            foreach (var info in _spawnerInfos)
                 UpdateSpawner(info, timeStep);
-            }
 
             ObstacleDespawner.DespawnNecessaryObstacles(ActiveObstacles);
+        }
+
+        public void ApplyTheme(IGameTheme theme)
+        {
+            _obstaclesColor = theme.ObstacleColor;
+            
+            foreach (var obstacle in _allObstacles)
+                obstacle.Color = _obstaclesColor;
         }
 
         protected override void OnPaused()
@@ -67,10 +70,10 @@ namespace Project.Game
             _spawnerInfos = new SpawnerInfo[_spawners.Length];
             for (var i = 0; i < _spawnerInfos.Length; i++)
             {
-                _spawners[i].ColorSource = this;
                 _spawnerInfos[i] = new SpawnerInfo(_spawners[i]);
 
                 _spawners[i].OnSpawned += HandleSpawned;
+                _spawners[i].OnCreated += HandleCreated;
             }
         }
 
@@ -96,6 +99,12 @@ namespace Project.Game
 
         private void HandleDespawned(IObstacle despawned) =>
             ActiveObstacles.Remove(despawned);
+
+        private void HandleCreated(IObstacle created)
+        {
+            _allObstacles.Add(created);
+            created.Color = _obstaclesColor;
+        }
 
         private class SpawnerInfo
         {

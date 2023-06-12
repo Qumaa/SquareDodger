@@ -40,6 +40,12 @@ namespace Project.Game
             SetUpdatedParticles(activeParticles);
         }
 
+        public void ApplyTheme(IGameTheme theme)
+        {
+            var mainModule = _particleSystem.main;
+            mainModule.startColor = new ParticleSystem.MinMaxGradient(theme.ParticlesColor);
+        }
+
         private int GetActiveParticlesCount()
         {
             ReallocateParticlesBufferIfNeeded();

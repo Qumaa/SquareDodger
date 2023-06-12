@@ -20,11 +20,11 @@ namespace Project.Architecture
 
         private void CreateGame(Camera controlledCamera)
         {
-            var resolver = new TempThemeResolver();
-            var gameData = new GameRuntimeData(resolver);
+            var resolver = new ResourcesGameThemeResolver();
+            var gameData = new GameRuntimeData();
             gameData.Load(_gameConfig);
 
-            _game = new Game(gameData, controlledCamera, _disposer);
+            _game = new Game(gameData, controlledCamera, _disposer, resolver);
             _game.InputService = GetComponent<IGameInputService>();
             _game.Initialize();
         }

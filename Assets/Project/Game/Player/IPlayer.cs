@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Project.Game
 {
-    public interface IPlayer : IPausableAndResettable, IGameInputServiceConsumer
+    public interface IPlayer : IPausableAndResettable, IGameInputServiceConsumer, IGameThemeAppender
     {
         public event Action OnTurned;
         public event Action OnDied;

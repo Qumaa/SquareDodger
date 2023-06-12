@@ -10,10 +10,9 @@ namespace Project.Game
         private float _bottomOffset;
         private float _defaultWidth;
 
-        private ICameraController _cameraController;
         private Transform _target;
 
-        public ICameraController CameraController => _cameraController;
+        public ICameraController CameraController { get; }
 
         public Transform Target
         {
@@ -21,12 +20,12 @@ namespace Project.Game
             set => SetTarget(value);
         }
 
-        public Vector2 Position => _cameraController.Position;
+        public Vector2 Position => CameraController.Position;
 
         public GameCamera(ICameraController cameraController, ProceduralMotionSystemVector2 motionSystem,
             ICameraOffsetCalculator offsetCalculator, float bottomOffset, float defaultWidth)
         {
-            _cameraController = cameraController;
+            CameraController = cameraController;
             _motionSystem = motionSystem;
             _offsetCalculator = offsetCalculator;
             _bottomOffset = bottomOffset;
@@ -44,6 +43,9 @@ namespace Project.Game
             
             SetPosition(position);
         }
+        
+        public void ApplyTheme(IGameTheme theme) =>
+            CameraController.ControlledCamera.backgroundColor = theme.BackgroundColor;
 
         protected override void OnReset()
         {
@@ -56,19 +58,19 @@ namespace Project.Game
             SetPosition(GetPositionWithOffset());
             
             _motionSystem.SetInitialValue(
-                new ProceduralMotionSystemOperandVector2(_cameraController.Position),
+                new ProceduralMotionSystemOperandVector2(CameraController.Position),
                 new ProceduralMotionSystemOperandVector2()
             );
         }
 
         private void ResetWidth()
         {
-            _cameraController.WidthInUnits = _defaultWidth;
+            CameraController.WidthInUnits = _defaultWidth;
         }
 
         private void SetPosition(Vector2 position)
         {
-            _cameraController.Position = new Vector2(position.x, position.y);
+            CameraController.Position = new Vector2(position.x, position.y);
         }
 
         private Vector2 GetPositionWithOffset() =>

@@ -42,5 +42,12 @@ namespace Project.Game
             base.OnReset();
             _shaderMaintainer.Reset();
         }
+
+        public override void ApplyTheme(IGameTheme theme)
+        {
+            base.ApplyTheme(theme);
+            _shaderMaintainer.MaintainedShader.PlayerColor = theme.PlayerColor;
+            _shaderMaintainer.MaintainedShader.BlendingColor = theme.ObstacleColor;
+        }
     }
 }

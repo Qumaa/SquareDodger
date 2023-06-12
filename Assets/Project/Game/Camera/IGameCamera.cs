@@ -2,7 +2,7 @@
 
 namespace Project.Game
 {
-    public interface IGameCamera : IFixedUpdatable, IPausableAndResettable
+    public interface IGameCamera : IFixedUpdatable, IPausableAndResettable, IGameThemeAppender
     {
         ICameraController CameraController { get; }
         Transform Target { get; set; }

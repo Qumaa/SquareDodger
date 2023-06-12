@@ -10,5 +10,6 @@ namespace Project.Architecture
         ICameraController CameraController { get; set; }
         IGameInputService InputService { get; set; }
         void Initialize();
+        void ApplyTheme(GameThemes themeType, bool dark = true);
     }
 }

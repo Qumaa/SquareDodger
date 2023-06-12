@@ -9,9 +9,11 @@ namespace Project.Architecture
     {
         private IGameStateMachine _stateMachine;
 
+        private GameThemeApplier _themeApplier;
         private GameRuntimeData _gameData;
         private Camera _camera;
         private IDisposer _disposer;
+        private IGameThemeResolver _themeResolver;
 
         private List<IUpdatable> _updatables;
         private List<IFixedUpdatable> _fixedUpdatables;
@@ -21,16 +23,20 @@ namespace Project.Architecture
         public ICameraController CameraController { get; set; }
         public IGameInputService InputService { get; set; }
 
-        public Game(GameRuntimeData gameData, Camera camera, IDisposer disposer)
+
+        public Game(GameRuntimeData gameData, Camera camera, IDisposer disposer,
+            IGameThemeResolver gameThemeResolver)
         {
-            _gameData = gameData;
-            
-            _camera = camera;
-            _disposer = disposer;
-            InitializeStateMachine();
-            
+            _themeApplier = new GameThemeApplier();
             _updatables = new List<IUpdatable>();
             _fixedUpdatables = new List<IFixedUpdatable>();
+
+            _gameData = gameData;
+            _camera = camera;
+            _disposer = disposer;
+            _themeResolver = gameThemeResolver;
+
+            InitializeStateMachine();
         }
 
         public void Update(float timeStep)
@@ -53,6 +59,9 @@ namespace Project.Architecture
             _fixedUpdatables.Add(Gameplay);
         }
 
+        public void ApplyTheme(GameThemes themeType, bool dark = true) =>
+            _themeApplier.ApplyTheme(_themeResolver.Resolve(themeType, dark));
+
         private void InitializeStateMachine()
         {
             _stateMachine = new GameStateMachine();
@@ -61,7 +70,7 @@ namespace Project.Architecture
 
         private void InitializeStates()
         {
-            var bootstrap = new BootstrapState(_stateMachine, this, _disposer, _gameData, _camera);
+            var bootstrap = new BootstrapState(_stateMachine, this, _disposer, _gameData, _camera, _themeApplier);
             var initializeMenu = new InitializeUIState(_stateMachine, this, _gameData.GameUIData);
             var menuState = new MenuState(_stateMachine, this);
             var gameLoop = new GameLoopState(_stateMachine, this);

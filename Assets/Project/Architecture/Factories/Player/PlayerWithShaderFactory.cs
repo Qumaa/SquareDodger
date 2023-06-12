@@ -8,8 +8,6 @@ namespace Project.Architecture
         private PlayerRuntimeData _playerData;
         private IGameInputService _inputService;
 
-        private const string _TRAIL_COLOR_PROPERTY_NAME = "_Color";
-
         public PlayerWithShaderFactory(PlayerRuntimeData playerData, IGameInputService inputService)
         {
             _playerData = playerData;
@@ -21,8 +19,6 @@ namespace Project.Architecture
             var playerObj = Object.Instantiate(_playerData.PlayerPrefab);
 
             var collisionDetector = playerObj.GetComponent<IPlayerCollisionDetector>();
-            
-            _playerData.TrailMaterial.SetColor(_TRAIL_COLOR_PROPERTY_NAME, _playerData.ShaderData.PlayerColor);
 
             var player = new PlayerWithShader(playerObj, collisionDetector, _playerData.TrailMaterial, 
                 _playerData.PlayerMaterial)

@@ -1,20 +1,14 @@
-﻿using UnityEngine;
-
-namespace Project.Architecture
+﻿namespace Project.Architecture
 {
     public struct BlendingShaderFactory : IFactory<IPlayerBlendingShader>
     {
         private float _blendingRadius;
         private float _blendingLength;
-        private Color32 _playerColor;
-        private Color32 _blendingColor;
 
-        public BlendingShaderFactory(float blendingRadius, float blendingLength, Color32 playerColor, Color32 blendingColor)
+        public BlendingShaderFactory(float blendingRadius, float blendingLength)
         {
             _blendingRadius = blendingRadius;
             _blendingLength = blendingLength;
-            _playerColor = playerColor;
-            _blendingColor = blendingColor;
         }
 
         public IPlayerBlendingShader CreateNew()
@@ -23,8 +17,6 @@ namespace Project.Architecture
             {
                 HardBlendingRadius = _blendingRadius,
                 SoftBlendingLength = _blendingLength,
-                PlayerColor = _playerColor,
-                BlendingColor = _blendingColor
             };
             
             return shader;

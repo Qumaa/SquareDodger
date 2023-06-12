@@ -9,14 +9,16 @@ namespace Project.Architecture
         private IDisposer _disposer;
         private GameRuntimeData _gameData;
         private Camera _controlledCamera;
+        private GameThemeApplier _themeApplier;
 
         public BootstrapState(IGameStateMachine stateMachine, IGame game, IDisposer disposer,
-            GameRuntimeData gameData, Camera controlledCamera)
+            GameRuntimeData gameData, Camera controlledCamera, GameThemeApplier themeApplier)
             : base(stateMachine, game)
         {
             _disposer = disposer;
             _gameData = gameData;
             _controlledCamera = controlledCamera;
+            _themeApplier = themeApplier;
         }
 
         public override void Enter()
@@ -38,8 +40,11 @@ namespace Project.Architecture
             // sound, input etc.
         }
 
-        private void LoadGame() =>
+        private void LoadGame()
+        {
             _game.Gameplay = CreateGameplayFactory().CreateNew();
+            _game.ApplyTheme(GameThemes.Default);
+        }
 
         private void MoveNext() =>
             _stateMachine.SetState<InitializeUIState>();
@@ -51,15 +56,13 @@ namespace Project.Architecture
                 WidthInUnits = _gameData.GameCameraData.ViewportWidth
             };
 
-            controller.ControlledCamera.backgroundColor = _gameData.GameColorsData.BackgroundColor;
             return controller;
         }
 
         private IFactory<IGameplay> CreateGameplayFactory()
         {
             var shaderData = _gameData.PlayerData.ShaderData;
-            var shaderFactory = new BlendingShaderFactory(shaderData.BlendingRadius, shaderData.BlendingLength,
-                _gameData.GameColorsData.PlayerColor, _gameData.GameColorsData.ObstaclesColor);
+            var shaderFactory = new BlendingShaderFactory(shaderData.BlendingRadius, shaderData.BlendingLength);
             var maintainerFactory = new PlayerBlendingShaderMaintainerFactory(_disposer, shaderFactory,
                 shaderData.BlendingRadius, shaderData.BlendingLength);
             
@@ -76,7 +79,7 @@ namespace Project.Architecture
 
             var calculatorFactory = new ScoreCalculatorFactory();
 
-            var gameplayFactory = new PausedGameplayFactory(maintainerFactory, playerFactory, obstacleManagerFactory, 
+            var gameplayFactory = new PausedGameplayFactory(_themeApplier, maintainerFactory, playerFactory, obstacleManagerFactory, 
                 gameCameraFactory, gameFinisherFactory, gameBackgroundFactory, calculatorFactory);
 
             return gameplayFactory;
@@ -93,7 +96,7 @@ namespace Project.Architecture
             var spawnerFactory = new ObstacleManagerSpawnerFactory
                 (managerConfig, controlledCamera, cameraViewportDepth, pooler, factory);
             var managerFactory = new ObstacleManagerViewportFactory
-                (spawnerFactory, despawner, _gameData.GameColorsData.ObstaclesColor);
+                (spawnerFactory, despawner);
 
             return managerFactory;
         }
@@ -101,8 +104,7 @@ namespace Project.Architecture
         private IFactory<IParticleGameBackground> CreateGameBackgroundFactory()
         {
             var particleFactory = new GameBackgroundParticleSystemFactory(
-                _gameData.GameBackgroundData.BackgroundParticlesPrefab, 
-                _gameData.GameColorsData.BackgroundParticlesColor);
+                _gameData.GameBackgroundData.BackgroundParticlesPrefab);
 
             var backgroundSize = 
                 new ViewportBackgroundSizeCalculator(_controlledCamera, _gameData.GameBackgroundData.ParticlesAreaExtraSize)

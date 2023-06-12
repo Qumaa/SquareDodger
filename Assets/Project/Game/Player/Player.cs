@@ -9,7 +9,7 @@ namespace Project.Game
         private Rigidbody2D _rigidbody;
         private IGameInputService _inputService;
         private TrailRenderer _trailRenderer;
-        protected GameObject _gameObject;
+        private GameObject _gameObject;
 
         private float _movementSpeed;
         private float _movementSpeedBeforePausing;
@@ -45,6 +45,11 @@ namespace Project.Game
             _trailRenderer.material = trailMaterial;
 
             collisionDetector.OnCollided += Die;
+        }
+
+        public virtual void ApplyTheme(IGameTheme theme)
+        {
+            _trailRenderer.material.color = theme.PlayerColor;
         }
 
         private void Turn()

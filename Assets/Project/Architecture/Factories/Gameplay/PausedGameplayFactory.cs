@@ -4,6 +4,7 @@ namespace Project.Architecture
 {
     public struct PausedGameplayFactory : IFactory<IGameplay>
     {
+        private readonly IGameThemeAppenderComposite _themeApplier;
         private IFactory<IPlayerBlendingShaderMaintainer> _shaderMaintainerFactory;
         private IFactory<IPlayerWithShader> _playerFactory;
         private IFactory<IGameCamera> _gameCameraFactory;
@@ -14,12 +15,15 @@ namespace Project.Architecture
 
         private CreatedObjects _context;
 
-        public PausedGameplayFactory(IFactory<IPlayerBlendingShaderMaintainer> shaderMaintainerFactory,
+        public PausedGameplayFactory(IGameThemeAppenderComposite themeApplier,
+            IFactory<IPlayerBlendingShaderMaintainer> shaderMaintainerFactory,
             IFactory<IPlayerWithShader> playerFactory,
             IFactory<IObstacleManagerViewport> obstacleManagerFactory, IFactory<IGameCamera> gameCameraFactory,
             IFactory<IAnimatedGameFinisher> gameFinisherFactory,
-            IFactory<IParticleGameBackground> gameBackgroundFactory, IFactory<IPlayerPositionScoreCalculator> calculatorFactory)
+            IFactory<IParticleGameBackground> gameBackgroundFactory,
+            IFactory<IPlayerPositionScoreCalculator> calculatorFactory)
         {
+            _themeApplier = themeApplier;
             _shaderMaintainerFactory = shaderMaintainerFactory;
             _playerFactory = playerFactory;
             _obstacleManagerFactory = obstacleManagerFactory;
@@ -34,7 +38,8 @@ namespace Project.Architecture
         public IGameplay CreateNew()
         {
             CreateDependencies();
-            InjectDependincies();
+            InjectDependencies();
+            AddThemeAppenders();
             return CreateNewPausedGame();
         }
 
@@ -52,7 +57,7 @@ namespace Project.Architecture
             };
         }
 
-        private void InjectDependincies()
+        private void InjectDependencies()
         {
             // player
             _context.Player.ShaderMaintainer = _context.ShaderMaintainer;
@@ -74,6 +79,14 @@ namespace Project.Architecture
             
             // score calculator
             _context.ScoreCalculator.PlayerTransform = _context.Player.Transform;
+        }
+
+        private void AddThemeAppenders()
+        {
+            _themeApplier.Add(_context.GameCamera);
+            _themeApplier.Add(_context.Player);
+            _themeApplier.Add(_context.Background);
+            _themeApplier.Add(_context.ObstacleManager);
         }
 
         private IGameplay CreateNewPausedGame()
