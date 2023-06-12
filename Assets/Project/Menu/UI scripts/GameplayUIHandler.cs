@@ -15,7 +15,7 @@ namespace Project.UI
         
         public void DisplayScore(float score)
         {
-            _scoreText.text = score.ToString("F2");
+            _scoreText.text = score.ToString("F0");
         }
 
         protected override void OnAwake()
