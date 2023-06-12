@@ -16,3 +16,4 @@ MonoBehaviour:
   _mainMenu: {fileID: 57307519695793593, guid: 58c4ecb5d713a4d4fbe5df0b85eb4508, type: 3}
   _pauseMenu: {fileID: 1928340600398114206, guid: 4b9d00a5b41246a42859c7e801400ee6, type: 3}
   _gameEndMenu: {fileID: 9138075428935010347, guid: 6c369f5da2295cb4e868e2d490edc00f, type: 3}
+  _gameplayUI: {fileID: 986346355981055681, guid: dcc8be470b452004a8a97f657164f933, type: 3}

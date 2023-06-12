@@ -1,9 +1,8 @@
 ﻿using System;
-using Project.Game;
 
 namespace Project.UI
 {
-    public interface IPauseMenu : IGameCanvasUI, IOpenSettingsUI, IReturnToMenuUI, IGameInputServiceConsumer
+    public interface IPauseMenu : IGameCanvasUI, IOpenSettingsUI, IReturnToMenuUI
     {
         event Action OnContinuePressed;
     }

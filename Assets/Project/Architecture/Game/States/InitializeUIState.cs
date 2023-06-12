@@ -27,20 +27,16 @@ namespace Project.Architecture
 
         private void CreateUI()
         {
-            var inputService = _game.InputService;
             _game.UI = new CanvasUIRendererFactory(_uiData.UICanvasPrefab).CreateNew();
             
             var mainMenu = new MainMenuFactory(_uiData.MainMenuPrefab).CreateNew();
-            mainMenu.InputService = inputService;
             _game.UI.Add(mainMenu);
 
             var gameEnd = new GameEndMenuFactory(_uiData.GameEndMenuPrefab).CreateNew();
-            gameEnd.InputService = inputService;
             gameEnd.Hide();
             _game.UI.Add(gameEnd);
 
             var pauseMenu = new PauseMenuFactory(_uiData.PauseMenuPrefab).CreateNew();
-            pauseMenu.InputService = inputService;
             pauseMenu.Hide();
             _game.UI.Add(pauseMenu);
 

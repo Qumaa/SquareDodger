@@ -4,8 +4,9 @@ using UnityEngine.UI;
 
 namespace Project.UI
 {
-    public class MainMenuHandler : GameInputCanvasUI, IMainMenu
+    public class MainMenuHandler : GameCanvasUI, IMainMenu
     {
+        [SerializeField] private Button _startButton;
         [SerializeField] private Button _quitButton;
         [SerializeField] private Button _settingsButton;
 
@@ -15,6 +16,7 @@ namespace Project.UI
 
         protected override void OnAwake()
         {
+            _startButton.onClick.AddListener(GameStart);
             _quitButton.onClick.AddListener(QuitGame);
             _settingsButton.onClick.AddListener(Settings);
         }
@@ -33,8 +35,5 @@ namespace Project.UI
         {
             OnOpenSettingsPressed?.Invoke();
         }
-
-        protected override Action GetInputHandler() =>
-            GameStart;
     }
 }

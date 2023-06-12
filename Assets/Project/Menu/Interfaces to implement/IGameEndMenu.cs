@@ -3,7 +3,7 @@ using Project.Game;
 
 namespace Project.UI
 {
-    public interface IGameEndMenu : IGameCanvasUI, IOpenSettingsUI, IReturnToMenuUI, IGameInputServiceConsumer
+    public interface IGameEndMenu : IGameCanvasUI, IOpenSettingsUI, IReturnToMenuUI
     {
         event Action OnRestartGamePressed;
     }
