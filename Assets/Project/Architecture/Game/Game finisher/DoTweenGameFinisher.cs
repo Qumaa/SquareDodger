@@ -1,5 +1,4 @@
-﻿using System;
-using DG.Tweening;
+﻿using DG.Tweening;
 using Project.Game;
 using UnityEngine;
 
@@ -7,16 +6,12 @@ namespace Project.Architecture
 {
     public class DoTweenGameFinisher : IAnimatedGameFinisher
     {
-        private IPlayer _player;
-        
         public IGameplay GameToFinish { get; set; }
         public ICameraController CameraController { get; set; }
         public IPlayerBlendingShader PlayerShader { get; set; }
-        public IPlayer Player
-        {
-            get => _player;
-            set => SetPlayer(value);
-        }
+        public IPlayer Player { get; set; }
+
+        private Sequence _animation;
 
         public void Finish()
         {
@@ -26,28 +21,45 @@ namespace Project.Architecture
 
         private void Animate()
         {
-            AnimateCamera(AnimateShader);
+            InitAnimation();
+
+            _animation.Play();
         }
 
-        private void AnimateCamera(Action callback)
+        private void InitAnimation()
         {
-            DOTween.To(() => CameraController.Position, x => CameraController.Position = x,
-                (Vector2) Player.Transform.position, 1);
+            _animation = DOTween.Sequence();
 
-            DOTween.To(() => CameraController.WidthInUnits, x => CameraController.WidthInUnits = x,
-                3f, 1.5f).OnComplete(() => callback());
+            var camPosTween = DOTween.To(
+                    () => CameraController.Position,
+                    x => CameraController.Position = x,
+                    (Vector2) Player.Transform.position,
+                    1)
+                .SetEase(Ease.OutCubic);
+
+            var camWidthTween = DOTween.To(
+                    () => CameraController.WidthInUnits,
+                    x => CameraController.WidthInUnits = x,
+                    3f,
+                    1.5f)
+                .SetEase(Ease.InOutSine);
+
+            var shaderTween = DOTween.To(
+                    () => PlayerShader.HardBlendingRadius,
+                    x => PlayerShader.HardBlendingRadius = x,
+                    2,
+                    0.8f)
+                .SetEase(Ease.InQuad);
+
+            _animation.Insert(0, camPosTween)
+                .Insert(0, camWidthTween)
+                .Append(shaderTween);
         }
 
-        private void AnimateShader()
+        public void Reset()
         {
-            DOTween.To(() => PlayerShader.HardBlendingRadius, x => PlayerShader.HardBlendingRadius = x,
-                2, 0.8f);
-        }
-
-        private void SetPlayer(IPlayer player)
-        {
-            _player = player;
-            _player.OnDied += Finish;
+            _animation?.Restart();
+            _animation?.Kill();
         }
     }
 }
