@@ -1,7 +1,9 @@
-﻿namespace Project.Game
+﻿using Project.Architecture;
+
+namespace Project.Game
 {
-    public interface IGameThemeAppender
+    public interface IGameThemeApplier
     {
-        void ApplyTheme(IGameTheme theme);
+        void ApplyTheme(GameThemes themeType, bool dark = true);
     }
 }

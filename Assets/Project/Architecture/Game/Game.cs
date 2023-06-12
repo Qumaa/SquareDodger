@@ -13,7 +13,6 @@ namespace Project.Architecture
         private GameRuntimeData _gameData;
         private Camera _camera;
         private IDisposer _disposer;
-        private IGameThemeResolver _themeResolver;
 
         private List<IUpdatable> _updatables;
         private List<IFixedUpdatable> _fixedUpdatables;
@@ -27,14 +26,13 @@ namespace Project.Architecture
         public Game(GameRuntimeData gameData, Camera camera, IDisposer disposer,
             IGameThemeResolver gameThemeResolver)
         {
-            _themeApplier = new GameThemeApplier();
+            _themeApplier = new GameThemeApplier(gameThemeResolver);
             _updatables = new List<IUpdatable>();
             _fixedUpdatables = new List<IFixedUpdatable>();
 
             _gameData = gameData;
             _camera = camera;
             _disposer = disposer;
-            _themeResolver = gameThemeResolver;
 
             InitializeStateMachine();
         }
@@ -60,7 +58,7 @@ namespace Project.Architecture
         }
 
         public void ApplyTheme(GameThemes themeType, bool dark = true) =>
-            _themeApplier.ApplyTheme(_themeResolver.Resolve(themeType, dark));
+            _themeApplier.ApplyTheme(themeType, dark);
 
         private void InitializeStateMachine()
         {

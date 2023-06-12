@@ -1,6 +1,6 @@
 ﻿namespace Project.Game
 {
-    public interface IGameThemeAppenderComposite : IGameThemeAppender, IInstanceContainer<IGameThemeAppender>
+    public interface IGameThemeAppenderComposite : IGameThemeApplier, IInstanceContainer<IGameThemeAppender>
     {
         
     }
