@@ -3,7 +3,7 @@ using Project.Architecture;
 
 namespace Project.Game
 {
-    public class GameThemeApplier : IGameThemeAppenderComposite
+    public class GameThemeApplier : IGameThemeApplierComposite
     {
         private List<IGameThemeAppender> _appenders;
         private IGameThemeResolver _themeResolver;
