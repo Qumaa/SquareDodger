@@ -6,18 +6,24 @@ namespace Project.Architecture
 {
     public class ResourcesGameThemeResolver : IGameThemeResolver
     {
+        private GameColorsRuntimeData _theme;
+
+        public ResourcesGameThemeResolver()
+        {
+            _theme = new GameColorsRuntimeData();
+        }
+
         public IGameTheme Resolve(GameThemes themeType, bool dark = true)
         {
             var themePath = ThemeEnumToResourcesPath(themeType, dark);
             
             var colors = Resources.Load<GameColorsConfig>(themePath);
             
-            var theme = new GameColorsRuntimeData();
-            theme.Load(colors);
+            _theme.Load(colors);
             
             Resources.UnloadAsset(colors);
 
-            return theme;
+            return _theme;
         }
 
         private static string ThemeEnumToResourcesPath(GameThemes themeType, bool dark) =>
