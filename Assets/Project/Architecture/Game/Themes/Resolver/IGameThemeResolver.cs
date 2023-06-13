@@ -1,6 +1,4 @@
-﻿using Project.Game;
-
-namespace Project.Architecture
+﻿namespace Project.Game
 {
     public interface IGameThemeResolver
     {

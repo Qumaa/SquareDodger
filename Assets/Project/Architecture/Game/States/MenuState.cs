@@ -5,9 +5,13 @@ namespace Project.Architecture
     public class MenuState : GameState
     {
         private IMainMenu _mainMenu;
+        private readonly ISettingsMenuOpener _settingsOpener;
+        private readonly IApplicationQuitter _applicationQuitter;
 
-        public MenuState(IGameStateMachine stateMachine, IGame game) : base(stateMachine, game)
+        public MenuState(IGameStateMachine stateMachine, IGame game, ISettingsMenuOpener settingsOpener, IApplicationQuitter applicationQuitter) : base(stateMachine, game)
         {
+            _settingsOpener = settingsOpener;
+            _applicationQuitter = applicationQuitter;
         }
 
         public override void Enter()
@@ -37,12 +41,12 @@ namespace Project.Architecture
 
         private void HandleQuit()
         {
-            throw new System.NotImplementedException();
+            _applicationQuitter.Quit();
         }
 
         private void HandleSettings()
         {
-            throw new System.NotImplementedException();
+            _settingsOpener.OpenSettings();
         }
 
         private void GetMenuIfNecessary() =>

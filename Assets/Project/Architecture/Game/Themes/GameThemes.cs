@@ -1,4 +1,4 @@
-﻿namespace Project.Architecture
+﻿namespace Project.Game
 {
     public enum GameThemes
     {

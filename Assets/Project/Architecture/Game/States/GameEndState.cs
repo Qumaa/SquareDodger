@@ -6,8 +6,11 @@ namespace Project.Architecture
     public class GameEndState : GameState
     {
         private IGameEndMenu _endMenu;
-        public GameEndState(IGameStateMachine stateMachine, IGame game) : base(stateMachine, game)
+        private ISettingsMenuOpener _settingsOpener;
+        
+        public GameEndState(IGameStateMachine stateMachine, IGame game, ISettingsMenuOpener settingsOpener) : base(stateMachine, game)
         {
+            _settingsOpener = settingsOpener;
         }
 
         public override void Enter()
@@ -38,7 +41,7 @@ namespace Project.Architecture
 
         private void HandleSettings()
         {
-            throw new NotImplementedException();
+            _settingsOpener.OpenSettings();
         }
 
         private void GetMenuIfNecessary() =>

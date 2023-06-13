@@ -9,10 +9,10 @@ namespace Project.Architecture
         private IDisposer _disposer;
         private GameRuntimeData _gameData;
         private Camera _controlledCamera;
-        private GameThemeApplier _themeApplier;
+        private IGameThemeApplierComposite _themeApplier;
 
         public BootstrapState(IGameStateMachine stateMachine, IGame game, IDisposer disposer,
-            GameRuntimeData gameData, Camera controlledCamera, GameThemeApplier themeApplier)
+            GameRuntimeData gameData, Camera controlledCamera, IGameThemeApplierComposite themeApplier)
             : base(stateMachine, game)
         {
             _disposer = disposer;

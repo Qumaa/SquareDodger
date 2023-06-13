@@ -35,6 +35,7 @@ namespace Project.Architecture
             _disposer = disposer;
 
             InitializeStateMachine();
+            InitializeStates();
         }
 
         public void Update(float timeStep)
@@ -63,26 +64,25 @@ namespace Project.Architecture
         private void InitializeStateMachine()
         {
             _stateMachine = new GameStateMachine();
-            InitializeStates();
         }
 
         private void InitializeStates()
         {
-            var bootstrap = new BootstrapState(_stateMachine, this, _disposer, _gameData, _camera, _themeApplier);
-            var initializeMenu = new InitializeUIState(_stateMachine, this, _gameData.GameUIData);
-            var menuState = new MenuState(_stateMachine, this);
-            var gameLoop = new GameLoopState(_stateMachine, this);
-            var gamePaused = new GamePauseState(_stateMachine, this);
-            var gameEnd = new GameEndState(_stateMachine, this);
-            var gameRestart = new RestartGameState(_stateMachine, this);
-
-            _stateMachine.AddState(bootstrap)
-                .AddState(initializeMenu)
-                .AddState(menuState)
-                .AddState(gameLoop)
-                .AddState(gamePaused)
-                .AddState(gameEnd)
-                .AddState(gameRestart);
+            var settingsOpener = new SettingsMenuOpenerFactory().CreateNew();
+            var quitter = new ApplicationQuitterFactory().CreateNew();
+            
+            var director = new GameStateMachineDirector(
+                _stateMachine,
+                this,
+                _gameData,
+                _disposer,
+                _camera,
+                _themeApplier,
+                settingsOpener,
+                quitter
+                );
+            
+            director.Build(_stateMachine);
         }
 
         public void Add(IUpdatable item) =>
