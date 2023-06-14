@@ -28,6 +28,11 @@ namespace Project.UI
             _transform.SetParent(canvas.transform, false);
         }
 
+        public void SetAsFocused()
+        {
+            _transform.SetAsLastSibling();
+        }
+
         protected abstract void OnAwake();
     }
 }

@@ -32,7 +32,7 @@ namespace Project.Architecture
         public void Build(IGameStateMachine machine)
         {
             var bootstrap = new BootstrapState(_stateMachine, _game, _disposer, _gameData, _camera, _themeApplier);
-            var initializeMenu = new InitializeUIState(_stateMachine, _game, _gameData.GameUIData);
+            var initializeMenu = new InitializeUIState(_stateMachine, _game, _gameData.GameUIData, _settingsOpener);
             var menuState = new MenuState(_stateMachine, _game, _settingsOpener, _applicationQuitter);
             var gameLoop = new GameLoopState(_stateMachine, _game);
             var gamePaused = new GamePauseState(_stateMachine, _game, _settingsOpener);

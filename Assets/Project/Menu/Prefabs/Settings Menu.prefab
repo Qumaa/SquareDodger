@@ -93,7 +93,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.85
+  m_fontSize: 43.95
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -304,7 +304,7 @@ RectTransform:
   m_Children:
   - {fileID: 3640830697939639052}
   m_Father: {fileID: 7987642448521042616}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.10769625, y: 0.17824738}
   m_AnchorMax: {x: 0.89258707, y: 0.82175267}
@@ -378,7 +378,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6736300149899508576}
   - {fileID: 442024036876067440}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -401,121 +400,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _closeSettingsButton: {fileID: 2142790449259941233}
-  _backgroundButton: {fileID: 8842185875376477947}
---- !u!1001 &9184861596350277239
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 7987642448521042616}
-    m_Modifications:
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_Pivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_Pivot.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5686165926328785793, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_Name
-      value: Background button
-      objectReference: {fileID: 0}
-    - target: {fileID: 5686165926328785793, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
---- !u!224 &6736300149899508576 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 2453067336576294167, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-  m_PrefabInstance: {fileID: 9184861596350277239}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8842185875376477947 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 415157731945574540, guid: 69a31fac93706c543b17fa403e36ab71, type: 3}
-  m_PrefabInstance: {fileID: 9184861596350277239}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  _backgroundButton: {fileID: 0}

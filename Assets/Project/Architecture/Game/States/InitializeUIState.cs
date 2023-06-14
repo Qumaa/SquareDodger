@@ -1,14 +1,18 @@
 ﻿using Project.Game;
+using Project.UI;
 
 namespace Project.Architecture
 {
     public class InitializeUIState : GameState
     {
         private GameUIRuntimeData _uiData;
+        private ISettingsMenuOpener _opener;
 
-        public InitializeUIState(IGameStateMachine stateMachine, IGame game, GameUIRuntimeData uiData) : base(stateMachine, game)
+        public InitializeUIState(IGameStateMachine stateMachine, IGame game, GameUIRuntimeData uiData, ISettingsMenuOpener opener) : 
+            base(stateMachine, game)
         {
             _uiData = uiData;
+            _opener = opener;
         }
 
         public override void Enter()
@@ -27,7 +31,7 @@ namespace Project.Architecture
 
         private void CreateUI()
         {
-            _game.UI = new CanvasUIRendererFactory(_uiData.UICanvasPrefab).CreateNew();
+            _game.UI = new CanvasUIRendererFactory(_uiData.UICanvasPrefab, _uiData.DarkeningPrefab).CreateNew();
             
             var mainMenu = new MainMenuFactory(_uiData.MainMenuPrefab).CreateNew();
             _game.UI.Add(mainMenu);
@@ -43,6 +47,13 @@ namespace Project.Architecture
             var gameplayUi = new GameplayUIFactory(_uiData.GameplayUIPrefab).CreateNew();
             gameplayUi.Hide();
             _game.UI.Add(gameplayUi);
+
+            var settingsMenu = new SettingsMenuFactory(_uiData.SettingsMenuPrefab).CreateNew();
+            settingsMenu.Hide();
+            _game.UI.Add(settingsMenu);
+
+            _opener.Focuser = _game.UI;
+            _opener.SettingsMenu = settingsMenu;
         }
 
         private void MoveNext()
@@ -50,6 +61,4 @@ namespace Project.Architecture
             _stateMachine.SetState<MenuState>();
         }
     }
-
-    
 }

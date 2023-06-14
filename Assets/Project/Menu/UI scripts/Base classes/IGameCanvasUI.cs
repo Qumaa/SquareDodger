@@ -7,5 +7,6 @@ namespace Project.UI
         void Show();
         void Hide();
         void SetCanvas(Canvas canvas);
+        void SetAsFocused();
     }
 }

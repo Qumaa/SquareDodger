@@ -1,10 +1,12 @@
-﻿namespace Project.Architecture
+﻿using UnityEditor;
+
+namespace Project.Architecture
 {
     public class EditorApplicationQuitter : IApplicationQuitter
     {
         public void Quit()
         {
-            throw new System.NotImplementedException();
+            EditorApplication.isPlaying = false;
         }
     }
 }

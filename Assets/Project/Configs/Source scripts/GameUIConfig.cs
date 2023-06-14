@@ -11,11 +11,15 @@ namespace Project.Game
         [SerializeField] private PauseMenuHandler _pauseMenu;
         [SerializeField] private GameEndMenuHandler _gameEndMenu;
         [SerializeField] private GameplayUIHandler _gameplayUI;
+        [SerializeField] private SettingsMenuHandler _settingsMenu;
+        [SerializeField] private RectTransform _darkeningPanel;
         
         public GameObject UICanvasPrefab => _uiCanvas.gameObject;
         public GameObject MainMenuPrefab => _mainMenu.gameObject;
         public GameObject PauseMenuPrefab => _pauseMenu.gameObject;
         public GameObject GameEndMenuPrefab => _gameEndMenu.gameObject;
         public GameObject GameplayUIPrefab => _gameplayUI.gameObject;
+        public GameObject SettingsMenuPrefab => _settingsMenu.gameObject;
+        public RectTransform DarkeningPrefab => _darkeningPanel;
     }
 }

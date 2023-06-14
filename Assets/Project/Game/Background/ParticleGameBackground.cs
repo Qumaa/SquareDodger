@@ -44,6 +44,13 @@ namespace Project.Game
         {
             var mainModule = _particleSystem.main;
             mainModule.startColor = new ParticleSystem.MinMaxGradient(theme.ParticlesColor);
+
+            var activeParticles = GetActiveParticlesCount();
+
+            for (var i = 0; i < activeParticles; i++)
+                _particles[i].startColor = theme.ParticlesColor;
+
+            SetUpdatedParticles(activeParticles);
         }
 
         private int GetActiveParticlesCount()

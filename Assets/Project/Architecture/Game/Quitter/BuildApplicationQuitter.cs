@@ -1,10 +1,12 @@
-﻿namespace Project.Architecture
+﻿using UnityEngine;
+
+namespace Project.Architecture
 {
     public class BuildApplicationQuitter : IApplicationQuitter
     {
         public void Quit()
         {
-            throw new System.NotImplementedException();
+            Application.Quit();
         }
     }
 }

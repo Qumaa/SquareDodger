@@ -9,6 +9,8 @@ namespace Project.Game
         public GameObject PauseMenuPrefab { get; private set; }
         public GameObject GameEndMenuPrefab { get; private set; }
         public GameObject GameplayUIPrefab { get; private set; }
+        public GameObject SettingsMenuPrefab { get; private set; }
+        public RectTransform DarkeningPrefab { get; private set; }
 
 
         public void Load(GameUIConfig data)
@@ -18,6 +20,8 @@ namespace Project.Game
             PauseMenuPrefab = data.PauseMenuPrefab;
             GameEndMenuPrefab = data.GameEndMenuPrefab;
             GameplayUIPrefab = data.GameplayUIPrefab;
+            SettingsMenuPrefab = data.SettingsMenuPrefab;
+            DarkeningPrefab = data.DarkeningPrefab;
         }
     }
 }
