@@ -31,26 +31,39 @@ namespace Project.Architecture
             _animation = DOTween.Sequence();
 
             var camPosTween = DOTween.To(
-                () => CameraController.Position, 
+                () => CameraController.Position,
                 x => CameraController.Position = x,
-                (Vector2) Player.Transform.position, 
+                (Vector2) Player.Transform.position,
                 1);
 
             var camWidthTween = DOTween.To(
                 () => CameraController.WidthInUnits,
                 x => CameraController.WidthInUnits = x,
-                3f, 
+                3f,
                 1.5f);
-            
+
             var shaderTween = DOTween.To(
-                () => PlayerShader.HardBlendingRadius, 
+                () => PlayerShader.HardBlendingRadius,
                 x => PlayerShader.HardBlendingRadius = x,
                 2,
                 0.8f);
 
-            _animation.Insert(0, camPosTween)
-                .Insert(0, camWidthTween)
-                .Append(shaderTween);
+            var balanceTween = DOTween.To(
+                () => PlayerShader.ColorBalance,
+                x => PlayerShader.ColorBalance = x,
+                1,
+                1);
+
+
+            float pos = 0;
+            _animation.Insert(pos, camPosTween)
+                .Insert(pos, camWidthTween);
+
+            pos = _animation.Duration();
+
+            _animation
+                .Insert(pos, shaderTween)
+                .Insert(pos, balanceTween);
         }
 
         public void Reset()
