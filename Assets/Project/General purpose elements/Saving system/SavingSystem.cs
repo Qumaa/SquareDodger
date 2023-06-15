@@ -1,4 +1,4 @@
-﻿namespace Project.Game
+﻿namespace Project
 {
     public abstract class SavingSystem<T> : ISavingSystem<T>
     {

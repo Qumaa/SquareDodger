@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace Project.Game
+namespace Project
 {
     public abstract class BinaryFormatterSavingSystem<T> : SavingSystem<T>
     {
