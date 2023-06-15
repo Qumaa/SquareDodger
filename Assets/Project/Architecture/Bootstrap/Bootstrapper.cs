@@ -7,8 +7,6 @@ namespace Project.Architecture
     public class Bootstrapper : MonoBehaviour
     {
         [SerializeField] private GameConfig _gameConfig;
-        [SerializeField] private GameThemes _gameTheme;
-        [SerializeField] private bool _darkTheme = true;
 
         private IGame _game;
         private IDisposer _disposer;
@@ -45,11 +43,6 @@ namespace Project.Architecture
         private void OnDestroy()
         {
             _disposer.DisposeAll();
-        }
-
-        private void OnValidate()
-        {
-            _game?.ApplyTheme(_gameTheme, _darkTheme);
         }
     }
 }
