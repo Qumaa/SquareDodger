@@ -20,7 +20,7 @@ namespace Project.Architecture
 
             var collisionDetector = playerObj.GetComponent<IPlayerCollisionDetector>();
 
-            var player = new PlayerWithShader(playerObj, collisionDetector, _playerData.TrailMaterial, 
+            var player = new PlayerWithShader(playerObj, collisionDetector, 
                 _playerData.PlayerMaterial)
             {
                 InputService = _inputService,

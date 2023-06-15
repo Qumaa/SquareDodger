@@ -74,6 +74,7 @@ namespace Project.Game
         {
             MaintainedShader.HardBlendingRadius = _defaultBlendingRadius;
             MaintainedShader.SoftBlendingLength = _defaultBlendingLength;
+            MaintainedShader.ColorBalance = 0;
         }
 
         private void ResetBuffer()

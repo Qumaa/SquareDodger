@@ -11,7 +11,6 @@ namespace Project.Game
         [SerializeField] private float _blendingRadius;
         [SerializeField] private float _blendingLength;
         [SerializeField] private float _trailLength;
-        [SerializeField] private Material _trailMaterial;
 
         public GameObject PlayerPrefab => _playerPrefab;
         public float MovementSpeed => _movementSpeed;
@@ -21,6 +20,5 @@ namespace Project.Game
 
         public float BlendingLength => _blendingLength;
         public float TrailLength => _trailLength;
-        public Material TrailMaterial => _trailMaterial;
     }
 }

@@ -4,6 +4,7 @@ Shader "Unlit/Player Shader"
     {
         _PlayerColor ("Player Color", Color) = (0.9, 0.9, 0.9)
         _ObstacleColor ("Obstacle Color", Color) = (0.9, 0, 0)
+        _ColorBalance ("Color Balance", Range(0, 1)) = 0
         _BlendingRadius ("Lower Blending Radius", float) = 1
         _BlendingLength ("Blending Width", float) = 1
     }
@@ -51,6 +52,7 @@ Shader "Unlit/Player Shader"
             float4 _ObstacleColor;
             float _BlendingRadius;
             float _BlendingLength;
+            float _ColorBalance;
 
             v2f vert(appdata v)
             {
@@ -76,7 +78,8 @@ Shader "Unlit/Player Shader"
                 }
                 float blend = (lastDist - _BlendingRadius) / (upperBlendingRadius - _BlendingRadius);
                 blend = saturate(blend);
-                float4 col = lerp(_ObstacleColor, _PlayerColor, blend) * i.color;
+                float4 col = lerp(_PlayerColor, _ObstacleColor, _ColorBalance) * i.color;
+                col = lerp(_ObstacleColor, col, blend) * i.color;
 
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;

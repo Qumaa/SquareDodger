@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Project.Game
 {
-    public class Player : PausableAndResettable, IPlayer
+    public abstract class Player : PausableAndResettable, IPlayer
     {
         private bool _movingRight;
         private Rigidbody2D _rigidbody;
@@ -14,7 +14,6 @@ namespace Project.Game
         private float _movementSpeed;
         private float _movementSpeedBeforePausing;
         private float _trailLength;
-        private float _trailTime;
 
         public Transform Transform => _gameObject.transform;
         public IGameInputService InputService
@@ -47,10 +46,7 @@ namespace Project.Game
             collisionDetector.OnCollided += Die;
         }
 
-        public virtual void ApplyTheme(IGameTheme theme)
-        {
-            _trailRenderer.material.color = theme.PlayerColor;
-        }
+        public abstract void ApplyTheme(IGameTheme theme);
 
         private void Turn()
         {
@@ -96,7 +92,6 @@ namespace Project.Game
 
         protected override void OnPaused()
         {
-            _trailRenderer.time = float.PositiveInfinity;
             _movementSpeedBeforePausing = _movementSpeed;
             _movementSpeed = 0;
             UpdateVelocity();
@@ -104,7 +99,6 @@ namespace Project.Game
 
         protected override void OnResumed()
         {
-            _trailRenderer.time = _trailTime;
             _movementSpeed = _movementSpeedBeforePausing;
             UpdateVelocity();
         }
@@ -118,7 +112,7 @@ namespace Project.Game
 
         private void SetTrailLength(float length)
         {
-            _trailRenderer.time = _trailTime = length / _movementSpeed;
+            _trailRenderer.time = length / _movementSpeed;
         }
     }
 }
