@@ -11,6 +11,8 @@ namespace Project
             
             // asset names
             public const string DEFAULT = "Game colors";
+            public const string HOT = "Hot colors";
+            public const string HARD = "Hard colors";
         }
     }
 }

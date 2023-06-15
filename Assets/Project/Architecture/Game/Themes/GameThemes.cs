@@ -2,6 +2,8 @@
 {
     public enum GameThemes
     {
-        Default
+        Default,
+        HOT,
+        HARD
     }
 }
