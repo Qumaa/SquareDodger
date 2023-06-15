@@ -3,7 +3,7 @@
     public enum GameThemes
     {
         Default,
-        HOT,
-        HARD
+        Hot,
+        Hard
     }
 }

@@ -7,12 +7,16 @@ namespace Project.Architecture
     {
         private GameUIRuntimeData _uiData;
         private ISettingsMenuOpener _opener;
+        private readonly PlayerSettingsSavingSystem _savingSystem;
+        private PlayerSettingsMaintainer _settingsMaintainer;
 
-        public InitializeUIState(IGameStateMachine stateMachine, IGame game, GameUIRuntimeData uiData, ISettingsMenuOpener opener) : 
+        public InitializeUIState(IGameStateMachine stateMachine, IGame game, GameUIRuntimeData uiData, 
+            ISettingsMenuOpener opener, PlayerSettingsSavingSystem savingSystem) : 
             base(stateMachine, game)
         {
             _uiData = uiData;
             _opener = opener;
+            _savingSystem = savingSystem;
         }
 
         public override void Enter()
@@ -51,6 +55,7 @@ namespace Project.Architecture
             var settingsMenu = new SettingsMenuFactory(_uiData.SettingsMenuPrefab).CreateNew();
             settingsMenu.Hide();
             _game.UI.Add(settingsMenu);
+            _settingsMaintainer = new PlayerSettingsMaintainer(_savingSystem, settingsMenu, _game);
 
             _opener.Focuser = _game.UI;
             _opener.SettingsMenu = settingsMenu;

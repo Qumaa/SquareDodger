@@ -235,13 +235,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2889821875758106895, guid: 86bd26454fb12dd488e1eb778d6aee4d, type: 3}
-      propertyPath: _darkTheme
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2889821875758106895, guid: 86bd26454fb12dd488e1eb778d6aee4d, type: 3}
-      propertyPath: _gameTheme
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 86bd26454fb12dd488e1eb778d6aee4d, type: 3}

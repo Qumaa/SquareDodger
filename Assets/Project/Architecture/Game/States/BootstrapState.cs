@@ -43,7 +43,6 @@ namespace Project.Architecture
         private void LoadGame()
         {
             _game.Gameplay = CreateGameplayFactory().CreateNew();
-            _game.ApplyTheme(GameThemes.Default);
         }
 
         private void MoveNext() =>

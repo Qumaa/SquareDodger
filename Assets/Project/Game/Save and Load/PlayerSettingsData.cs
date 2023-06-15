@@ -5,8 +5,30 @@ namespace Project.Game
     [Serializable]
     public class PlayerSettingsData
     {
-        public GameThemes CurrentTheme;
-        public bool IsCurrentThemeDark;
+        private GameThemes _currentTheme;
+        private bool _isCurrentThemeDark;
+
+        public GameThemes CurrentTheme
+        {
+            get => _currentTheme;
+            set
+            {
+                _currentTheme = value;
+                InvokeThemeModified();
+            }
+        }
+
+        public bool IsCurrentThemeDark
+        {
+            get => _isCurrentThemeDark;
+            set
+            {
+                _isCurrentThemeDark = value;
+                InvokeThemeModified();
+            }
+        }
+
+        [field: NonSerialized] public event Action<GameThemes, bool> OnThemeModified;
 
         public PlayerSettingsData()
         {
@@ -18,6 +40,8 @@ namespace Project.Game
             CurrentTheme = GameThemes.Default;
             IsCurrentThemeDark = true;
         }
+
+        private void InvokeThemeModified() =>
+            OnThemeModified?.Invoke(CurrentTheme, IsCurrentThemeDark);
     }
-    
 }

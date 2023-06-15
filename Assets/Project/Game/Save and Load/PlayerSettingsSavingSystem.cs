@@ -3,11 +3,11 @@ using System.IO;
 
 namespace Project.Game
 {
-    public class PlayerSettingsSaveSystem : BinaryFormatterSavingSystem<PlayerSettingsData>
+    public class PlayerSettingsSavingSystem : BinaryFormatterSavingSystem<PlayerSettingsData>
     {
         private const string _FILE_NAME = "prefs.data";
 
-        public PlayerSettingsSaveSystem() : 
+        public PlayerSettingsSavingSystem() : 
             base(Path.Combine(Application.persistentDataPath, _FILE_NAME))
         {
         }

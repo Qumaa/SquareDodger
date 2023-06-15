@@ -184,7 +184,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 915993124940274549, guid: 9839e194bcf3c9b45b0a0dc9889f4411, type: 3}
       propertyPath: m_fontSize
-      value: 21
+      value: 37.4
       objectReference: {fileID: 0}
     - target: {fileID: 4721211546480420391, guid: 9839e194bcf3c9b45b0a0dc9889f4411, type: 3}
       propertyPath: m_Pivot.x
@@ -276,7 +276,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8025832346618122344, guid: 9839e194bcf3c9b45b0a0dc9889f4411, type: 3}
       propertyPath: m_fontSize
-      value: 21.45
+      value: 35.15
       objectReference: {fileID: 0}
     - target: {fileID: 8925486288637098454, guid: 9839e194bcf3c9b45b0a0dc9889f4411, type: 3}
       propertyPath: m_text
@@ -284,9 +284,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8925486288637098454, guid: 9839e194bcf3c9b45b0a0dc9889f4411, type: 3}
       propertyPath: m_fontSize
-      value: 18
+      value: 27.45
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4607288120092819290, guid: 9839e194bcf3c9b45b0a0dc9889f4411, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9839e194bcf3c9b45b0a0dc9889f4411, type: 3}
 --- !u!224 &1403199321006513735 stripped
 RectTransform:

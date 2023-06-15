@@ -17,3 +17,5 @@ MonoBehaviour:
   _pauseMenu: {fileID: 1928340600398114206, guid: 4b9d00a5b41246a42859c7e801400ee6, type: 3}
   _gameEndMenu: {fileID: 9138075428935010347, guid: 6c369f5da2295cb4e868e2d490edc00f, type: 3}
   _gameplayUI: {fileID: 986346355981055681, guid: dcc8be470b452004a8a97f657164f933, type: 3}
+  _settingsMenu: {fileID: 4969968634349854893, guid: d02b3f05debbd3f4d9b15f56a3d6adbf, type: 3}
+  _darkeningPanel: {fileID: 7149227240797978755, guid: 9d8ae8b4779c54e4798efc95f246b9ff, type: 3}
