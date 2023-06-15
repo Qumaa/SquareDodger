@@ -16,8 +16,8 @@ namespace Project.Game
         public IObstacleManager ObstaclesSource { get; set; }
 
         public PlayerWithShader(GameObject playerObject, IPlayerCollisionDetector collisionDetector,
-            Material trailMaterial, Material playerMaterial) : 
-            base(playerObject, collisionDetector, trailMaterial)
+            Material playerMaterial) : 
+            base(playerObject, collisionDetector, playerMaterial)
         {
             _playerMaterial = playerMaterial;
             playerObject.GetComponent<Renderer>().material = playerMaterial;
@@ -45,7 +45,6 @@ namespace Project.Game
 
         public override void ApplyTheme(IGameTheme theme)
         {
-            base.ApplyTheme(theme);
             _shaderMaintainer.MaintainedShader.PlayerColor = theme.PlayerColor;
             _shaderMaintainer.MaintainedShader.BlendingColor = theme.ObstacleColor;
         }
