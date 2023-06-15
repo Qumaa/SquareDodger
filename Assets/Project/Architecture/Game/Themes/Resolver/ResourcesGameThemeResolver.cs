@@ -31,11 +31,15 @@ namespace Project.Architecture
 
         private static string GetPathPrefix(bool dark) =>
             dark ? ResourcesPaths.Themes.DARK_THEMES : ResourcesPaths.Themes.BRIGHT_THEMES;
-        private static string SwitchThemeType(GameThemes themeType) =>
+
+        public static string SwitchThemeType(GameThemes themeType) =>
             themeType switch
             {
                 GameThemes.Default => ResourcesPaths.Themes.DEFAULT,
+                GameThemes.HOT => ResourcesPaths.Themes.HOT,
+                GameThemes.HARD => ResourcesPaths.Themes.HARD,
                 _ => throw new ArgumentException()
             };
+
     }
 }
