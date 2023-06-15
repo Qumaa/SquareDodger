@@ -1,7 +1,10 @@
 # Overview
 A first game to ever be made by us on Unity!
+
 The main goal of this project is to prove our capabilities to possible employers.
+
 The project is a casual mobile game with one-hand controls and simple design. Gameplay is all about dodging obstacles by changing the character's direction with taps. The longer player remains alive, the higher score they get. After reaching certain thresholds they're allowed to choose a new game colors set of their choice.
+
 Started May 22nd, 2023
 
 # Summary
