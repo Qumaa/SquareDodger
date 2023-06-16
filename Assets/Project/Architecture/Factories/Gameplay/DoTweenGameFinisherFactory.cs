@@ -4,7 +4,7 @@
     {
         public IAnimatedGameFinisher CreateNew()
         {
-            var finisher = new DoTweenGameFinisher();
+            var finisher = new AnimatedGameFinisher();
             return finisher;
         }
     }

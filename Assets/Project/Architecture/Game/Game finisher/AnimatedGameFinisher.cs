@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Project.Architecture
 {
-    public class DoTweenGameFinisher : IAnimatedGameFinisher
+    public class AnimatedGameFinisher : IAnimatedGameFinisher
     {
         public IGameplay GameToFinish { get; set; }
         public ICameraController CameraController { get; set; }
@@ -68,7 +68,6 @@ namespace Project.Architecture
 
         public void Reset()
         {
-            _animation?.Restart();
             _animation?.Kill();
         }
     }
