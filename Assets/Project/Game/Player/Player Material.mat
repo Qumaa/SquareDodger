@@ -23,8 +23,9 @@ Material:
     m_Ints: []
     m_Floats:
     - _BlendingLength: 2.2
-    - _BlendingRadius: 0.8
+    - _BlendingRadius: 2
+    - _ColorBalance: 1
     m_Colors:
-    - _ObstacleColor: {r: 1, g: 1, b: 1, a: 1}
-    - _PlayerColor: {r: 0.15686275, g: 0.44313726, b: 0.24313726, a: 1}
+    - _ObstacleColor: {r: 0.98039216, g: 0.5568628, b: 0.16862746, a: 1}
+    - _PlayerColor: {r: 0.5058824, g: 0.49803922, b: 0.40784314, a: 0}
   m_BuildTextureStacks: []

@@ -54,12 +54,17 @@ Shader "Unlit/Player Shader"
             float _BlendingLength;
             float _ColorBalance;
 
+            float4 GetObstacleColor()
+            {
+                return float4(_ObstacleColor.rgb, max(_PlayerColor.a, _ObstacleColor.a));
+            }
+
             v2f vert(appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex);
-                o.color = v.color;
+                o.color = lerp(_PlayerColor, GetObstacleColor(), _ColorBalance) * v.color;
                 UNITY_TRANSFER_FOG(o, o.vertex);
                 return o;
             }
@@ -78,8 +83,7 @@ Shader "Unlit/Player Shader"
                 }
                 float blend = (lastDist - _BlendingRadius) / (upperBlendingRadius - _BlendingRadius);
                 blend = saturate(blend);
-                float4 col = lerp(_PlayerColor, _ObstacleColor, _ColorBalance) * i.color;
-                col = lerp(_ObstacleColor, col, blend) * i.color;
+                float4 col = lerp(GetObstacleColor(), i.color, blend);
 
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;
