@@ -6,9 +6,9 @@ namespace Project.Game
     public class PlayerSettingsMaintainer : IPlayerSettingsMaintainer
     {
         private PlayerSettingsData _data;
-        private PlayerSettingsSavingSystem _savingSystem;
+        private ISavingSystem<PlayerSettingsData> _savingSystem;
 
-        public PlayerSettingsMaintainer(PlayerSettingsSavingSystem savingSystem, ISettingsMenu settings, IGame game)
+        public PlayerSettingsMaintainer(ISavingSystem<PlayerSettingsData> savingSystem, ISettingsMenu settings, IGame game)
         {
             _data = savingSystem.LoadData();
             _savingSystem = savingSystem;
