@@ -38,6 +38,7 @@ namespace Project.Game
 
         public Player(GameObject playerObject, IPlayerCollisionDetector collisionDetector, Material trailMaterial)
         {
+            _movingRight = true;
             _gameObject = playerObject;
             _rigidbody = _gameObject.GetComponent<Rigidbody2D>();
             _trailRenderer = _gameObject.GetComponent<TrailRenderer>();
@@ -105,7 +106,7 @@ namespace Project.Game
 
         protected override void OnReset()
         {
-            _movingRight = false;
+            _movingRight = true;
             Transform.position = Vector3.zero;
             _trailRenderer.Clear();
         }
