@@ -21,6 +21,12 @@ Shader "Unlit/Player Shader"
 		ZWrite Off
         Blend SrcAlpha OneMinusSrcAlpha
         
+        Stencil
+        {
+            Comp Equal
+            Pass IncrSat
+        }
+        
         Pass
         {
             CGPROGRAM
@@ -71,17 +77,15 @@ Shader "Unlit/Player Shader"
 
             fixed4 frag(v2f i) : SV_Target
             {
-                int width = buffer[0].x;
+                const int width = buffer[0].x;
 
-                float upperBlendingRadius = _BlendingRadius + _BlendingLength;
-                float lastDist = upperBlendingRadius + 1;
+                const float upperBlendingRadius = _BlendingRadius + _BlendingLength;
+                float minDist = upperBlendingRadius + 1;
 
                 for (int index = 1; index < width + 1; index++)
-                {
-                    float dist = distance(i.worldPos.xy, buffer[index]);
-                    lastDist = min(lastDist, dist);
-                }
-                float blend = (lastDist - _BlendingRadius) / (upperBlendingRadius - _BlendingRadius);
+                    minDist = min(minDist, distance(i.worldPos.xy, buffer[index]));
+                
+                float blend = (minDist - _BlendingRadius) / (upperBlendingRadius - _BlendingRadius);
                 blend = saturate(blend);
                 float4 col = lerp(GetObstacleColor(), i.color, blend);
 
