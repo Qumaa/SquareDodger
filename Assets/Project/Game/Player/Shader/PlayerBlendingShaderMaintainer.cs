@@ -6,7 +6,7 @@ namespace Project.Game
 {
     public class PlayerBlendingShaderMaintainer : PausableAndResettable, IPlayerBlendingShaderMaintainer
     {
-        private const string _BUFFER_NAME = "buffer";
+        private const string _BUFFER_NAME = "PosBuffer";
         private readonly int _bufferNameId = Shader.PropertyToID(_BUFFER_NAME);
         private const int _STRIDE = 8; // vector2 size in bytes
 

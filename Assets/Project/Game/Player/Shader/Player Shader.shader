@@ -13,31 +13,30 @@ Shader "Unlit/Player Shader"
         Tags
         {
             "RenderType"="Transparent"
-            "Queue"="Transparent" 
+            "Queue"="Transparent"
+            "PreviewType"="Plane"
         }
-        
+
         Cull Off
-		Lighting Off
-		ZWrite Off
+        Lighting Off
+        ZWrite Off
         Blend SrcAlpha OneMinusSrcAlpha
-        
+
         Stencil
         {
             Comp Equal
             Pass IncrSat
         }
-        
+
         Pass
         {
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            // make fog work
-            #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
 
-            uniform StructuredBuffer<float2> buffer : register(t1);
+            uniform StructuredBuffer<float2> PosBuffer : register(t1);
 
             struct appdata
             {
@@ -49,20 +48,29 @@ Shader "Unlit/Player Shader"
             struct v2f
             {
                 float3 worldPos : TEXCOORD0;
-                UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
-                float4 color : COLOR;
+                float4 playerColor : COLOR;
+                float4 obstacleColor : TEXCOORD1;
+                float blend : TEXCOORD2;
             };
-            
+
             float4 _PlayerColor;
             float4 _ObstacleColor;
             float _BlendingRadius;
             float _BlendingLength;
             float _ColorBalance;
 
-            float4 GetObstacleColor()
+            float CalculateBlendForPosition(float2 pos)
             {
-                return float4(_ObstacleColor.rgb, max(_PlayerColor.a, _ObstacleColor.a));
+                const int width = PosBuffer[0].x;
+
+                float minDist = _BlendingRadius + _BlendingLength;
+
+                for (int index = 1; index < width + 1; index++)
+                    minDist = min(minDist, distance(pos, PosBuffer[index]));
+
+                float blend = (minDist - _BlendingRadius) / _BlendingLength;
+                return saturate(blend);
             }
 
             v2f vert(appdata v)
@@ -70,28 +78,19 @@ Shader "Unlit/Player Shader"
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex);
-                o.color = lerp(_PlayerColor, GetObstacleColor(), _ColorBalance) * v.color;
-                UNITY_TRANSFER_FOG(o, o.vertex);
+                
+                o.obstacleColor = float4(_ObstacleColor.rgb, max(_PlayerColor.a, _ObstacleColor.a));
+                o.playerColor = lerp(_PlayerColor, o.obstacleColor, _ColorBalance) * v.color;
+
+                o.blend = CalculateBlendForPosition(o.worldPos);
+                
                 return o;
             }
 
             fixed4 frag(v2f i) : SV_Target
             {
-                const int width = buffer[0].x;
-
-                const float upperBlendingRadius = _BlendingRadius + _BlendingLength;
-                float minDist = upperBlendingRadius + 1;
-
-                for (int index = 1; index < width + 1; index++)
-                    minDist = min(minDist, distance(i.worldPos.xy, buffer[index]));
-                
-                float blend = (minDist - _BlendingRadius) / (upperBlendingRadius - _BlendingRadius);
-                blend = saturate(blend);
-                float4 col = lerp(GetObstacleColor(), i.color, blend);
-
-                UNITY_APPLY_FOG(i.fogCoord, col);
-                return col;
-            }            
+                return lerp(i.obstacleColor, i.playerColor, i.blend);
+            }
             ENDCG
         }
     }
