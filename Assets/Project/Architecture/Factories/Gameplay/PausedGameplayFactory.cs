@@ -6,7 +6,7 @@ namespace Project.Architecture
     {
         private readonly IGameThemeApplierComposite _themeApplier;
         private IFactory<IPlayerBlendingShaderMaintainer> _shaderMaintainerFactory;
-        private IFactory<IPlayerWithShader> _playerFactory;
+        private IFactory<IBlendingShaderPlayer> _playerFactory;
         private IFactory<IGameCamera> _gameCameraFactory;
         private IFactory<IObstacleManagerViewport> _obstacleManagerFactory;
         private IFactory<IAnimatedGameFinisher> _gameFinisherFactory;
@@ -17,7 +17,7 @@ namespace Project.Architecture
 
         public PausedGameplayFactory(IGameThemeApplierComposite themeApplier,
             IFactory<IPlayerBlendingShaderMaintainer> shaderMaintainerFactory,
-            IFactory<IPlayerWithShader> playerFactory,
+            IFactory<IBlendingShaderPlayer> playerFactory,
             IFactory<IObstacleManagerViewport> obstacleManagerFactory, IFactory<IGameCamera> gameCameraFactory,
             IFactory<IAnimatedGameFinisher> gameFinisherFactory,
             IFactory<IParticleGameBackground> gameBackgroundFactory,
@@ -108,7 +108,7 @@ namespace Project.Architecture
         private struct CreatedObjects
         {
             public IPlayerBlendingShaderMaintainer ShaderMaintainer;
-            public IPlayerWithShader Player;
+            public IBlendingShaderPlayer Player;
             public IObstacleManagerViewport ObstacleManager;
             public IGameCamera GameCamera;
             public IAnimatedGameFinisher GameFinisher;

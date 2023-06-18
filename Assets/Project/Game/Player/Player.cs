@@ -8,8 +8,9 @@ namespace Project.Game
         private bool _movingRight;
         private Rigidbody2D _rigidbody;
         private IGameInputService _inputService;
-        private TrailRenderer _trailRenderer;
         private GameObject _gameObject;
+        protected readonly SpriteRenderer _renderer;
+        protected readonly TrailRenderer _trailRenderer;
 
         private float _movementSpeed;
         private float _movementSpeedBeforePausing;
@@ -41,6 +42,7 @@ namespace Project.Game
             _movingRight = true;
             _gameObject = playerObject;
             _rigidbody = _gameObject.GetComponent<Rigidbody2D>();
+            _renderer = _gameObject.GetComponent<SpriteRenderer>();
             _trailRenderer = _gameObject.GetComponent<TrailRenderer>();
             _trailRenderer.material = trailMaterial;
 
