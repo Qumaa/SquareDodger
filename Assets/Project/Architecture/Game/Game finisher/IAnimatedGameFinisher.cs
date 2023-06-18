@@ -6,6 +6,6 @@ namespace Project.Architecture
     {
         IPlayer Player { get; set; }
         ICameraController CameraController { get; set; }
-        IPlayerBlendingShader PlayerShader { get; set; }
+        IBlendingShader PlayerShader { get; set; }
     }
 }

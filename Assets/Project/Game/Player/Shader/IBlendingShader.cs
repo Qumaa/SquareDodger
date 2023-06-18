@@ -2,7 +2,7 @@
 
 namespace Project.Architecture
 {
-    public interface IPlayerBlendingShader
+    public interface IBlendingShader
     {
         Material Material { get; set; }
         Color32 PlayerColor { get; set; }

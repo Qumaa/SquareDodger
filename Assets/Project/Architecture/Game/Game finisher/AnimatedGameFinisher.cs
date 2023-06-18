@@ -8,7 +8,7 @@ namespace Project.Architecture
     {
         public IGameplay GameToFinish { get; set; }
         public ICameraController CameraController { get; set; }
-        public IPlayerBlendingShader PlayerShader { get; set; }
+        public IBlendingShader PlayerShader { get; set; }
         public IPlayer Player { get; set; }
 
         private Sequence _animation;

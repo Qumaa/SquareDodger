@@ -4,25 +4,32 @@ namespace Project.Game
 {
     public class BlendingShaderPlayer : Player, IBlendingShaderPlayer
     {
-        private IPlayerBlendingShaderMaintainer _shaderMaintainer;
+        private IBlendingShaderMaintainer _playerShaderMaintainer;
+        private IBlendingShaderMaintainer _trailShaderMaintainer;
         private Material _playerMaterial;
+        private Material _trailMaterial;
 
-        public IPlayerBlendingShaderMaintainer ShaderMaintainer
+        public IBlendingShaderMaintainer PlayerShaderMaintainer
         {
-            get => _shaderMaintainer;
-            set => SetShaderMaintainer(value);
+            set => SetPlayerMaintainer(value);
+        }
+
+        public IBlendingShaderMaintainer TrailShaderMaintainer
+        {
+            set => SetTrailMaintainer(value);
         }
 
         public IObstacleManager ObstaclesSource { get; set; }
 
         public BlendingShaderPlayer(GameObject playerObject, IPlayerCollisionDetector collisionDetector,
-            Material playerMaterial) : 
-            base(playerObject, collisionDetector, playerMaterial)
+            Material playerMaterial, Material trailMaterial) : 
+            base(playerObject, collisionDetector)
         {
             _playerMaterial = playerMaterial;
+            _trailMaterial = trailMaterial;
+            
             _renderer.material = playerMaterial;
-            _renderer.rendererPriority = 1;
-            _trailRenderer.rendererPriority = 0;
+            _trailRenderer.material = trailMaterial;
         }
 
         public void Update(float timeStep)
@@ -30,25 +37,42 @@ namespace Project.Game
             if (_isPaused)
                 return;
             
-            _shaderMaintainer.UpdateShader(ObstaclesSource.ActiveObstacles);
-        }
-
-        private void SetShaderMaintainer(IPlayerBlendingShaderMaintainer value)
-        {
-            _shaderMaintainer = value;
-            _shaderMaintainer.MaintainedShader.Material = _playerMaterial;
+            _playerShaderMaintainer.UpdateShader(ObstaclesSource.ActiveObstacles);
+            _trailShaderMaintainer.UpdateShader(ObstaclesSource.ActiveObstacles);
         }
 
         protected override void OnReset()
         {
             base.OnReset();
-            _shaderMaintainer.Reset();
+            _playerShaderMaintainer.Reset();
+            _trailShaderMaintainer.Reset();
         }
 
         public override void ApplyTheme(IGameTheme theme)
         {
-            _shaderMaintainer.MaintainedShader.PlayerColor = theme.PlayerColor;
-            _shaderMaintainer.MaintainedShader.BlendingColor = theme.ObstacleColor;
+            SetMaintainerTheme(_trailShaderMaintainer, theme);
+            SetMaintainerTheme(_playerShaderMaintainer, theme);
+        }
+
+        private void SetPlayerMaintainer(IBlendingShaderMaintainer maintainer)
+        {
+            _playerShaderMaintainer = maintainer;
+            SetMaintainerMaterial(maintainer, _playerMaterial);
+        }
+        
+        private void SetTrailMaintainer(IBlendingShaderMaintainer maintainer)
+        {
+            _trailShaderMaintainer = maintainer;
+            SetMaintainerMaterial(maintainer, _trailMaterial);
+        }
+
+        private static void SetMaintainerMaterial(IBlendingShaderMaintainer maintainer, Material material) =>
+            maintainer.MaintainedShader.Material = material;
+
+        private static void SetMaintainerTheme(IBlendingShaderMaintainer maintainer, IGameTheme theme)
+        {
+            maintainer.MaintainedShader.PlayerColor = theme.PlayerColor;
+            maintainer.MaintainedShader.BlendingColor = theme.ObstacleColor;
         }
     }
 }

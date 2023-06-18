@@ -5,7 +5,7 @@ namespace Project.Architecture
     public struct PausedGameplayFactory : IFactory<IGameplay>
     {
         private readonly IGameThemeApplierComposite _themeApplier;
-        private IFactory<IPlayerBlendingShaderMaintainer> _shaderMaintainerFactory;
+        private IFactory<IBlendingShaderMaintainer> _shaderMaintainerFactory;
         private IFactory<IBlendingShaderPlayer> _playerFactory;
         private IFactory<IGameCamera> _gameCameraFactory;
         private IFactory<IObstacleManagerViewport> _obstacleManagerFactory;
@@ -16,7 +16,7 @@ namespace Project.Architecture
         private CreatedObjects _context;
 
         public PausedGameplayFactory(IGameThemeApplierComposite themeApplier,
-            IFactory<IPlayerBlendingShaderMaintainer> shaderMaintainerFactory,
+            IFactory<IBlendingShaderMaintainer> shaderMaintainerFactory,
             IFactory<IBlendingShaderPlayer> playerFactory,
             IFactory<IObstacleManagerViewport> obstacleManagerFactory, IFactory<IGameCamera> gameCameraFactory,
             IFactory<IAnimatedGameFinisher> gameFinisherFactory,
@@ -47,7 +47,8 @@ namespace Project.Architecture
         {
             _context = new CreatedObjects()
             {
-                ShaderMaintainer = _shaderMaintainerFactory.CreateNew(),
+                PlayerShaderMaintainer = _shaderMaintainerFactory.CreateNew(),
+                TrailShaderMaintainer = _shaderMaintainerFactory.CreateNew(),
                 Background = _gameBackgroundFactory.CreateNew(),
                 GameCamera = _gameCameraFactory.CreateNew(),
                 GameFinisher = _gameFinisherFactory.CreateNew(),
@@ -60,13 +61,14 @@ namespace Project.Architecture
         private void InjectDependencies()
         {
             // player
-            _context.Player.ShaderMaintainer = _context.ShaderMaintainer;
+            _context.Player.PlayerShaderMaintainer = _context.PlayerShaderMaintainer;
+            _context.Player.TrailShaderMaintainer = _context.TrailShaderMaintainer;
             _context.Player.ObstaclesSource = _context.ObstacleManager;
 
             // obstacle manager
             var despawner = _context.ObstacleManager.ObstacleDespawner;
             despawner.PlayerTransform = _context.Player.Transform;
-            despawner.PlayerBlendingRadius = _context.ShaderMaintainer.MaintainedShader.TotalBlendingRadius;
+            despawner.PlayerBlendingRadius = _context.PlayerShaderMaintainer.MaintainedShader.TotalBlendingRadius;
             
             // game camera
             _context.GameCamera.Target = _context.Player.Transform;
@@ -75,7 +77,7 @@ namespace Project.Architecture
             var animatedFinisher = _context.GameFinisher;
             animatedFinisher.Player = _context.Player;
             animatedFinisher.CameraController = _context.GameCamera.CameraController;
-            animatedFinisher.PlayerShader = _context.ShaderMaintainer.MaintainedShader;
+            animatedFinisher.PlayerShader = _context.PlayerShaderMaintainer.MaintainedShader;
             
             // score calculator
             _context.ScoreCalculator.PlayerTransform = _context.Player.Transform;
@@ -107,7 +109,8 @@ namespace Project.Architecture
 
         private struct CreatedObjects
         {
-            public IPlayerBlendingShaderMaintainer ShaderMaintainer;
+            public IBlendingShaderMaintainer PlayerShaderMaintainer;
+            public IBlendingShaderMaintainer TrailShaderMaintainer;
             public IBlendingShaderPlayer Player;
             public IObstacleManagerViewport ObstacleManager;
             public IGameCamera GameCamera;

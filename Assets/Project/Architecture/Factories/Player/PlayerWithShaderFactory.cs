@@ -21,7 +21,7 @@ namespace Project.Architecture
             var collisionDetector = playerObj.GetComponent<IPlayerCollisionDetector>();
 
             var player = new BlendingShaderPlayer(playerObj, collisionDetector, 
-                _playerData.PlayerMaterial)
+                _playerData.PlayerMaterial, _playerData.TrailMaterial)
             {
                 InputService = _inputService,
                 MovementSpeed = _playerData.MovementSpeed,

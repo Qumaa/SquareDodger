@@ -2,7 +2,8 @@
 {
     public interface IBlendingShaderPlayer : IPlayer, IUpdatable
     {
-        public IPlayerBlendingShaderMaintainer ShaderMaintainer { get; set; }
+        public IBlendingShaderMaintainer PlayerShaderMaintainer { set; }
+        public IBlendingShaderMaintainer TrailShaderMaintainer { set; }
         public IObstacleManager ObstaclesSource { get; set; }
     }
 }

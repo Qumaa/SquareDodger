@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Project.Game
 {
-    public class PlayerBlendingShaderMaintainer : PausableAndResettable, IPlayerBlendingShaderMaintainer
+    public class PlayerBlendingShaderMaintainer : PausableAndResettable, IBlendingShaderMaintainer
     {
         private const string _BUFFER_NAME = "PosBuffer";
         private readonly int _bufferNameId = Shader.PropertyToID(_BUFFER_NAME);
@@ -17,7 +17,7 @@ namespace Project.Game
         private readonly float _defaultBlendingRadius;
         private readonly float _defaultBlendingLength;
 
-        public IPlayerBlendingShader MaintainedShader { get; set; }
+        public IBlendingShader MaintainedShader { get; set; }
 
         public PlayerBlendingShaderMaintainer(float defaultBlendingRadius, float defaultBlendingLength)
         {

@@ -2,7 +2,7 @@
 
 namespace Project.Architecture
 {
-    public class PlayerBlendingShader : IPlayerBlendingShader
+    public class PlayerBlendingShader : IBlendingShader
     {
         private const string _MATERIAL_BLENDING_RADIUS_NAME = "_BlendingRadius";
         private const string _MATERIAL_BLENDING_WIDTH_NAME = "_BlendingLength";

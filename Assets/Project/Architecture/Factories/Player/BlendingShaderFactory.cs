@@ -1,6 +1,6 @@
 ﻿namespace Project.Architecture
 {
-    public struct BlendingShaderFactory : IFactory<IPlayerBlendingShader>
+    public struct BlendingShaderFactory : IFactory<IBlendingShader>
     {
         private float _blendingRadius;
         private float _blendingLength;
@@ -11,7 +11,7 @@
             _blendingLength = blendingLength;
         }
 
-        public IPlayerBlendingShader CreateNew()
+        public IBlendingShader CreateNew()
         {
             var shader = new PlayerBlendingShader
             {

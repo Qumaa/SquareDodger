@@ -37,14 +37,13 @@ namespace Project.Game
         public event Action OnTurned;
         public event Action OnDied;
 
-        public Player(GameObject playerObject, IPlayerCollisionDetector collisionDetector, Material trailMaterial)
+        public Player(GameObject playerObject, IPlayerCollisionDetector collisionDetector)
         {
             _movingRight = true;
             _gameObject = playerObject;
             _rigidbody = _gameObject.GetComponent<Rigidbody2D>();
             _renderer = _gameObject.GetComponent<SpriteRenderer>();
             _trailRenderer = _gameObject.GetComponent<TrailRenderer>();
-            _trailRenderer.material = trailMaterial;
 
             collisionDetector.OnCollided += Die;
         }
