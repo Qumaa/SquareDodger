@@ -2,7 +2,7 @@
 
 namespace Project.Game
 {
-    public class PlayerWithShader : Player, IPlayerWithShader
+    public class BlendingShaderPlayer : Player, IBlendingShaderPlayer
     {
         private IPlayerBlendingShaderMaintainer _shaderMaintainer;
         private Material _playerMaterial;
@@ -15,12 +15,14 @@ namespace Project.Game
 
         public IObstacleManager ObstaclesSource { get; set; }
 
-        public PlayerWithShader(GameObject playerObject, IPlayerCollisionDetector collisionDetector,
+        public BlendingShaderPlayer(GameObject playerObject, IPlayerCollisionDetector collisionDetector,
             Material playerMaterial) : 
             base(playerObject, collisionDetector, playerMaterial)
         {
             _playerMaterial = playerMaterial;
-            playerObject.GetComponent<Renderer>().material = playerMaterial;
+            _renderer.material = playerMaterial;
+            _renderer.rendererPriority = 1;
+            _trailRenderer.rendererPriority = 0;
         }
 
         public void Update(float timeStep)

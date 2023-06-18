@@ -6,7 +6,7 @@ namespace Project.Game
     public class Gameplay : PausableAndResettable, IGameplay
     {
         private IGameCamera _gameCamera;
-        private IPlayerWithShader _player;
+        private IBlendingShaderPlayer _player;
         private IObstacleManager _obstacleManager;
         private IAnimatedGameFinisher _gameFinisher;
         private IGameBackground _gameBackground;
@@ -18,7 +18,7 @@ namespace Project.Game
 
         public float Score => _scoreCalculator.CalculateScore();
 
-        public Gameplay(IPlayerWithShader player, IGameCamera gameCamera, IObstacleManager obstacleManager, 
+        public Gameplay(IBlendingShaderPlayer player, IGameCamera gameCamera, IObstacleManager obstacleManager, 
             IAnimatedGameFinisher gameFinisher, IGameBackground gameBackground, IGameScoreCalculator scoreCalculator)
         {
             _gameCamera = gameCamera;
