@@ -7,7 +7,7 @@
 #if UNITY_EDITOR
             return new EditorApplicationQuitter();
 #else
-            return new BuildApplicationBuilder();       
+            return new BuildApplicationQuitter();       
 #endif
         }
     }

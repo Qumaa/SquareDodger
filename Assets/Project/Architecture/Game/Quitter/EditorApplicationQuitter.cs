@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 
 namespace Project.Architecture
 {
@@ -10,3 +11,4 @@ namespace Project.Architecture
         }
     }
 }
+#endif

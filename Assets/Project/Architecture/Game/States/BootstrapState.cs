@@ -23,7 +23,7 @@ namespace Project.Architecture
 
         public override void Enter()
         {
-            InitializeGameServices();
+            Initialize();
             LoadGame();
             MoveNext();
         }
@@ -33,8 +33,9 @@ namespace Project.Architecture
             
         }
 
-        private void InitializeGameServices()
+        private void Initialize()
         {
+            Application.targetFrameRate = 60;
             DOTween.Init();
             _game.CameraController = CreateCameraController();
             // sound, input etc.
