@@ -1,5 +1,4 @@
 ﻿using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,15 +7,12 @@ namespace Project.UI
     public class GameplayUIHandler : GameCanvasUI, IGameplayUI
     {
         [SerializeField] private Button _pauseButton;
-        [SerializeField] private TMP_Text _scoreText;
-        
+        [SerializeField] private ScaleScoreDisplay _scoreDisplay;
 
         public event Action OnPausePressed;
         
-        public void DisplayScore(float score)
-        {
-            _scoreText.text = score.ToString("F0");
-        }
+        public void DisplayScore(float score) =>
+            _scoreDisplay.DisplayScore(score);
 
         protected override void OnAwake()
         {

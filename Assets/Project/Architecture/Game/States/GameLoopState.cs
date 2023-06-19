@@ -57,17 +57,17 @@ namespace Project.Architecture
         private class UIUpdater : IFixedUpdatable
         {
             private IScoreSource _scoreSource;
-            private IGameScoreDisplayer _displayer;
+            private IGameScoreDisplay _display;
 
-            public UIUpdater(IScoreSource scoreSource, IGameScoreDisplayer displayer)
+            public UIUpdater(IScoreSource scoreSource, IGameScoreDisplay display)
             {
                 _scoreSource = scoreSource;
-                _displayer = displayer;
+                _display = display;
             }
 
             public void FixedUpdate(float fixedTimeStep)
             {
-                _displayer.DisplayScore(_scoreSource.Score);
+                _display.DisplayScore(_scoreSource.Score);
             }
         }
     }

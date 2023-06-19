@@ -1,6 +1,6 @@
 ﻿namespace Project.UI
 {
-    public interface IGameScoreDisplayer
+    public interface IGameScoreDisplay
     {
         void DisplayScore(float score);
     }

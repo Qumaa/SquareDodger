@@ -2,7 +2,7 @@
 
 namespace Project.UI
 {
-    public interface IGameplayUI : IGameCanvasUI, IGameScoreDisplayer
+    public interface IGameplayUI : IGameCanvasUI, IGameScoreDisplay
     {
         event Action OnPausePressed;
     }
