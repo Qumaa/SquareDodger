@@ -165,6 +165,15 @@ namespace Project.UI
             PositionTransformOnScaleLine(division, position);
         }
 
+        private Vector2 GetDivisionSizeAt(float position)
+        {
+            var big = ShouldBeBigDivisionAt(position / _valueBetweenDivisions);
+            return big ? _bigDivisionSize : _divisionSize;
+        }
+
+        private bool ShouldBeBigDivisionAt(float position) =>
+            Mathf.RoundToInt(Mathf.Round(position / _divisionGapScaled) % _bigDivisionInterval) == 0;
+
         private RectTransform GetDivision(bool big)
         {
             var div = _divisionsPooler.CanPop() ? _divisionsPooler.Pop() : CreateNewDivision();
@@ -178,6 +187,13 @@ namespace Project.UI
             return div;
         }
 
+        private void PositionTransformOnScaleLine(Transform transformToPlace, float scalePosition)
+        {
+            var normalizedPos = (scalePosition - _scaleLowerBound) / (_scaleUpperBound - _scaleLowerBound);
+            var xPos = (normalizedPos - 0.5f) * _scaleLine.rectTransform.rect.width;
+            transformToPlace.localPosition = new Vector3(xPos, 0);
+        }
+
         private RectTransform CreateNewDivision()
         {
             var div = new GameObject();
@@ -189,22 +205,6 @@ namespace Project.UI
             img.sprite = _divisionSprite;
 
             return trans;
-        }
-
-        private Vector2 GetDivisionSizeAt(float position)
-        {
-            var big = ShouldBeBigDivisionAt(position / _valueBetweenDivisions);
-            return big ? _bigDivisionSize : _divisionSize;
-        }
-
-        private bool ShouldBeBigDivisionAt(float position) =>
-            Mathf.RoundToInt(Mathf.Round(position / _divisionGapScaled) % _bigDivisionInterval) == 0;
-
-        private void PositionTransformOnScaleLine(Transform transformToPlace, float scalePosition)
-        {
-            var normalizedPos = (scalePosition - _scaleLowerBound) / (_scaleUpperBound - _scaleLowerBound);
-            var xPos = (normalizedPos - 0.5f) * _scaleLine.rectTransform.rect.width;
-            transformToPlace.localPosition = new Vector3(xPos, 0);
         }
 
         #endregion
