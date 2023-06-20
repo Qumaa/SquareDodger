@@ -2,8 +2,7 @@ using System.Collections.Generic;
 
 namespace Project
 {
-    public abstract class Pooler<TTarget> : IPooler<TTarget>
-        where TTarget : IPoolerTarget
+    public class Pooler<TTarget> : IPooler<TTarget>
     {
         private Stack<TTarget> _pool;
 
@@ -16,7 +15,7 @@ namespace Project
             _pool.Push(objToPool);
 
         public bool CanPop() =>
-            _pool.TryPeek(out var res) && res != null;
+            _pool.TryPeek(out _);
 
         public TTarget Pop() =>
             _pool.Pop();

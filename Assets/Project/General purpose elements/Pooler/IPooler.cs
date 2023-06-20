@@ -1,7 +1,6 @@
 ﻿namespace Project
 {
     public interface IPooler<TTarget>
-        where TTarget : IPoolerTarget
     {
         void Push(TTarget objToPool);
         bool CanPop();

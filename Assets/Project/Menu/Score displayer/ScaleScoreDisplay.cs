@@ -1,38 +1,70 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Project.UI
 {
     public class ScaleScoreDisplay : MonoBehaviour
     {
         #region Values
-
+        
+        [Header("Elements")]
         [SerializeField] private RectTransform _viewport;
+        [SerializeField] private Image _scaleLine;
+        
+        [Header("Parameters")]
+        [SerializeField] private Vector2 _referenceViewportSize = new(5, 2);
+        [SerializeField] private Vector2 _divisionSize = new(0.05f, 0.25f);
+        [SerializeField] private Vector2 _bigDivisionSize = new(0.1f, 0.7f);
+        [SerializeField] private float _divisionGap = 1;
+        [SerializeField] private int _bigDivisionInterval = 5;
+        [SerializeField] private float _valueBetweenDivisions = 1;
+        [SerializeField] private float _scaleLineThickness = 0.1f;
+        [SerializeField] private float _numbersHeight = 0.8f;
+        
+        [Header("Visuals")]
+        [SerializeField] private Sprite _scaleLineSprite;
+        [SerializeField] private Sprite _divisionSprite;
+        
         private Vector2 _viewportSize;
+        private Vector2 _viewportHalfSize;
         
-        private float _scaleRelativePosition;
-        private float _scaleUpperBound => _scaleRelativePosition + _viewportSize.x;
-        private float _scaleLowerBound => _scaleRelativePosition - _viewportSize.x;
-        
+        private float _scalePosition;
+        private float _scaleClampedPosition;
+        private float _scaleUpperBound => _scaleClampedPosition + _viewportHalfSize.x;
+        private float _scaleLowerBound => _scaleClampedPosition - _viewportHalfSize.x;
+
+        private Pooler<RectTransform> _divisionsPooler;
+        private List<RectTransform> _visibleDivisions;
+
         #endregion
 
         #region Initialization
 
         private void Start()
         {
-            _viewportSize = CalculateViewportSize();
-            Debug.Log(_viewportSize);
+            CalculateViewportSize();
+
+            var height = ReferenceHeightToViewportHeight(_scaleLineThickness);
+            var line = _scaleLine.rectTransform;
+            line.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+            _scaleLine.sprite = _scaleLineSprite;
+
+            _divisionsPooler = new Pooler<RectTransform>();
+            _visibleDivisions = new List<RectTransform>();
         }
 
-        private Vector2 CalculateViewportSize()
+        private void CalculateViewportSize()
         {
-            Vector3[] results = new Vector3[4];
+            var results = new Vector3[4];
             _viewport.GetWorldCorners(results);
 
             var rotatedSize = results[2] - results[0];
-            var unrotatedSize = Quaternion.Inverse(_viewport.rotation) * rotatedSize;
+            var unrotatedSize = (Vector2)(Quaternion.Inverse(_viewport.rotation) * rotatedSize);
 
-            return unrotatedSize;
+            _viewportSize = unrotatedSize;
+            _viewportHalfSize = unrotatedSize / 2f;
         }
 
         #endregion
@@ -41,20 +73,40 @@ namespace Project.UI
 
         public void DisplayScore(float score)
         {
-            SetScaleRelativePosition(score);
+            ClearDisplay();
+            SetScoreAsPosition(score);
             DrawScaleDivisions();
             DrawNumbers();
             DrawHighestScore();
+            DrawCurrentScore();
         }
 
-        private void SetScaleRelativePosition(float position)
+        private void ClearDisplay()
         {
-            throw new NotImplementedException();
+            foreach (var div in _visibleDivisions)
+            {
+                _divisionsPooler.Push(div);
+                div.gameObject.SetActive(false);
+            }
+            
+            _visibleDivisions.Clear();
+        }
+
+        private void SetScoreAsPosition(float score)
+        {
+            var position = score / _valueBetweenDivisions;
+            
+            _scalePosition = position;
+            _scaleClampedPosition = Mathf.Max(position, _viewportHalfSize.x);
         }
 
         private void DrawScaleDivisions()
         {
-            throw new NotImplementedException();
+            var divisionsCount = CalculateDivisionsCountForCurrentPosition();
+            var firstPos = CalculateFirstDivisionPositionFromLeft();
+
+            for (var i = 0; i < divisionsCount; i++)
+                DisplayDivision(firstPos + i * _divisionGap);
         }
 
         private void DrawNumbers()
@@ -66,6 +118,75 @@ namespace Project.UI
         {
             throw new NotImplementedException();
         }
+
+        private void DrawCurrentScore()
+        {
+            throw new NotImplementedException();
+        }
+
+        private int CalculateDivisionsCountForCurrentPosition() =>
+            Mathf.FloorToInt(_scaleUpperBound / _divisionGap + 1) - Mathf.CeilToInt(_scaleLowerBound / _divisionGap - 1) - 1;
+
+        private float CalculateFirstDivisionPositionFromLeft()
+        {
+            var big = ShouldBeBigDivisionAt(_scaleLowerBound / _valueBetweenDivisions);
+            var offset = big ? _bigDivisionSize.x : _divisionSize.x;
+            return Mathf.Ceil((_scaleLowerBound - offset / 2) / _divisionGap) * _divisionGap;
+        }
+
+        private void DisplayDivision(float position)
+        {
+            var big = ShouldBeBigDivisionAt(position);
+
+            var division = GetDivision(big);
+            PositionTransformOnScaleLine(division, position);
+        }
+
+        private RectTransform GetDivision(bool big)
+        {
+            var div = _divisionsPooler.CanPop() ? _divisionsPooler.Pop() : CreateNewDivision();
+            
+            var size = big ? _bigDivisionSize : _divisionSize;
+            div.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ReferenceHeightToViewportHeight(size.x));
+            div.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ReferenceHeightToViewportHeight(size.y));
+            
+            div.gameObject.SetActive(true);
+            _visibleDivisions.Add(div);
+            return div;
+        }
+
+        private RectTransform CreateNewDivision()
+        {
+            var div = new GameObject();
+            
+            var trans = div.AddComponent<RectTransform>();
+            trans.SetParent(_scaleLine.transform, false);
+
+            var img = div.AddComponent<Image>();
+            img.sprite = _divisionSprite;
+
+            return trans;
+        }
+
+        private bool ShouldBeBigDivisionAt(float position) =>
+            Mathf.RoundToInt(Mathf.Round(position / _divisionGap) % _bigDivisionInterval) == 0;
+
+        private void PositionTransformOnScaleLine(Transform transformToPlace, float scalePosition)
+        {
+            var normalizedPos = Mathf.InverseLerp(_scaleLowerBound, _scaleUpperBound, scalePosition);
+            var xPos = (normalizedPos - 0.5f) * _scaleLine.rectTransform.rect.width;
+            transformToPlace.localPosition = new Vector3(xPos, 0);
+        }
+
+        #endregion
+
+        #region Utils
+
+        private float ReferenceHeightToViewportHeight(float referenceUnits) =>
+            _viewport.rect.height / (_referenceViewportSize.y / referenceUnits);
+
+        private float ReferenceWidthToViewportWidth(float referenceUnits) =>
+            _viewport.rect.width / (_referenceViewportSize.x / referenceUnits);
 
         #endregion
     }
