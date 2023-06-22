@@ -55,6 +55,8 @@ MonoBehaviour:
   _referenceViewportSize: {x: 5, y: 2}
   _divisionSize: {x: 0.05, y: 0.25}
   _bigDivisionSize: {x: 0.1, y: 0.7}
+  _currentScoreSize: {x: 0.5, y: 0.5}
+  _highestScoreSize: {x: 0.5, y: 0.5}
   _divisionGap: 1
   _bigDivisionInterval: 5
   _valueBetweenDivisions: 5
@@ -62,6 +64,8 @@ MonoBehaviour:
   _numbersHeight: 0.8
   _scaleLineSprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
   _divisionSprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  _currentScoreSprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
+  _highestScoreSprite: {fileID: -9095717837082945937, guid: bd3cb4af8406d4436a2ae8c2aafe1f8d, type: 3}
 --- !u!1 &9185030429669722403
 GameObject:
   m_ObjectHideFlags: 0

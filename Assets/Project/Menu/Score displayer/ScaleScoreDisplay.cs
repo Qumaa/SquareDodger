@@ -13,19 +13,24 @@ namespace Project.UI
         [Header("Elements")] [SerializeField] private RectTransform _viewport;
         [SerializeField] private Image _scaleLine;
 
-        [Header("Parameters")] [SerializeField]
-        private Vector2 _referenceViewportSize = new(5, 2);
+        [Header("Parameters")] 
+        [SerializeField] private Vector2 _referenceViewportSize = new(5, 2);
 
         [SerializeField] private Vector2 _divisionSize = new(0.05f, 0.25f);
         [SerializeField] private Vector2 _bigDivisionSize = new(0.1f, 0.7f);
+        [SerializeField] private float _currentScoreSize = 0.5f;
+        [SerializeField] private float _highestScoreSize = 0.5f;
         [SerializeField] private float _divisionGap = 1;
         [SerializeField] private int _bigDivisionInterval = 5;
         [SerializeField] private float _valueBetweenDivisions = 1;
         [SerializeField] private float _scaleLineThickness = 0.1f;
         [SerializeField] private float _numbersHeight = 0.8f;
 
-        [Header("Visuals")] [SerializeField] private Sprite _scaleLineSprite;
+        [Header("Visuals")] 
+        [SerializeField] private Sprite _scaleLineSprite;
         [SerializeField] private Sprite _divisionSprite;
+        [SerializeField] private Sprite _currentScoreSprite;
+        [SerializeField] private Sprite _highestScoreSprite;
 
         private Vector2 _viewportSize;
         private Vector2 _viewportHalfSize;
@@ -37,9 +42,14 @@ namespace Project.UI
         private float _scaleLowerBound => _scaleClampedPosition - _viewportHalfSize.x;
 
         private float _divisionGapScaled;
+        
+        private float _highestScore;
+        private float _highestScorePosition;
 
         private Pooler<RectTransform> _divisionsPooler;
         private List<RectTransform> _visibleDivisions;
+        private RectTransform _highestScoreIcon;
+        private RectTransform _currentScoreIcon;
 
         #endregion
 
@@ -49,14 +59,39 @@ namespace Project.UI
         {
             base.Start();
             CacheViewportSize();
+            InitializeScaleLine();
+            InitializeScaleElements();
+        }
 
+        private void InitializeScaleLine()
+        {
             var height = ReferenceHeightToViewportHeight(_scaleLineThickness);
             var line = _scaleLine.rectTransform;
             line.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
             _scaleLine.sprite = _scaleLineSprite;
+        }
 
+        private void InitializeScaleElements()
+        {
             _divisionsPooler = new Pooler<RectTransform>();
             _visibleDivisions = new List<RectTransform>();
+            _highestScoreIcon = CreateScaleLineIcon(_highestScoreSprite);
+            SetRectTransformSize(_highestScoreIcon, ReferenceHeightToViewportHeight(_highestScoreSize));
+            _currentScoreIcon = CreateScaleLineIcon(_currentScoreSprite);
+            SetRectTransformSize(_currentScoreIcon, ReferenceHeightToViewportHeight(_currentScoreSize));
+        }
+        
+        private RectTransform CreateScaleLineIcon(Sprite icon)
+        {
+            var obj = new GameObject();
+
+            var trans = obj.AddComponent<RectTransform>();
+            trans.SetParent(_scaleLine.transform, false);
+
+            var img = obj.AddComponent<Image>();
+            img.sprite = icon;
+
+            return trans;
         }
 
         protected override void OnRectTransformDimensionsChange()
@@ -97,6 +132,12 @@ namespace Project.UI
             DrawHighestScore();
             DrawCurrentScore();
         }
+        
+        public void SetHighestScore(float score)
+        {
+            _highestScore = score;
+            UpdateHighestScorePosition();
+        }
 
         private void ClearDisplay()
         {
@@ -128,18 +169,28 @@ namespace Project.UI
 
         private void DrawNumbers()
         {
-            throw new NotImplementedException();
+            // TODO
         }
 
         private void DrawHighestScore()
         {
-            throw new NotImplementedException();
+            if (!IsVisibleOnScaleLine(_highestScorePosition, _highestScoreSize))
+            {
+                _highestScoreIcon.gameObject.SetActive(false);
+                return;
+            }
+            
+            _highestScoreIcon.gameObject.SetActive(true);
+            PositionTransformOnScaleLine(_highestScoreIcon, _highestScorePosition);
         }
 
         private void DrawCurrentScore()
         {
-            throw new NotImplementedException();
+            PositionTransformOnScaleLine(_currentScoreIcon, _scalePosition);
         }
+
+        private void UpdateHighestScorePosition() =>
+            _highestScorePosition = _highestScore / _valueBetweenDivisions;
 
         private int CalculateDivisionsCountForCurrentPosition()
         {
@@ -164,7 +215,7 @@ namespace Project.UI
             var division = GetDivision(big);
             PositionTransformOnScaleLine(division, position);
         }
-
+        
         private Vector2 GetDivisionSizeAt(float position)
         {
             var big = ShouldBeBigDivisionAt(position / _valueBetweenDivisions);
@@ -179,8 +230,8 @@ namespace Project.UI
             var div = _divisionsPooler.CanPop() ? _divisionsPooler.Pop() : CreateNewDivision();
 
             var size = big ? _bigDivisionSize : _divisionSize;
-            div.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ReferenceWidthToViewportWidth(size.x));
-            div.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ReferenceHeightToViewportHeight(size.y));
+            size = ReferenceSizeToViewportSize(size);
+            SetRectTransformSize(div, size);
 
             div.gameObject.SetActive(true);
             _visibleDivisions.Add(div);
@@ -196,15 +247,15 @@ namespace Project.UI
 
         private RectTransform CreateNewDivision()
         {
-            var div = new GameObject();
-
-            var trans = div.AddComponent<RectTransform>();
-            trans.SetParent(_scaleLine.transform, false);
-
-            var img = div.AddComponent<Image>();
-            img.sprite = _divisionSprite;
-
+            var trans = CreateScaleLineIcon(_divisionSprite);
+            UpdateScaleHierarchyOrder();
             return trans;
+        }
+
+        private void UpdateScaleHierarchyOrder()
+        {
+            _highestScoreIcon.SetAsLastSibling();
+            _currentScoreIcon.SetAsLastSibling();
         }
 
         #endregion
@@ -216,6 +267,21 @@ namespace Project.UI
 
         private float ReferenceWidthToViewportWidth(float referenceUnits) =>
             _viewport.rect.width / (_referenceViewportSize.x / referenceUnits);
+        
+        private Vector2 ReferenceSizeToViewportSize(Vector2 referenceSize) =>
+        new(ReferenceWidthToViewportWidth(referenceSize.x), ReferenceHeightToViewportHeight(referenceSize.y));
+        
+        private static void SetRectTransformSize(RectTransform rectTransform, Vector2 size)
+        {
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
+        }
+        
+        private static void SetRectTransformSize(RectTransform rectTransform, float size) =>
+            SetRectTransformSize(rectTransform, new Vector2(size, size));
+
+        private bool IsVisibleOnScaleLine(float position, float width) =>
+            _viewportHalfSize.x - width / 2 <= Mathf.Abs(_scaleClampedPosition - position);
 
         #endregion
     }
