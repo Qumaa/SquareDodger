@@ -46,8 +46,8 @@ namespace Project.UI
         private float _highestScore;
         private float _highestScorePosition;
 
-        private Pooler<RectTransform> _divisionsPooler;
-        private List<RectTransform> _visibleDivisions;
+        private Pooler<Division> _divisionsPooler;
+        private List<Division> _visibleDivisions;
         private RectTransform _highestScoreIcon;
         private RectTransform _currentScoreIcon;
 
@@ -73,8 +73,8 @@ namespace Project.UI
 
         private void InitializeScaleElements()
         {
-            _divisionsPooler = new Pooler<RectTransform>();
-            _visibleDivisions = new List<RectTransform>();
+            _divisionsPooler = new Pooler<Division>();
+            _visibleDivisions = new List<Division>();
             _highestScoreIcon = CreateScaleLineIcon(_highestScoreSprite);
             SetRectTransformSize(_highestScoreIcon, ReferenceHeightToViewportHeight(_highestScoreSize));
             _currentScoreIcon = CreateScaleLineIcon(_currentScoreSprite);
@@ -144,7 +144,7 @@ namespace Project.UI
             foreach (var div in _visibleDivisions)
             {
                 _divisionsPooler.Push(div);
-                div.gameObject.SetActive(false);
+                div.SetActive(false);
             }
 
             _visibleDivisions.Clear();
@@ -213,7 +213,7 @@ namespace Project.UI
             var big = ShouldBeBigDivisionAt(position);
 
             var division = GetDivision(big);
-            PositionTransformOnScaleLine(division, position);
+            PositionTransformOnScaleLine(division.RectTransform, position);
         }
         
         private Vector2 GetDivisionSizeAt(float position)
@@ -225,15 +225,11 @@ namespace Project.UI
         private bool ShouldBeBigDivisionAt(float position) =>
             Mathf.RoundToInt(Mathf.Round(position / _divisionGapScaled) % _bigDivisionInterval) == 0;
 
-        private RectTransform GetDivision(bool big)
+        private Division GetDivision(bool big)
         {
             var div = _divisionsPooler.CanPop() ? _divisionsPooler.Pop() : CreateNewDivision();
-
-            var size = big ? _bigDivisionSize : _divisionSize;
-            size = ReferenceSizeToViewportSize(size);
-            SetRectTransformSize(div, size);
-
-            div.gameObject.SetActive(true);
+            div.IsBig = big;
+            div.SetActive(true);
             _visibleDivisions.Add(div);
             return div;
         }
@@ -245,11 +241,11 @@ namespace Project.UI
             transformToPlace.localPosition = new Vector3(xPos, 0);
         }
 
-        private RectTransform CreateNewDivision()
+        private Division CreateNewDivision()
         {
             var trans = CreateScaleLineIcon(_divisionSprite);
             UpdateScaleHierarchyOrder();
-            return trans;
+            return new Division(this, trans);
         }
 
         private void UpdateScaleHierarchyOrder()
@@ -284,5 +280,47 @@ namespace Project.UI
             _viewportHalfSize.x - width / 2 <= Mathf.Abs(_scaleClampedPosition - position);
 
         #endregion
+        
+        private class Division
+        {
+            private readonly ScaleScoreDisplay _parent;
+            private bool _isBig;
+            private Vector2 _size;
+
+            public bool IsBig
+            {
+                get => _isBig;
+                set => SetBig(value);
+            }
+
+            public Vector2 Size
+            {
+                get => _size;
+                private set => SetSize(value);
+            }
+
+            public RectTransform RectTransform { get; }
+
+            public Division(ScaleScoreDisplay parent, RectTransform rectTransform)
+            {
+                _parent = parent;
+                RectTransform = rectTransform;
+            }
+
+            public void SetActive(bool active) =>
+            RectTransform.gameObject.SetActive(active);
+
+            private void SetBig(bool big)
+            {
+                _isBig = big;
+                Size = _isBig ? _parent._bigDivisionSize : _parent._divisionSize;
+            }
+
+            private void SetSize(Vector2 size)
+            {
+                _size = size;
+                SetRectTransformSize(RectTransform, _parent.ReferenceSizeToViewportSize(_size));
+            }
+        }
     }
 }
