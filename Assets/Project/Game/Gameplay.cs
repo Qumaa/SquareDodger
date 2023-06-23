@@ -78,8 +78,8 @@ namespace Project.Game
 
         private void End()
         {
-            _gameFinisher.Finish();
             OnEnded?.Invoke();
+            _gameFinisher.Finish();
         }
 
         private void InitializeComposites()

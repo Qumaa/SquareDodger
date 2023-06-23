@@ -14,6 +14,9 @@ namespace Project.UI
         public void DisplayScore(float score) =>
             _scoreDisplay.DisplayScore(score);
 
+        public void SetHighestScore(float score) =>
+            _scoreDisplay.SetHighestScore(score);
+        
         protected override void OnAwake()
         {
             _pauseButton.onClick.AddListener(PauseGame);

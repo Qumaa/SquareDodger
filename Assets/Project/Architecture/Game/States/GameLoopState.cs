@@ -6,7 +6,7 @@ namespace Project.Architecture
     public class GameLoopState : GameState
     {
         private IGameplayUI _gameplayUI;
-        private UIUpdater _updater;
+        private DisplayUpdater _displayUpdater;
 
         public GameLoopState(IGameStateMachine stateMachine, IGame game) : base(stateMachine, game)
         {
@@ -22,7 +22,10 @@ namespace Project.Architecture
             _gameplayUI.Show();
             _gameplayUI.OnPausePressed += HandleGamePause;
             
-            _game.Add(_updater);
+            _game.Add(_displayUpdater);
+            // this is absolutely fucking stupid
+            // but there is no other way to repaint display
+            _displayUpdater.FixedUpdate(0);
         }
 
         public override void Exit()
@@ -32,7 +35,7 @@ namespace Project.Architecture
             _gameplayUI.Hide();
             _gameplayUI.OnPausePressed -= HandleGamePause;
             
-            _game.Remove(_updater);
+            _game.Remove(_displayUpdater);
         }
 
         private void HandleGameEnd()
@@ -51,15 +54,15 @@ namespace Project.Architecture
                 return;
             
             _gameplayUI = _game.UI.Get<IGameplayUI>();
-            _updater = new UIUpdater(_game.Gameplay, _gameplayUI);
+            _displayUpdater = new DisplayUpdater(_game.Gameplay, _gameplayUI);
         }
 
-        private class UIUpdater : IFixedUpdatable
+        private class DisplayUpdater : IFixedUpdatable
         {
             private IScoreSource _scoreSource;
             private IGameScoreDisplay _display;
 
-            public UIUpdater(IScoreSource scoreSource, IGameScoreDisplay display)
+            public DisplayUpdater(IScoreSource scoreSource, IGameScoreDisplay display)
             {
                 _scoreSource = scoreSource;
                 _display = display;

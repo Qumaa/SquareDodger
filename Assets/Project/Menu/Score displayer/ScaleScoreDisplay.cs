@@ -50,10 +50,18 @@ namespace Project.UI
         private List<Division> _visibleDivisions;
         private RectTransform _highestScoreIcon;
         private RectTransform _currentScoreIcon;
+        private Image _currentScoreImage;
+        private Vector3[] _viewportCornersTable;
 
         #endregion
 
         #region Initialization
+
+        protected override void Awake()
+        {
+            base.Awake();
+            _viewportCornersTable = new Vector3[4];
+        }
 
         protected override void Start()
         {
@@ -78,6 +86,7 @@ namespace Project.UI
             _highestScoreIcon = CreateScaleLineIcon(_highestScoreSprite);
             SetRectTransformSize(_highestScoreIcon, ReferenceHeightToViewportHeight(_highestScoreSize));
             _currentScoreIcon = CreateScaleLineIcon(_currentScoreSprite);
+            _currentScoreImage = _currentScoreIcon.GetComponent<Image>();
             SetRectTransformSize(_currentScoreIcon, ReferenceHeightToViewportHeight(_currentScoreSize));
         }
         
@@ -98,25 +107,28 @@ namespace Project.UI
         {
             base.OnRectTransformDimensionsChange();
             CacheViewportSize();
-            UpdateViewportDependantValues();
         }
 
         private void CacheViewportSize()
         {
-            var results = new Vector3[4];
-            _viewport.GetWorldCorners(results);
+            _viewport.GetWorldCorners(_viewportCornersTable);
 
-            var rotatedSize = results[2] - results[0];
+            var rotatedSize = _viewportCornersTable[2] - _viewportCornersTable[0];
             var unrotatedSize = (Vector2) (Quaternion.Inverse(_viewport.rotation) * rotatedSize);
 
             _viewportSize = unrotatedSize;
-            _viewportHalfSize = _viewportSize / 2f;
-            _viewportScaleFactor = _viewportSize / _referenceViewportSize;
+            
+            UpdateViewportDependantValues();
         }
 
         private void UpdateViewportDependantValues()
         {
+            _viewportScaleFactor = _viewportSize / _referenceViewportSize;
+            _viewportHalfSize = _viewportSize / 2f;
+            
             _divisionGapScaled = _divisionGap * _viewportScaleFactor.x;
+            
+            UpdateHighestScorePosition();
         }
 
         #endregion
@@ -125,19 +137,38 @@ namespace Project.UI
 
         public void DisplayScore(float score)
         {
-            ClearDisplay();
             SetScoreAsPosition(score);
-            DrawScaleDivisions();
-            DrawNumbers();
-            DrawHighestScore();
-            DrawCurrentScore();
+            Repaint();
         }
-        
+
         public void SetHighestScore(float score)
         {
             _highestScore = score;
             UpdateHighestScorePosition();
         }
+
+        private void SetScoreAsPosition(float score)
+        {
+            var position = ViewportPositionToScaleLinePosition(score);
+
+            _scalePosition = position;
+            _scaleClampedPosition = Mathf.Max(position, _viewportHalfSize.x);
+        }
+
+        private void Repaint()
+        {
+            ClearDisplay();
+            DrawScaleDivisions();
+            DrawNumbers();
+            DrawHighestScore();
+            DrawCurrentScore();
+        }
+
+        private void UpdateHighestScorePosition() =>
+            _highestScorePosition = ViewportPositionToScaleLinePosition(_highestScore);
+
+        private float ViewportPositionToScaleLinePosition(float score) =>
+            score / _valueBetweenDivisions * _viewportScaleFactor.x;
 
         private void ClearDisplay()
         {
@@ -148,14 +179,6 @@ namespace Project.UI
             }
 
             _visibleDivisions.Clear();
-        }
-
-        private void SetScoreAsPosition(float score)
-        {
-            var position = score / _valueBetweenDivisions;
-
-            _scalePosition = position;
-            _scaleClampedPosition = Mathf.Max(position, _viewportHalfSize.x);
         }
 
         private void DrawScaleDivisions()
@@ -174,7 +197,7 @@ namespace Project.UI
 
         private void DrawHighestScore()
         {
-            if (!IsVisibleOnScaleLine(_highestScorePosition, _highestScoreSize))
+            if (!IsVisibleOnScaleLine(_highestScorePosition, _highestScoreSize) || CurrentScoreHigherThanHighestScore())
             {
                 _highestScoreIcon.gameObject.SetActive(false);
                 return;
@@ -186,11 +209,11 @@ namespace Project.UI
 
         private void DrawCurrentScore()
         {
+            _currentScoreImage.sprite =
+                CurrentScoreHigherThanHighestScore() ? _highestScoreSprite : _currentScoreSprite;
+            
             PositionTransformOnScaleLine(_currentScoreIcon, _scalePosition);
         }
-
-        private void UpdateHighestScorePosition() =>
-            _highestScorePosition = _highestScore / _valueBetweenDivisions;
 
         private int CalculateDivisionsCountForCurrentPosition()
         {
@@ -215,7 +238,20 @@ namespace Project.UI
             var division = GetDivision(big);
             PositionTransformOnScaleLine(division.RectTransform, position);
         }
-        
+
+        private bool IsVisibleOnScaleLine(float position, float width) =>
+            _viewportHalfSize.x + width / 2 > Mathf.Abs(_scaleClampedPosition - position);
+
+        private bool CurrentScoreHigherThanHighestScore() =>
+            _highestScorePosition <= _scaleClampedPosition;
+
+        private void PositionTransformOnScaleLine(Transform transformToPlace, float scalePosition)
+        {
+            var normalizedPos = (scalePosition - _scaleLowerBound) / (_scaleUpperBound - _scaleLowerBound);
+            var xPos = (normalizedPos - 0.5f) * _scaleLine.rectTransform.rect.width;
+            transformToPlace.localPosition = new Vector3(xPos, 0);
+        }
+
         private Vector2 GetDivisionSizeAt(float position)
         {
             var big = ShouldBeBigDivisionAt(position / _valueBetweenDivisions);
@@ -223,7 +259,7 @@ namespace Project.UI
         }
 
         private bool ShouldBeBigDivisionAt(float position) =>
-            Mathf.RoundToInt(Mathf.Round(position / _divisionGapScaled) % _bigDivisionInterval) == 0;
+            Mathf.RoundToInt(position / _divisionGapScaled) % _bigDivisionInterval == 0;
 
         private Division GetDivision(bool big)
         {
@@ -232,13 +268,6 @@ namespace Project.UI
             div.SetActive(true);
             _visibleDivisions.Add(div);
             return div;
-        }
-
-        private void PositionTransformOnScaleLine(Transform transformToPlace, float scalePosition)
-        {
-            var normalizedPos = (scalePosition - _scaleLowerBound) / (_scaleUpperBound - _scaleLowerBound);
-            var xPos = (normalizedPos - 0.5f) * _scaleLine.rectTransform.rect.width;
-            transformToPlace.localPosition = new Vector3(xPos, 0);
         }
 
         private Division CreateNewDivision()
@@ -263,21 +292,18 @@ namespace Project.UI
 
         private float ReferenceWidthToViewportWidth(float referenceUnits) =>
             _viewport.rect.width / (_referenceViewportSize.x / referenceUnits);
-        
+
         private Vector2 ReferenceSizeToViewportSize(Vector2 referenceSize) =>
         new(ReferenceWidthToViewportWidth(referenceSize.x), ReferenceHeightToViewportHeight(referenceSize.y));
-        
+
         private static void SetRectTransformSize(RectTransform rectTransform, Vector2 size)
         {
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
         }
-        
+
         private static void SetRectTransformSize(RectTransform rectTransform, float size) =>
             SetRectTransformSize(rectTransform, new Vector2(size, size));
-
-        private bool IsVisibleOnScaleLine(float position, float width) =>
-            _viewportHalfSize.x - width / 2 <= Mathf.Abs(_scaleClampedPosition - position);
 
         #endregion
         
