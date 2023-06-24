@@ -7,9 +7,14 @@ namespace Project.Architecture
     {
         private IGameplayUI _gameplayUI;
         private DisplayUpdater _displayUpdater;
+        private ISavingSystem<PlayerProgressData> _progressSavingSystem;
+        private PlayerProgressData _playerProgress;
 
-        public GameLoopState(IGameStateMachine stateMachine, IGame game) : base(stateMachine, game)
+        public GameLoopState(IGameStateMachine stateMachine, IGame game, ISavingSystem<PlayerProgressData> progressSavingSystem) : 
+            base(stateMachine, game)
         {
+            _progressSavingSystem = progressSavingSystem;
+            _playerProgress = _progressSavingSystem.LoadData();
         }
 
         public override void Enter()
@@ -23,9 +28,8 @@ namespace Project.Architecture
             _gameplayUI.OnPausePressed += HandleGamePause;
             
             _game.Add(_displayUpdater);
-            // this is absolutely fucking stupid
-            // but there is no other way to repaint display
-            _displayUpdater.FixedUpdate(0);
+            _displayUpdater.SetHighestScore(_playerProgress.HighestScore);
+            _displayUpdater.UpdateDisplay();
         }
 
         public override void Exit()
@@ -40,7 +44,20 @@ namespace Project.Architecture
 
         private void HandleGameEnd()
         {
+            UpdateHighestScore();
             _stateMachine.SetState<GameEndState>();
+        }
+
+        private void UpdateHighestScore()
+        {
+            var highest = _playerProgress.HighestScore;
+            var current = _game.Gameplay.Score;
+
+            if (current <= highest)
+                return;
+
+            _playerProgress.HighestScore = current;
+            _progressSavingSystem.SaveData(_playerProgress);
         }
 
         private void HandleGamePause()
@@ -68,10 +85,14 @@ namespace Project.Architecture
                 _display = display;
             }
 
-            public void FixedUpdate(float fixedTimeStep)
-            {
+            public void FixedUpdate(float fixedTimeStep) =>
+                UpdateDisplay();
+
+            public void UpdateDisplay() =>
                 _display.DisplayScore(_scoreSource.Score);
-            }
+
+            public void SetHighestScore(float score) =>
+                _display.SetHighestScore(score);
         }
     }
 }

@@ -3,7 +3,7 @@ using Project.UI;
 
 namespace Project.Game
 {
-    public class PlayerSettingsMaintainer : IPlayerSettingsMaintainer
+    public class PlayerSettingsMaintainer
     {
         private PlayerSettingsData _data;
         private ISavingSystem<PlayerSettingsData> _savingSystem;

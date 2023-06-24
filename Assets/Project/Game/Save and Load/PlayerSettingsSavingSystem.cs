@@ -12,7 +12,7 @@ namespace Project.Game
         {
         }
 
-        protected override PlayerSettingsData CreateNewGenericInstance() => 
+        protected override PlayerSettingsData CreateEmptyDataInstance() => 
             new();
     }
 }

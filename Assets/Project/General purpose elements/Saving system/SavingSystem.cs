@@ -13,6 +13,6 @@
 
         public abstract T LoadData();
 
-        protected abstract T CreateNewGenericInstance();
+        protected abstract T CreateEmptyDataInstance();
     }
 }

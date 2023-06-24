@@ -22,7 +22,7 @@ namespace Project
         public override T LoadData()
         {
             if (!File.Exists(_savePath))
-                return CreateNewGenericInstance();
+                return CreateEmptyDataInstance();
 
             using FileStream fileStream = File.Open(_savePath, FileMode.Open);
             return (T) _formatter.Deserialize(fileStream);
