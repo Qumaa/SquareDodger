@@ -10,7 +10,8 @@ namespace Project.UI
     {
         #region Values
 
-        [Header("Elements")] [SerializeField] private RectTransform _viewport;
+        [Header("Elements")] 
+        [SerializeField] private RectTransform _viewport;
         [SerializeField] private Image _scaleLine;
 
         [Header("Parameters")] 
@@ -25,6 +26,7 @@ namespace Project.UI
         [SerializeField] private float _valueBetweenDivisions = 1;
         [SerializeField] private float _scaleLineThickness = 0.1f;
         [SerializeField] private float _numbersHeight = 0.8f;
+        [SerializeField] private float _numbersOffset = 0.1f;
 
         [Header("Visuals")] 
         [SerializeField] private Sprite _scaleLineSprite;
@@ -149,7 +151,7 @@ namespace Project.UI
 
         private void SetScoreAsPosition(float score)
         {
-            var position = ViewportPositionToScaleLinePosition(score);
+            var position = ScoreToScaleLinePosition(score);
 
             _scalePosition = position;
             _scaleClampedPosition = Mathf.Max(position, _viewportHalfSize.x);
@@ -159,15 +161,15 @@ namespace Project.UI
         {
             ClearDisplay();
             DrawScaleDivisions();
-            DrawNumbers();
             DrawHighestScore();
             DrawCurrentScore();
+            DrawScaleNumbers();
         }
 
         private void UpdateHighestScorePosition() =>
-            _highestScorePosition = ViewportPositionToScaleLinePosition(_highestScore);
+            _highestScorePosition = ScoreToScaleLinePosition(_highestScore);
 
-        private float ViewportPositionToScaleLinePosition(float score) =>
+        private float ScoreToScaleLinePosition(float score) =>
             score / _valueBetweenDivisions * _viewportScaleFactor.x;
 
         private void ClearDisplay()
@@ -190,11 +192,6 @@ namespace Project.UI
                 DisplayDivision(firstPos + i * _divisionGapScaled);
         }
 
-        private void DrawNumbers()
-        {
-            // TODO
-        }
-
         private void DrawHighestScore()
         {
             if (!IsVisibleOnScaleLine(_highestScorePosition, _highestScoreSize) || CurrentScoreHigherThanHighestScore())
@@ -213,6 +210,11 @@ namespace Project.UI
                 CurrentScoreHigherThanHighestScore() ? _highestScoreSprite : _currentScoreSprite;
             
             PositionTransformOnScaleLine(_currentScoreIcon, _scalePosition);
+        }
+
+        private void DrawScaleNumbers()
+        {
+            // TODO
         }
 
         private int CalculateDivisionsCountForCurrentPosition()

@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Trail material
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: d5eb7b8f64061fe498c056a6cdcdaab1, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -63,7 +63,10 @@ Material:
     m_Ints: []
     m_Floats:
     - PixelSnap: 0
+    - _BlendingLength: 2.2
+    - _BlendingRadius: 0.8
     - _BumpScale: 1
+    - _ColorBalance: 0
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -84,5 +87,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _ObstacleColor: {r: 0.8117647, g: 0.10980392, b: 0.10980392, a: 1}
+    - _PlayerColor: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
