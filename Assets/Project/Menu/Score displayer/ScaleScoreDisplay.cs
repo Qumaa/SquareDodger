@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,7 +7,7 @@ namespace Project.UI
 {
     public class ScaleScoreDisplay : UIBehaviour
     {
-        #region Values
+    #region Values
 
         [Header("Elements")] 
         [SerializeField] private RectTransform _viewport;
@@ -55,14 +54,14 @@ namespace Project.UI
         private Image _currentScoreImage;
         private Vector3[] _viewportCornersTable;
 
-        #endregion
+    #endregion
 
-        #region Initialization
+    #region Initialization
 
         protected override void Awake()
         {
             base.Awake();
-            _viewportCornersTable = new Vector3[4];
+            InitializeFieldValues();
         }
 
         protected override void Start()
@@ -73,42 +72,20 @@ namespace Project.UI
             InitializeScaleElements();
         }
 
-        private void InitializeScaleLine()
-        {
-            var height = ReferenceHeightToViewportHeight(_scaleLineThickness);
-            var line = _scaleLine.rectTransform;
-            line.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
-            _scaleLine.sprite = _scaleLineSprite;
-        }
-
-        private void InitializeScaleElements()
-        {
-            _divisionsPooler = new Pooler<Division>();
-            _visibleDivisions = new List<Division>();
-            _highestScoreIcon = CreateScaleLineIcon(_highestScoreSprite);
-            SetRectTransformSize(_highestScoreIcon, ReferenceHeightToViewportHeight(_highestScoreSize));
-            _currentScoreIcon = CreateScaleLineIcon(_currentScoreSprite);
-            _currentScoreImage = _currentScoreIcon.GetComponent<Image>();
-            SetRectTransformSize(_currentScoreIcon, ReferenceHeightToViewportHeight(_currentScoreSize));
-        }
-        
-        private RectTransform CreateScaleLineIcon(Sprite icon)
-        {
-            var obj = new GameObject();
-
-            var trans = obj.AddComponent<RectTransform>();
-            trans.SetParent(_scaleLine.transform, false);
-
-            var img = obj.AddComponent<Image>();
-            img.sprite = icon;
-
-            return trans;
-        }
-
         protected override void OnRectTransformDimensionsChange()
         {
             base.OnRectTransformDimensionsChange();
             CacheViewportSize();
+        }
+
+        private void InitializeFieldValues()
+        {
+            _viewportCornersTable = new Vector3[4];
+            _divisionsPooler = new Pooler<Division>();
+            _visibleDivisions = new List<Division>();
+            _highestScoreIcon = CreateScaleLineIcon(_highestScoreSprite);
+            _currentScoreIcon = CreateScaleLineIcon(_currentScoreSprite);
+            _currentScoreImage = _currentScoreIcon.GetComponent<Image>();
         }
 
         private void CacheViewportSize()
@@ -123,6 +100,33 @@ namespace Project.UI
             UpdateViewportDependantValues();
         }
 
+        private void InitializeScaleLine()
+        {
+            var height = ReferenceHeightToViewportHeight(_scaleLineThickness);
+            var line = _scaleLine.rectTransform;
+            line.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+            _scaleLine.sprite = _scaleLineSprite;
+        }
+
+        private void InitializeScaleElements() 
+        {
+            SetRectTransformSize(_highestScoreIcon, ReferenceHeightToViewportHeight(_highestScoreSize));
+            SetRectTransformSize(_currentScoreIcon, ReferenceHeightToViewportHeight(_currentScoreSize));
+        }
+
+        private RectTransform CreateScaleLineIcon(Sprite icon)
+        {
+            var obj = new GameObject();
+
+            var trans = obj.AddComponent<RectTransform>();
+            trans.SetParent(_scaleLine.transform, false);
+
+            var img = obj.AddComponent<Image>();
+            img.sprite = icon;
+
+            return trans;
+        }
+
         private void UpdateViewportDependantValues()
         {
             _viewportScaleFactor = _viewportSize / _referenceViewportSize;
@@ -133,9 +137,9 @@ namespace Project.UI
             UpdateHighestScorePosition();
         }
 
-        #endregion
+    #endregion
 
-        #region Display
+    #region Display
 
         public void DisplayScore(float score)
         {
@@ -214,7 +218,12 @@ namespace Project.UI
 
         private void DrawScaleNumbers()
         {
-            // TODO
+            foreach(var div in _visibleDivisions)
+                if (div.IsBig)
+                    DrawNumberUnderDivision(div);
+            
+            DrawNumberUnderHighestScore();
+            DrawNumberUnderCurrentScore();
         }
 
         private int CalculateDivisionsCountForCurrentPosition()
@@ -245,13 +254,27 @@ namespace Project.UI
             _viewportHalfSize.x + width / 2 > Mathf.Abs(_scaleClampedPosition - position);
 
         private bool CurrentScoreHigherThanHighestScore() =>
-            _highestScorePosition <= _scaleClampedPosition;
+            _highestScorePosition <= _scalePosition;
 
         private void PositionTransformOnScaleLine(Transform transformToPlace, float scalePosition)
         {
             var normalizedPos = (scalePosition - _scaleLowerBound) / (_scaleUpperBound - _scaleLowerBound);
             var xPos = (normalizedPos - 0.5f) * _scaleLine.rectTransform.rect.width;
             transformToPlace.localPosition = new Vector3(xPos, 0);
+        }
+
+        private void DrawNumberUnderDivision(Division div)
+        {
+        }
+        private void DrawNumberUnderHighestScore()
+        {
+        }
+        private void DrawNumberUnderCurrentScore()
+        {
+        }
+
+        private void DrawNumberUnderTransform(RectTransform baseTransform, float tranformReferenceHeight)
+        {
         }
 
         private Vector2 GetDivisionSizeAt(float position)
@@ -285,9 +308,9 @@ namespace Project.UI
             _currentScoreIcon.SetAsLastSibling();
         }
 
-        #endregion
+    #endregion
 
-        #region Utils
+    #region Utils
 
         private float ReferenceHeightToViewportHeight(float referenceUnits) =>
             _viewport.rect.height / (_referenceViewportSize.y / referenceUnits);
@@ -307,7 +330,7 @@ namespace Project.UI
         private static void SetRectTransformSize(RectTransform rectTransform, float size) =>
             SetRectTransformSize(rectTransform, new Vector2(size, size));
 
-        #endregion
+    #endregion
         
         private class Division
         {

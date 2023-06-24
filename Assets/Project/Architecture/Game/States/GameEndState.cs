@@ -26,6 +26,9 @@ namespace Project.Architecture
         public override void Exit()
         {
             _endMenu.Hide();
+            _endMenu.OnRestartGamePressed -= HandleGameRestart;
+            _endMenu.OnReturnToMenuPressed -= HandleReturnToMenu;
+            _endMenu.OnOpenSettingsPressed -= HandleSettings;
         }
 
         private void HandleGameRestart()
