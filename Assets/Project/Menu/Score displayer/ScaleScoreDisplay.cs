@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Project.UI
 {
-    public class ScaleScoreDisplay : UIBehaviour
+    public class ScaleScoreDisplay : UIBehaviour, IGameScoreDisplay
     {
     #region Values
 

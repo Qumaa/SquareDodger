@@ -1,4 +1,5 @@
 ﻿using System;
+using Project.Game;
 using Project.UI;
 
 namespace Project.Architecture
@@ -7,20 +8,28 @@ namespace Project.Architecture
     {
         private IGameEndMenu _endMenu;
         private ISettingsMenuOpener _settingsOpener;
-        
-        public GameEndState(IGameStateMachine stateMachine, IGame game, ISettingsMenuOpener settingsOpener) : base(stateMachine, game)
+        private ISavingSystem<PlayerProgressData> _progressSavingSystem;
+
+        public GameEndState(IGameStateMachine stateMachine, IGame game, ISettingsMenuOpener settingsOpener,
+            ISavingSystem<PlayerProgressData> progressSavingSystem) : 
+            base(stateMachine, game)
         {
             _settingsOpener = settingsOpener;
+            _progressSavingSystem = progressSavingSystem;
         }
 
         public override void Enter()
         {
             GetMenuIfNecessary();
-            
+
             _endMenu.Show();
             _endMenu.OnRestartGamePressed += HandleGameRestart;
             _endMenu.OnReturnToMenuPressed += HandleReturnToMenu;
             _endMenu.OnOpenSettingsPressed += HandleSettings;
+
+            var progressData = _progressSavingSystem.LoadData();
+            _endMenu.SetHighestScore(progressData.HighestScore);
+            _endMenu.DisplayScore(_game.Gameplay.Score);
         }
 
         public override void Exit()

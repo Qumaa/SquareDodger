@@ -46,7 +46,7 @@ namespace Project.Architecture
             var gamePaused = 
                 new GamePauseState(_stateMachine, _game, _settingsOpener);
             var gameEnd = 
-                new GameEndState(_stateMachine, _game, _settingsOpener);
+                new GameEndState(_stateMachine, _game, _settingsOpener, _progressSavingSystem);
             var gameRestart = 
                 new RestartGameState(_stateMachine, _game);
 

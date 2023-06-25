@@ -9,6 +9,7 @@ namespace Project.UI
         [SerializeField] private Button _restartButton;
         [SerializeField] private Button _returnToMenuButton;
         [SerializeField] private Button _settingsButton;
+        [SerializeField] private GameEndMenuScoreDisplay _scoreDisplay;
         
         public event Action OnRestartGamePressed;
         public event Action OnReturnToMenuPressed;
@@ -35,6 +36,16 @@ namespace Project.UI
         private void Settings()
         {
             OnOpenSettingsPressed?.Invoke();
+        }
+
+        public void DisplayScore(float score)
+        {
+            _scoreDisplay.DisplayScore(score);
+        }
+
+        public void SetHighestScore(float score)
+        {
+            _scoreDisplay.SetHighestScore(score);
         }
     }
 
