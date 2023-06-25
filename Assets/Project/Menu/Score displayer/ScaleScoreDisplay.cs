@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -24,7 +25,7 @@ namespace Project.UI
         [SerializeField] private int _bigDivisionInterval = 5;
         [SerializeField] private float _valueBetweenDivisions = 1;
         [SerializeField] private float _scaleLineThickness = 0.1f;
-        [SerializeField] private float _numbersHeight = 0.8f;
+        [SerializeField] private float _numbersFontSize = 40;
         [SerializeField] private float _numbersOffset = 0.1f;
 
         [Header("Visuals")] 
@@ -49,6 +50,8 @@ namespace Project.UI
 
         private Pooler<Division> _divisionsPooler;
         private List<Division> _visibleDivisions;
+        private Pooler<TextMeshProUGUI> _numberLabelsPooler;
+        private List<TextMeshProUGUI> _visibleNumberLabels;
         private RectTransform _highestScoreIcon;
         private RectTransform _currentScoreIcon;
         private Image _currentScoreImage;
@@ -83,6 +86,8 @@ namespace Project.UI
             _viewportCornersTable = new Vector3[4];
             _divisionsPooler = new Pooler<Division>();
             _visibleDivisions = new List<Division>();
+            _numberLabelsPooler = new Pooler<TextMeshProUGUI>();
+            _visibleNumberLabels = new List<TextMeshProUGUI>();
             _highestScoreIcon = CreateScaleLineIcon(_highestScoreSprite);
             _currentScoreIcon = CreateScaleLineIcon(_currentScoreSprite);
             _currentScoreImage = _currentScoreIcon.GetComponent<Image>();
@@ -90,6 +95,9 @@ namespace Project.UI
 
         private void CacheViewportSize()
         {
+            if (ViewportNotActive())
+                return;
+            
             _viewport.GetWorldCorners(_viewportCornersTable);
 
             var rotatedSize = _viewportCornersTable[2] - _viewportCornersTable[0];
@@ -116,14 +124,21 @@ namespace Project.UI
 
         private RectTransform CreateScaleLineIcon(Sprite icon)
         {
+            var trans = CreateScaleLineObject();
+
+            var img = trans.gameObject.AddComponent<Image>();
+            img.sprite = icon;
+
+            return trans;
+        }
+
+        private RectTransform CreateScaleLineObject()
+        {
             var obj = new GameObject();
 
             var trans = obj.AddComponent<RectTransform>();
             trans.SetParent(_scaleLine.transform, false);
-
-            var img = obj.AddComponent<Image>();
-            img.sprite = icon;
-
+            
             return trans;
         }
 
@@ -163,6 +178,9 @@ namespace Project.UI
 
         private void Repaint()
         {
+            if (ViewportNotActive())
+                return;
+            
             ClearDisplay();
             DrawScaleDivisions();
             DrawHighestScore();
@@ -185,6 +203,14 @@ namespace Project.UI
             }
 
             _visibleDivisions.Clear();
+
+            foreach (var label in _visibleNumberLabels)
+            {
+                _numberLabelsPooler.Push(label);
+                label.gameObject.SetActive(false);
+            }
+            
+            _visibleNumberLabels.Clear();
         }
 
         private void DrawScaleDivisions()
@@ -218,10 +244,7 @@ namespace Project.UI
 
         private void DrawScaleNumbers()
         {
-            foreach(var div in _visibleDivisions)
-                if (div.IsBig)
-                    DrawNumberUnderDivision(div);
-            
+            DrawNumbersUnderDivisions();
             DrawNumberUnderHighestScore();
             DrawNumberUnderCurrentScore();
         }
@@ -238,8 +261,14 @@ namespace Project.UI
 
         private float CalculateFirstDivisionPositionFromLeft()
         {
-            var offset = GetDivisionSizeAt(_scaleLowerBound).x;
-            return Mathf.Ceil((_scaleLowerBound - offset / 2) / _divisionGapScaled) * _divisionGapScaled;
+            var width = GetDivisionSizeAt(_scaleLowerBound).x;
+            return CalculateFirstDivisionWithInterval(width);
+        }
+
+        private float CalculateFirstDivisionWithInterval(float width, float interval = 1)
+        {
+            interval *= _divisionGapScaled;
+            return Mathf.Ceil((_scaleLowerBound - width / 2) / interval) * interval;
         }
 
         private void DisplayDivision(float position)
@@ -256,26 +285,79 @@ namespace Project.UI
         private bool CurrentScoreHigherThanHighestScore() =>
             _highestScorePosition <= _scalePosition;
 
-        private void PositionTransformOnScaleLine(Transform transformToPlace, float scalePosition)
+        private void PositionTransformOnScaleLine(Transform transformToPlace, float scalePosition, float verticalOffset = 0)
         {
             var normalizedPos = (scalePosition - _scaleLowerBound) / (_scaleUpperBound - _scaleLowerBound);
             var xPos = (normalizedPos - 0.5f) * _scaleLine.rectTransform.rect.width;
-            transformToPlace.localPosition = new Vector3(xPos, 0);
+            var yPos = ReferenceHeightToViewportHeight(verticalOffset);
+            transformToPlace.localPosition = new Vector3(xPos, yPos);
         }
 
-        private void DrawNumberUnderDivision(Division div)
+        private void DrawNumbersUnderDivisions()
         {
+            var firstPos = CalculateFirstBigDivisionPositionFromLeft();
+            var previous = GetBigDivisionRelativelyTo(firstPos, -1);
+
+            var pos = previous;
+            var verticalOffset = -(_bigDivisionSize.y / 2 + _numbersOffset);
+            Vector2 textSize;
+            TextMeshProUGUI text;
+            
+            do
+            {
+                text = GetNumberLabel();
+                textSize = CalculateTextWidthAtPosition(text, pos);
+                if (IsVisibleOnScaleLine(pos, textSize.x))
+                    DrawNumberAtPosition(text, pos, verticalOffset - textSize.y / 2);
+
+                pos = GetBigDivisionRelativelyTo(pos, 1);
+            } while (IsVisibleOnScaleLine(pos, textSize.x));
         }
+
+        private TextMeshProUGUI GetNumberLabel()
+        {
+            var label = _numberLabelsPooler.CanPop() ? _numberLabelsPooler.Pop() : CreateNewNumberLabel();
+            _visibleNumberLabels.Add(label);
+            label.gameObject.SetActive(true);
+            return label;
+        }
+
+        private TextMeshProUGUI CreateNewNumberLabel()
+        {
+            var trans = CreateScaleLineObject();
+            var text = trans.gameObject.AddComponent<TextMeshProUGUI>();
+            // TODO: update when viewport changes
+            text.fontSize = _numbersFontSize * _viewportScaleFactor.x;
+            return text;
+        }
+
         private void DrawNumberUnderHighestScore()
         {
         }
+
         private void DrawNumberUnderCurrentScore()
         {
         }
 
-        private void DrawNumberUnderTransform(RectTransform baseTransform, float tranformReferenceHeight)
+        private Vector2 CalculateTextWidthAtPosition(TextMeshProUGUI text, float pos) =>
+            text.GetPreferredValues(NumberToString(pos)) / _viewport.rect.size * _viewportSize;
+
+        private float GetBigDivisionRelativelyTo(float pos, int offset) =>
+            pos + _divisionGapScaled * _bigDivisionInterval * offset;
+
+        private float CalculateFirstBigDivisionPositionFromLeft() =>
+            CalculateFirstDivisionWithInterval(_bigDivisionSize.x, _bigDivisionInterval);
+
+        private void DrawNumberAtPosition(TextMeshProUGUI text, float position, float verticalOffset)
         {
+            var str = NumberToString(position / _viewportScaleFactor.x * _valueBetweenDivisions);
+            text.text = str;
+            text.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, text.GetPreferredValues(str).x);
+            PositionTransformOnScaleLine(text.transform, position, verticalOffset);
         }
+
+        private string NumberToString(float number) =>
+            number.ToString("F1");
 
         private Vector2 GetDivisionSizeAt(float position)
         {
@@ -329,6 +411,9 @@ namespace Project.UI
 
         private static void SetRectTransformSize(RectTransform rectTransform, float size) =>
             SetRectTransformSize(rectTransform, new Vector2(size, size));
+
+        private bool ViewportNotActive() =>
+            !_viewport.gameObject.activeInHierarchy;
 
     #endregion
         
