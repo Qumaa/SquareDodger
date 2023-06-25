@@ -7,24 +7,24 @@ namespace Project
     {
         private readonly BinaryFormatter _formatter;
 
-        protected BinaryFormatterSavingSystem(string savePath) : 
+        protected BinaryFormatterSavingSystem(string savePath) :
             base(savePath)
         {
             _formatter = new BinaryFormatter();
         }
 
-        public override void SaveData(T data)
+        protected override void WriteInstanceToDisk(T data, string filePath)
         {
-            using var fileStream = File.Create(_savePath);
+            using var fileStream = File.Create(filePath);
             _formatter.Serialize(fileStream, data);
         }
 
-        public override T LoadData()
-        {
-            if (!File.Exists(_savePath))
-                return CreateEmptyDataInstance();
+        protected override bool CanLoadFromDisk(string filePath) =>
+            File.Exists(filePath);
 
-            using FileStream fileStream = File.Open(_savePath, FileMode.Open);
+        protected override T LoadInstanceFromDisk(string filePath)
+        {
+            using FileStream fileStream = File.Open(filePath, FileMode.Open);
             return (T) _formatter.Deserialize(fileStream);
         }
     }
