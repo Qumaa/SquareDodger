@@ -62,7 +62,7 @@ MonoBehaviour:
   _valueBetweenDivisions: 5
   _scaleLineThickness: 0.1
   _numbersFontSize: 36
-  _numbersOffset: 0.1
+  _numbersOffset: 0.2
   _scaleLineSprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
   _divisionSprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
   _currentScoreSprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
