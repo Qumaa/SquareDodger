@@ -9,7 +9,7 @@ namespace Project.Game
         private int _current;
 
         public ObstacleSpawnerDataCalculatorTop
-        (ObstacleViewportSpawnerConfig config, Camera viewportCamera, float depth) : 
+        (ObstacleViewportSpawnerRuntimeData config, Camera viewportCamera, float depth) : 
             base(config, viewportCamera, depth)
         {
             _dirs = new[] {Vector2.left, Vector2.down};

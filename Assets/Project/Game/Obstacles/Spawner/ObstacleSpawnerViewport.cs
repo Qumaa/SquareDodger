@@ -4,7 +4,7 @@ namespace Project.Game
 {
     public class ObstacleSpawnerViewport : IObstacleSpawner
     {
-        private ObstacleViewportSpawnerConfig _config;
+        private ObstacleViewportSpawnerRuntimeData _config;
         private IPooler<IObstacle> _pooler;
         private IFactory<IObstacle> _factory;
         private IObstacleSpawnerDataCalculator _calculator;
@@ -16,7 +16,7 @@ namespace Project.Game
         public event Action<IObstacle> OnSpawned;
         public event Action<IObstacle> OnCreated;
 
-        public ObstacleSpawnerViewport(ObstacleViewportSpawnerConfig config, IPooler<IObstacle> pooler,
+        public ObstacleSpawnerViewport(ObstacleViewportSpawnerRuntimeData config, IPooler<IObstacle> pooler,
             IFactory<IObstacle> factory, IObstacleSpawnerDataCalculator calculator)
         {
             _config = config;

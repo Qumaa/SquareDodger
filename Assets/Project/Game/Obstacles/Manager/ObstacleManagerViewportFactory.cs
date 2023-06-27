@@ -8,16 +8,22 @@ namespace Project.Architecture
         private IObstacleDespawnerViewportShader _obstacleDespawner;
         private IFactory<IObstacleSpawner[]> _spawnerFactory;
 
-        public ObstacleManagerViewportFactory(IFactory<IObstacleSpawner[]> spawnerFactory, 
-            IObstacleDespawnerViewportShader obstacleDespawner)
+        public ObstacleManagerViewportFactory(ObstacleManagerRuntimeData managerConfig, Camera controlledCamera, float cameraViewportDepth)
         {
+            var pooler = new ObstaclePooler();
+            var factory = new ObstacleFactory(managerConfig.ObstaclePrefab.gameObject);
+            
+            var despawner = new ObstacleDespawnerViewportShader(controlledCamera,
+                new Vector2(0.707f, 0.707f) * managerConfig.ObstaclePrefab.Size, pooler);
+
+            var spawnerFactory = new ObstacleManagerSpawnerFactory(managerConfig, controlledCamera, cameraViewportDepth,
+                pooler, factory);
+            
             _spawnerFactory = spawnerFactory;
-            _obstacleDespawner = obstacleDespawner;
+            _obstacleDespawner = despawner;
         }
 
-        public IObstacleManagerViewport CreateNew()
-        {
-            return new ObstacleManagerViewport(_spawnerFactory.CreateNew(), _obstacleDespawner);
-        }
+        public IObstacleManagerViewport CreateNew() =>
+            new ObstacleManagerViewport(_spawnerFactory.CreateNew(), _obstacleDespawner);
     }
 }

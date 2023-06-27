@@ -5,6 +5,7 @@ namespace Project.Game
     public class ParticleGameBackground : IParticleGameBackground
     {
         private ParticleSystem _particleSystem;
+        private readonly IGameBackgroundSizeCalculator _sizeCalculator;
         private ParticleSystem.Particle[] _particles;
         private Vector2 _centerPosition;
         private float _particlesPerUnit;
@@ -21,12 +22,14 @@ namespace Project.Game
             set => SetParticlesDensity(value);
         }
 
-        public Vector2 Size { get; set; }
+        public Vector2 Size { get; private set; }
 
 
-        public ParticleGameBackground(ParticleSystem particleSystem)
+        public ParticleGameBackground(ParticleSystem particleSystem, IGameBackgroundSizeCalculator sizeCalculator)
         {
             _particleSystem = particleSystem;
+            _sizeCalculator = sizeCalculator;
+            Size = _sizeCalculator.Calculate();
         }
 
         public void Update(float timeStep)

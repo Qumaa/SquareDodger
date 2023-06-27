@@ -16,5 +16,6 @@ namespace Project
         public const string PLAYER_CONFIG = _PROJECT + "Player Config";
         public const string GAME_CONFIG = _PROJECT + "Game Config";
         public const string UI_CONFIG = _PROJECT + "UI Config";
+        public const string SOUND_CONFIG = _PROJECT + "Sound Config";
     }
 }

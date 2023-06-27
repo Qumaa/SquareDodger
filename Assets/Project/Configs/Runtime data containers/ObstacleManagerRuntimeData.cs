@@ -4,16 +4,22 @@
     {
         public Obstacle ObstaclePrefab { get; private set; }
         
-        public ObstacleViewportSpawnerConfig RightSpawnerConfig { get; private set; }
-        public ObstacleViewportSpawnerConfig TopSpawnerConfig { get; private set; }
-        public ObstacleViewportSpawnerConfig LeftSpawnerConfig { get; private set; }
+        public ObstacleViewportSpawnerRuntimeData RightSpawnerConfig { get; private set; }
+        public ObstacleViewportSpawnerRuntimeData TopSpawnerConfig { get; private set; }
+        public ObstacleViewportSpawnerRuntimeData LeftSpawnerConfig { get; private set; }
         
         public void Load(ObstacleManagerConfig data)
         {
             ObstaclePrefab = data.ObstaclePrefab;
-            RightSpawnerConfig = data.RightSpawnerConfig;
-            TopSpawnerConfig = data.TopSpawnerConfig;
-            LeftSpawnerConfig = data.LeftSpawnerConfig;
+            
+            RightSpawnerConfig = new ObstacleViewportSpawnerRuntimeData();
+            RightSpawnerConfig.Load(data.RightSpawnerConfig);
+
+            TopSpawnerConfig = new ObstacleViewportSpawnerRuntimeData();
+            TopSpawnerConfig.Load(data.TopSpawnerConfig);
+            
+            LeftSpawnerConfig = new ObstacleViewportSpawnerRuntimeData();
+            LeftSpawnerConfig.Load(data.LeftSpawnerConfig);
         }
     }
 }

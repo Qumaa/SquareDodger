@@ -9,13 +9,13 @@ namespace Project.Architecture
         private readonly float _blendingRadius;
         private readonly float _blendingLength;
 
-        public PlayerBlendingShaderMaintainerFactory(IDisposer disposer, IFactory<IBlendingShader> shaderFactory,
+        public PlayerBlendingShaderMaintainerFactory(IDisposer disposer,
             float blendingRadius, float blendingLength)
         {
             _disposer = disposer;
-            _shaderFactory = shaderFactory;
             _blendingRadius = blendingRadius;
             _blendingLength = blendingLength;
+            _shaderFactory = new BlendingShaderFactory(_blendingRadius, _blendingLength);
         }
 
         public IBlendingShaderMaintainer CreateNew()

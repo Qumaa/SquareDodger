@@ -6,8 +6,8 @@ namespace Project.Game
     {
         [Header("General settings")] 
         [SerializeField] private int _obstaclesToSpawn;
-        [SerializeField] private int _spawnInterval;
-        [SerializeField] private int _obstaclesSpeed;
+        [SerializeField] private float _spawnInterval;
+        [SerializeField] private float _obstaclesSpeed;
 
         public int ObstaclesToSpawn => _obstaclesToSpawn;
 

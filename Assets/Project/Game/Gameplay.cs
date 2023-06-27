@@ -11,6 +11,7 @@ namespace Project.Game
         private IAnimatedGameFinisher _gameFinisher;
         private IGameBackground _gameBackground;
         private IGameScoreCalculator _scoreCalculator;
+        private IGameSounds _gameSounds;
 
         private IPausableAndResettable[] _gameComposites;
         
@@ -19,7 +20,8 @@ namespace Project.Game
         public float Score => _scoreCalculator.CalculateScore();
 
         public Gameplay(IBlendingShaderPlayer player, IGameCamera gameCamera, IObstacleManager obstacleManager, 
-            IAnimatedGameFinisher gameFinisher, IGameBackground gameBackground, IGameScoreCalculator scoreCalculator)
+            IAnimatedGameFinisher gameFinisher, IGameBackground gameBackground, IGameScoreCalculator scoreCalculator,
+            IGameSounds gameSounds)
         {
             _gameCamera = gameCamera;
             _player = player;
@@ -27,8 +29,10 @@ namespace Project.Game
             _gameFinisher = gameFinisher;
             _gameBackground = gameBackground;
             _scoreCalculator = scoreCalculator;
+            _gameSounds = gameSounds;
 
             InitializeComposites();
+            InitializeSounds();
             SetFinisher();
         }
 
@@ -70,18 +74,6 @@ namespace Project.Game
             ForeachComposite(x => x.Reset());
         }
 
-        private void SetFinisher()
-        {
-            _gameFinisher.GameToFinish = this;
-            _player.OnDied += End;
-        }
-
-        private void End()
-        {
-            OnEnded?.Invoke();
-            _gameFinisher.Finish();
-        }
-
         private void InitializeComposites()
         {
             _gameComposites = new IPausableAndResettable[]
@@ -91,6 +83,25 @@ namespace Project.Game
                 _obstacleManager,
                 _gameBackground
             };
+        }
+
+        private void InitializeSounds()
+        {
+            _gameSounds.PlayMusicInLoop();
+            _player.OnTurned += _gameSounds.PlayTurnSound;
+        }
+
+        private void SetFinisher()
+        {
+            _gameFinisher.GameToFinish = this;
+            _player.OnDied += End;
+        }
+
+        private void End()
+        {
+            OnEnded?.Invoke();
+            _gameSounds.PlayLoseSound();
+            _gameFinisher.Finish();
         }
 
         private void ForeachComposite(Action<IPausableAndResettable> action)

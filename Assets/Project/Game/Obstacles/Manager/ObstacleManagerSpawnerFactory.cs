@@ -5,9 +5,9 @@ namespace Project.Architecture
 {
     public struct ObstacleManagerSpawnerFactory : IFactory<IObstacleSpawner[]>
     {
-        private ObstacleViewportSpawnerConfig _topSpawnerConfig;
-        private ObstacleViewportSpawnerConfig _leftSpawnerConfig;
-        private ObstacleViewportSpawnerConfig _rightSpawnerConfig;
+        private ObstacleViewportSpawnerRuntimeData _topSpawnerConfig;
+        private ObstacleViewportSpawnerRuntimeData _leftSpawnerConfig;
+        private ObstacleViewportSpawnerRuntimeData _rightSpawnerConfig;
         private Camera _controlledCamera;
         private float _cameraViewportDepth;
         private IPooler<IObstacle> _obstaclePooler;
@@ -77,12 +77,12 @@ namespace Project.Architecture
         
         private struct ObstacleSpawnerDataViewport
         {
-            public readonly ObstacleViewportSpawnerConfig Config;
+            public readonly ObstacleViewportSpawnerRuntimeData Config;
             public readonly IPooler<IObstacle> Pooler;
             public readonly IFactory<IObstacle> Factory;
             public readonly IObstacleSpawnerDataCalculator Calculator;
 
-            public ObstacleSpawnerDataViewport(ObstacleViewportSpawnerConfig config, IPooler<IObstacle> pooler,
+            public ObstacleSpawnerDataViewport(ObstacleViewportSpawnerRuntimeData config, IPooler<IObstacle> pooler,
                 IFactory<IObstacle> factory, IObstacleSpawnerDataCalculator calculator)
             {
                 Config = config;
