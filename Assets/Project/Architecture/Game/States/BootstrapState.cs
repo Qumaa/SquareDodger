@@ -36,13 +36,11 @@ namespace Project.Architecture
             Application.targetFrameRate = 60;
             DOTween.Init();
             _game.CameraController = CreateCameraController();
-            // sound, input etc.
+            _game.GameSounds = CreateGameSounds();
         }
 
-        private void CreateGameplay()
-        {
+        private void CreateGameplay() =>
             _game.Gameplay = new PausedGameplayFactory(_themeApplier, _game, _gameData, _disposer).CreateNew();
-        }
 
         private void MoveNext() =>
             _stateMachine.SetState<InitializeUIState>();
@@ -55,6 +53,14 @@ namespace Project.Architecture
             };
 
             return controller;
+        }
+
+        private IGameSounds CreateGameSounds()
+        {
+            var factory = new GameSoundsFactory();
+            var sounds = factory.CreateNew();
+
+            return sounds;
         }
     }
 }

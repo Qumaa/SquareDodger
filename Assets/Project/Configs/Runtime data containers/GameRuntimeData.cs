@@ -1,6 +1,4 @@
-﻿using Project.Architecture;
-
-namespace Project.Game
+﻿namespace Project.Game
 {
     public class GameRuntimeData : ILoadableFrom<GameConfig>
     {
@@ -9,6 +7,7 @@ namespace Project.Game
         public PlayerRuntimeData PlayerData { get; private set; }
         public GameBackgroundRuntimeData GameBackgroundData { get; private set; }
         public GameUIRuntimeData GameUIData { get; private set; }
+        public GameSoundsRuntimeData GameSoundsData { get; private set; }
         
         public void Load(GameConfig data)
         {
@@ -30,6 +29,9 @@ namespace Project.Game
 
             GameUIData = new GameUIRuntimeData();
             GameUIData.Load(data.GameUIConfig);
+
+            GameSoundsData = new GameSoundsRuntimeData();
+            GameSoundsData.Load(data.GameSoundsConfig);
         }
     }
 }

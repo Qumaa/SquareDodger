@@ -5,17 +5,15 @@ namespace Project.Architecture
     public struct PausedGameplayFactory : IFactory<IGameplay>
     {
         private readonly IGameThemeApplierComposite _themeApplier;
-        private readonly IGame _game;
-        private readonly GameRuntimeData _gameData;
-        private readonly IDisposer _disposer;
+        private readonly IGameSounds _gameSounds;
 
-        private IFactory<IBlendingShaderMaintainer> _shaderMaintainerFactory;
-        private IFactory<IBlendingShaderPlayer> _playerFactory;
-        private IFactory<IGameCamera> _gameCameraFactory;
-        private IFactory<IObstacleManagerViewport> _obstacleManagerFactory;
-        private IFactory<IAnimatedGameFinisher> _gameFinisherFactory;
-        private IFactory<IParticleGameBackground> _gameBackgroundFactory;
-        private IFactory<IPlayerPositionScoreCalculator> _calculatorFactory;
+        private readonly IFactory<IBlendingShaderMaintainer> _shaderMaintainerFactory;
+        private readonly IFactory<IBlendingShaderPlayer> _playerFactory;
+        private readonly IFactory<IGameCamera> _gameCameraFactory;
+        private readonly IFactory<IObstacleManagerViewport> _obstacleManagerFactory;
+        private readonly IFactory<IAnimatedGameFinisher> _gameFinisherFactory;
+        private readonly IFactory<IParticleGameBackground> _gameBackgroundFactory;
+        private readonly IFactory<IPlayerPositionScoreCalculator> _calculatorFactory;
 
         private CreatedObjects _context;
 
@@ -23,19 +21,17 @@ namespace Project.Architecture
             IDisposer disposer)
         {
             _themeApplier = themeApplier;
-            _game = game;
-            _gameData = gameData;
-            _disposer = disposer;
+            _gameSounds = game.GameSounds;
 
-            _shaderMaintainerFactory = new PlayerBlendingShaderMaintainerFactory(_disposer,
-                _gameData.PlayerData.ShaderData.BlendingRadius, _gameData.PlayerData.ShaderData.BlendingLength);
-            _playerFactory = new PlayerWithShaderFactory(_gameData.PlayerData, _game.InputService);
-            _obstacleManagerFactory = new ObstacleManagerViewportFactory(_gameData.ObstacleManagerData,
-                _game.CameraController.ControlledCamera, _gameData.GameCameraData.ViewportDepth);
-            _gameCameraFactory = new GameCameraFactory(_gameData.GameCameraData, _game.CameraController);
+            _shaderMaintainerFactory = new PlayerBlendingShaderMaintainerFactory(disposer,
+                gameData.PlayerData.ShaderData.BlendingRadius, gameData.PlayerData.ShaderData.BlendingLength);
+            _playerFactory = new PlayerWithShaderFactory(gameData.PlayerData, game.InputService);
+            _obstacleManagerFactory = new ObstacleManagerViewportFactory(gameData.ObstacleManagerData,
+                game.CameraController.ControlledCamera, gameData.GameCameraData.ViewportDepth);
+            _gameCameraFactory = new GameCameraFactory(gameData.GameCameraData, game.CameraController);
             _gameFinisherFactory = new DoTweenGameFinisherFactory();
-            _gameBackgroundFactory = new ParticleGameBackgroundFactory(_gameData, _game.CameraController.ControlledCamera,
-                _gameData.GameBackgroundData.DensityPerUnit);
+            _gameBackgroundFactory = new ParticleGameBackgroundFactory(gameData, game.CameraController.ControlledCamera,
+                gameData.GameBackgroundData.DensityPerUnit);
             _calculatorFactory = new ScoreCalculatorFactory();
 
             _context = new CreatedObjects();
@@ -60,8 +56,7 @@ namespace Project.Architecture
                 GameFinisher = _gameFinisherFactory.CreateNew(),
                 ObstacleManager = _obstacleManagerFactory.CreateNew(),
                 Player = _playerFactory.CreateNew(),
-                ScoreCalculator = _calculatorFactory.CreateNew(),
-                GameSounds = new GameSounds() //TODO
+                ScoreCalculator = _calculatorFactory.CreateNew()
             };
         }
 
@@ -101,7 +96,7 @@ namespace Project.Architecture
         private IGameplay CreateNewPausedGame()
         {
             var game = new Gameplay(_context.Player, _context.GameCamera, _context.ObstacleManager,
-                _context.GameFinisher, _context.Background, _context.ScoreCalculator, _context.GameSounds);
+                _context.GameFinisher, _context.Background, _context.ScoreCalculator, _gameSounds);
 
             game.Pause();
 
@@ -118,7 +113,6 @@ namespace Project.Architecture
             public IAnimatedGameFinisher GameFinisher;
             public IParticleGameBackground Background;
             public IPlayerPositionScoreCalculator ScoreCalculator;
-            public IGameSounds GameSounds;
         }
     }
 }

@@ -25,6 +25,7 @@ namespace Project.UI
         private void PauseGame()
         {
             OnPausePressed?.Invoke();
+            InvokeTapped();
         }
     }
 }

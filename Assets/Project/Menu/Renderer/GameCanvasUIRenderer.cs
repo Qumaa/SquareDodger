@@ -1,19 +1,22 @@
 using System;
 using System.Collections.Generic;
+using Project.Game;
 using UnityEngine;
 
 namespace Project.UI
 {
     public class GameCanvasUIRenderer : IGameCanvasUIRenderer
     {
-        private Canvas _canvas;
-        private RectTransform _focusDarkening;
-        private Dictionary<Type, IGameCanvasUI> _uis;
+        private readonly Canvas _canvas;
+        private readonly RectTransform _focusDarkening;
+        private readonly IGameSounds _gameSounds;
+        private readonly Dictionary<Type, IGameCanvasUI> _uis;
 
-        public GameCanvasUIRenderer(Canvas canvas, RectTransform focusDarkening)
+        public GameCanvasUIRenderer(Canvas canvas, RectTransform focusDarkening, IGameSounds gameSounds)
         {
             _canvas = canvas;
             _focusDarkening = focusDarkening;
+            _gameSounds = gameSounds;
             _uis = new Dictionary<Type, IGameCanvasUI>();
             
             Unfocus();
@@ -41,6 +44,7 @@ namespace Project.UI
             where T : IGameCanvasUI
         {
             _uis.Add(typeof(T), item);
+            item.OnShouldPlayTappedSound += _gameSounds.PlayInterfaceTapSound;
             item.SetCanvas(_canvas);
         }
 

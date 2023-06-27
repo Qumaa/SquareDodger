@@ -35,7 +35,7 @@ namespace Project.Architecture
 
         private void CreateUI()
         {
-            _game.UI = new CanvasUIRendererFactory(_uiData.UICanvasPrefab, _uiData.DarkeningPrefab).CreateNew();
+            _game.UI = new CanvasUIRendererFactory(_uiData.UICanvasPrefab, _uiData.DarkeningPrefab, _game.GameSounds).CreateNew();
             
             var mainMenu = new MainMenuFactory(_uiData.MainMenuPrefab).CreateNew();
             _game.UI.Add(mainMenu);

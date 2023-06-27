@@ -29,11 +29,13 @@ namespace Project.UI
         private void QuitGame()
         {
             OnApplicationQuitPressed?.Invoke();
+            InvokeTapped();
         }
         
         private void Settings()
         {
             OnOpenSettingsPressed?.Invoke();
+            InvokeTapped();
         }
     }
 }

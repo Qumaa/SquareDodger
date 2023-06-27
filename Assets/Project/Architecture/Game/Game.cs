@@ -21,7 +21,7 @@ namespace Project.Architecture
         public IGameCanvasUIRenderer UI { get; set; }
         public ICameraController CameraController { get; set; }
         public IGameInputService InputService { get; set; }
-
+        public IGameSounds GameSounds { get; set; }
 
         public Game(GameRuntimeData gameData, Camera camera, IDisposer disposer,
             IGameThemeResolver gameThemeResolver)

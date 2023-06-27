@@ -77,6 +77,7 @@ namespace Project.UI
         private void HandleCloseSettingsPressed()
         {
             OnClosePressed?.Invoke();
+            InvokeTapped();
         }
     }
 }

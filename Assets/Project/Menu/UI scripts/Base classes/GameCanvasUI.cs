@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Project.UI
 {
@@ -12,6 +13,8 @@ namespace Project.UI
             _transform = (RectTransform) transform;
             OnAwake();
         }
+
+        public event Action OnShouldPlayTappedSound;
 
         public virtual void Show()
         {
@@ -32,6 +35,9 @@ namespace Project.UI
         {
             _transform.SetAsLastSibling();
         }
+
+        protected void InvokeTapped() =>
+            OnShouldPlayTappedSound?.Invoke();
 
         protected abstract void OnAwake();
     }

@@ -31,11 +31,13 @@ namespace Project.UI
         private void HandleReturnToMenuPressed()
         {
             OnReturnToMenuPressed?.Invoke();
+            InvokeTapped();
         }
 
         private void Settings()
         {
             OnOpenSettingsPressed?.Invoke();
+            InvokeTapped();
         }
 
         public void DisplayScore(float score)

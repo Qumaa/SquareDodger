@@ -9,6 +9,7 @@ namespace Project.Architecture
         IGameCanvasUIRenderer UI { get; set; }
         ICameraController CameraController { get; set; }
         IGameInputService InputService { get; set; }
+        IGameSounds GameSounds { get; set; }
         void Initialize();
     }
 }

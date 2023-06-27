@@ -10,6 +10,7 @@ namespace Project.Game
         [SerializeField] private PlayerConfig _playerConfig;
         [SerializeField] private GameBackgroundConfig _gameBackgroundConfig;
         [SerializeField] private GameUIConfig _gameUIConfig;
+        [SerializeField] private GameSoundsConfig _gameSoundsConfig;
         
 
         public GameCameraConfig CameraConfig => _cameraConfig;
@@ -21,5 +22,7 @@ namespace Project.Game
         public GameBackgroundConfig GameBackgroundConfig => _gameBackgroundConfig;
 
         public GameUIConfig GameUIConfig => _gameUIConfig;
+
+        public GameSoundsConfig GameSoundsConfig => _gameSoundsConfig;
     }
 }
