@@ -13,7 +13,7 @@ namespace Project.Architecture
             _theme = new GameColorsRuntimeData();
         }
 
-        public IGameTheme Resolve(GameThemes themeType, bool dark = true)
+        public IGameTheme Resolve(GameTheme themeType, bool dark = true)
         {
             var themePath = ThemeEnumToResourcesPath(themeType, dark);
             
@@ -26,18 +26,18 @@ namespace Project.Architecture
             return _theme;
         }
 
-        private static string ThemeEnumToResourcesPath(GameThemes themeType, bool dark) =>
+        private static string ThemeEnumToResourcesPath(GameTheme themeType, bool dark) =>
             GetPathPrefix(dark) + SwitchThemeType(themeType);
 
         private static string GetPathPrefix(bool dark) =>
             dark ? ResourcesPaths.Themes.DARK_THEMES : ResourcesPaths.Themes.BRIGHT_THEMES;
 
-        private static string SwitchThemeType(GameThemes themeType) =>
+        private static string SwitchThemeType(GameTheme themeType) =>
             themeType switch
             {
-                GameThemes.Default => ResourcesPaths.Themes.DEFAULT,
-                GameThemes.Hot => ResourcesPaths.Themes.HOT,
-                GameThemes.Hard => ResourcesPaths.Themes.HARD,
+                GameTheme.Default => ResourcesPaths.Themes.DEFAULT,
+                GameTheme.Hot => ResourcesPaths.Themes.HOT,
+                GameTheme.Hard => ResourcesPaths.Themes.HARD,
                 _ => throw new ArgumentException()
             };
 

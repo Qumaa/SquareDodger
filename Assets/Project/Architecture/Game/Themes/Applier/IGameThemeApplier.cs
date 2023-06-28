@@ -2,6 +2,6 @@
 {
     public interface IGameThemeApplier
     {
-        void ApplyTheme(GameThemes themeType, bool dark = true);
+        void ApplyTheme(GameTheme themeType, bool dark = true);
     }
 }

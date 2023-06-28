@@ -2,6 +2,6 @@
 {
     public interface IGameThemeResolver
     {
-        IGameTheme Resolve(GameThemes themeType, bool dark = true);
+        IGameTheme Resolve(GameTheme themeType, bool dark = true);
     }
 }

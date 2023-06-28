@@ -1,6 +1,6 @@
 ﻿namespace Project.Game
 {
-    public enum GameThemes
+    public enum GameTheme
     {
         Default,
         Hot,

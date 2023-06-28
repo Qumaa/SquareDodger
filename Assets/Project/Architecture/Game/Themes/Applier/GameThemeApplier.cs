@@ -6,7 +6,7 @@ namespace Project.Game
     {
         private List<IGameThemeAppender> _appenders;
         private IGameThemeResolver _themeResolver;
-        private GameThemes? _currentTheme;
+        private GameTheme? _currentTheme;
         private bool _currentThemeMode;
 
         public GameThemeApplier(IGameThemeResolver themeResolver)
@@ -25,7 +25,7 @@ namespace Project.Game
             _appenders.Remove(item);
         }
 
-        public void ApplyTheme(GameThemes themeType, bool dark = true)
+        public void ApplyTheme(GameTheme themeType, bool dark = true)
         {
             if (!ShouldApply(themeType, dark))
                 return;
@@ -39,7 +39,7 @@ namespace Project.Game
                 appender.ApplyTheme(theme);
         }
         
-        private bool ShouldApply(GameThemes theme, bool mode)
+        private bool ShouldApply(GameTheme theme, bool mode)
         {
             var result = _currentTheme == null || _currentTheme != theme || _currentThemeMode != mode;
             _currentTheme = theme;

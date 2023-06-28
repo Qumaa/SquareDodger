@@ -58,7 +58,7 @@ namespace Project.Architecture
             _fixedUpdatables.Add(Gameplay);
         }
 
-        public void ApplyTheme(GameThemes themeType, bool dark = true) =>
+        public void ApplyTheme(GameTheme themeType, bool dark = true) =>
             _themeApplier.ApplyTheme(themeType, dark);
 
         private void InitializeStateMachine()

@@ -5,10 +5,12 @@ namespace Project.Game
     [Serializable]
     public class PlayerSettingsData
     {
-        private GameThemes _currentTheme;
+        private GameTheme _currentTheme;
         private bool _isCurrentThemeDark;
 
-        public GameThemes CurrentTheme
+        private ShaderBlendingMode _shaderMode;
+
+        public GameTheme CurrentTheme
         {
             get => _currentTheme;
             set
@@ -28,7 +30,18 @@ namespace Project.Game
             }
         }
 
-        [field: NonSerialized] public event Action<GameThemes, bool> OnThemeModified;
+        public ShaderBlendingMode ShaderMode
+        {
+            get => _shaderMode;
+            set
+            {
+                _shaderMode = value;
+                OnShaderModeModified?.Invoke(_shaderMode);
+            }
+        }
+
+        [field: NonSerialized] public event Action<GameTheme, bool> OnThemeModified;
+        [field: NonSerialized] public event Action<ShaderBlendingMode> OnShaderModeModified; 
 
         public PlayerSettingsData()
         {
@@ -37,8 +50,9 @@ namespace Project.Game
 
         private void SetDefaultValues()
         {
-            CurrentTheme = GameThemes.Default;
+            CurrentTheme = GameTheme.Default;
             IsCurrentThemeDark = true;
+            ShaderMode = ShaderBlendingMode.None;
         }
 
         private void InvokeThemeModified() =>
