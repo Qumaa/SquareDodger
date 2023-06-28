@@ -6,7 +6,6 @@ namespace Project.Game
     public class Gameplay : PausableAndResettable, IGameplay
     {
         private IGameCamera _gameCamera;
-        private IBlendingShaderPlayer _player;
         private IObstacleManager _obstacleManager;
         private IAnimatedGameFinisher _gameFinisher;
         private IGameBackground _gameBackground;
@@ -16,6 +15,7 @@ namespace Project.Game
         private IPausableAndResettable[] _gameComposites;
         
         public event Action OnEnded;
+        public IBlendingShaderPlayer Player { get; }
 
         public float Score => _scoreCalculator.CalculateScore();
 
@@ -24,7 +24,7 @@ namespace Project.Game
             IGameSounds gameSounds)
         {
             _gameCamera = gameCamera;
-            _player = player;
+            Player = player;
             _obstacleManager = obstacleManager;
             _gameFinisher = gameFinisher;
             _gameBackground = gameBackground;
@@ -51,7 +51,7 @@ namespace Project.Game
                 return;
             
             _obstacleManager.Update(timeStep);
-            _player.Update(timeStep);
+            Player.Update(timeStep);
             _gameBackground.Update(timeStep);
         }
 
@@ -78,7 +78,7 @@ namespace Project.Game
         {
             _gameComposites = new IPausableAndResettable[]
             {
-                _player,
+                Player,
                 _gameCamera,
                 _obstacleManager,
                 _gameBackground
@@ -88,13 +88,13 @@ namespace Project.Game
         private void InitializeSounds()
         {
             _gameSounds.PlayMusicInLoop();
-            _player.OnTurned += _gameSounds.PlayTurnSound;
+            Player.OnTurned += _gameSounds.PlayTurnSound;
         }
 
         private void SetFinisher()
         {
             _gameFinisher.GameToFinish = this;
-            _player.OnDied += End;
+            Player.OnDied += End;
         }
 
         private void End()

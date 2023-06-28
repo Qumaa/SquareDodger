@@ -8,16 +8,20 @@ namespace Project.Game
         private PlayerSettingsData _data;
         private ISavingSystem<PlayerSettingsData> _savingSystem;
 
-        public PlayerSettingsMaintainer(ISavingSystem<PlayerSettingsData> savingSystem, ISettingsMenu settings, IGame game)
+        public PlayerSettingsMaintainer(ISavingSystem<PlayerSettingsData> savingSystem, ISettingsMenu settings,
+            IGame game)
         {
             _data = savingSystem.LoadData();
             _savingSystem = savingSystem;
-            
+
             settings.SetSettingsData(_data);
             settings.OnClosePressed += SaveOnClose;
 
             game.ApplyTheme(_data.CurrentTheme, _data.IsCurrentThemeDark);
             _data.OnThemeModified += game.ApplyTheme;
+
+            game.Gameplay.Player.SetShaderMode(_data.ShaderMode);
+            _data.OnShaderModeModified += game.Gameplay.Player.SetShaderMode;
         }
 
         private void SaveOnClose()

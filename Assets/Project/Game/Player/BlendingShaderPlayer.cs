@@ -36,6 +36,12 @@ namespace Project.Game
             _trailShaderMaintainer.UpdateShader(ObstaclesSource.ActiveObstacles);
         }
 
+        public void SetShaderMode(ShaderBlendingMode mode)
+        {
+            _playerShaderMaintainer.MaintainedShader.BlendingMode = mode;
+            _trailShaderMaintainer.MaintainedShader.BlendingMode = mode;
+        }
+
         protected override void OnReset()
         {
             base.OnReset();

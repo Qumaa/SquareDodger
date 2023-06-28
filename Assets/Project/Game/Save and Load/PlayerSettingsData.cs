@@ -13,35 +13,23 @@ namespace Project.Game
         public GameTheme CurrentTheme
         {
             get => _currentTheme;
-            set
-            {
-                _currentTheme = value;
-                InvokeThemeModified();
-            }
+            set => SetCurrentTheme(value);
         }
 
         public bool IsCurrentThemeDark
         {
             get => _isCurrentThemeDark;
-            set
-            {
-                _isCurrentThemeDark = value;
-                InvokeThemeModified();
-            }
+            set => SetCurrentThemeMode(value);
         }
 
         public ShaderBlendingMode ShaderMode
         {
             get => _shaderMode;
-            set
-            {
-                _shaderMode = value;
-                OnShaderModeModified?.Invoke(_shaderMode);
-            }
+            set => SetShaderMode(value);
         }
 
         [field: NonSerialized] public event Action<GameTheme, bool> OnThemeModified;
-        [field: NonSerialized] public event Action<ShaderBlendingMode> OnShaderModeModified; 
+        [field: NonSerialized] public event Action<ShaderBlendingMode> OnShaderModeModified;
 
         public PlayerSettingsData()
         {
@@ -53,6 +41,33 @@ namespace Project.Game
             CurrentTheme = GameTheme.Default;
             IsCurrentThemeDark = true;
             ShaderMode = ShaderBlendingMode.None;
+        }
+
+        private void SetCurrentTheme(GameTheme theme)
+        {
+            if (theme == _currentTheme)
+                return;
+
+            _currentTheme = theme;
+            InvokeThemeModified();
+        }
+
+        private void SetCurrentThemeMode(bool dark)
+        {
+            if (dark == _isCurrentThemeDark)
+                return;
+
+            _isCurrentThemeDark = dark;
+            InvokeThemeModified();
+        }
+
+        private void SetShaderMode(ShaderBlendingMode mode)
+        {
+            if (mode == _shaderMode)
+                return;
+
+            _shaderMode = mode;
+            OnShaderModeModified?.Invoke(_shaderMode);
         }
 
         private void InvokeThemeModified() =>
