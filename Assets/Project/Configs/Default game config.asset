@@ -17,3 +17,4 @@ MonoBehaviour:
   _playerConfig: {fileID: 11400000, guid: c6c7763026eabc043b71724812a84c37, type: 2}
   _gameBackgroundConfig: {fileID: 11400000, guid: 4a48e1b03f5baae4fb7315abac8d3d42, type: 2}
   _gameUIConfig: {fileID: 11400000, guid: da619472f5c6cac4d8fdfb892af70e10, type: 2}
+  _gameSoundsConfig: {fileID: 11400000, guid: d943729a47a3bc84196e54bab284a152, type: 2}
