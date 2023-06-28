@@ -7,4 +7,13 @@ ShaderVariantCollection:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Player Shader Variants Collection
-  m_Shaders: {}
+  m_Shaders:
+  - first: {fileID: 4800000, guid: d5eb7b8f64061fe498c056a6cdcdaab1, type: 3}
+    second:
+      variants:
+      - keywords: _COLORBLEND_FRAG
+        passType: 0
+      - keywords: _COLORBLEND_OFF
+        passType: 0
+      - keywords: _COLORBLEND_VERT
+        passType: 0

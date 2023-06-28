@@ -1,6 +1,8 @@
 using Project.Game;
 using UnityEditor;
 
+#if UNITY_EDITOR
+
 namespace Project
 {
     public static class MenuItems
@@ -36,3 +38,5 @@ namespace Project
         }
     }
 }
+
+#endif

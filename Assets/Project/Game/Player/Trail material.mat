@@ -9,7 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Trail material
   m_Shader: {fileID: 4800000, guid: d5eb7b8f64061fe498c056a6cdcdaab1, type: 3}
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _COLORBLEND_OFF
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -67,6 +68,7 @@ Material:
     - _BlendingRadius: 0.8
     - _BumpScale: 1
     - _ColorBalance: 0
+    - _ColorBlend: 0
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
