@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-namespace Project.Architecture
+namespace Project.Game
 {
     public interface IBlendingShader
     {
-        Material Material { get; set; }
+        Material Material { get; }
         Color32 PlayerColor { get; set; }
         Color32 BlendingColor { get; set; }
         /// <summary>
@@ -14,5 +14,6 @@ namespace Project.Architecture
         float HardBlendingRadius { get; set; }
         float SoftBlendingLength { get; set; }
         float TotalBlendingRadius { get; }
+        ShaderBlendingMode BlendingMode { get; set; }
     }
 }

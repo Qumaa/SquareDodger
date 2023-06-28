@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Project.Architecture;
 using UnityEngine;
 
@@ -58,6 +59,7 @@ namespace Project.Game
         private ComputeBuffer AllocateBuffer(int bufferLength)
         {
             _allocatedBufferLength = bufferLength;
+            Array.Resize(ref _allocatedBufferData, bufferLength);
             return new ComputeBuffer(bufferLength, _STRIDE);
         }
 
@@ -66,8 +68,6 @@ namespace Project.Game
             _allocatedBuffer?.Release();
             _allocatedBuffer = AllocateBuffer(bufferLength);
             MaintainedShader.Material.SetBuffer(_bufferNameId, _allocatedBuffer);
-
-            _allocatedBufferData = new Vector2[bufferLength];
         }
 
         private void ResetShaderValues()

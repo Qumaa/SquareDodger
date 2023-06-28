@@ -7,7 +7,8 @@ namespace Project.Architecture
         private readonly IGameThemeApplierComposite _themeApplier;
         private readonly IGameSounds _gameSounds;
 
-        private readonly IFactory<IBlendingShaderMaintainer> _shaderMaintainerFactory;
+        private readonly IFactory<IBlendingShaderMaintainer> _playerShaderMaintainerFactory;
+        private readonly IFactory<IBlendingShaderMaintainer> _trailShaderMaintainerFactory;
         private readonly IFactory<IBlendingShaderPlayer> _playerFactory;
         private readonly IFactory<IGameCamera> _gameCameraFactory;
         private readonly IFactory<IObstacleManagerViewport> _obstacleManagerFactory;
@@ -23,8 +24,10 @@ namespace Project.Architecture
             _themeApplier = themeApplier;
             _gameSounds = game.GameSounds;
 
-            _shaderMaintainerFactory = new PlayerBlendingShaderMaintainerFactory(disposer,
-                gameData.PlayerData.ShaderData.BlendingRadius, gameData.PlayerData.ShaderData.BlendingLength);
+            _playerShaderMaintainerFactory = new BlendingShaderMaintainerFactory(disposer,
+                gameData.PlayerData.ShaderData.BlendingRadius, gameData.PlayerData.ShaderData.BlendingLength, gameData.PlayerData.PlayerMaterial);
+            _trailShaderMaintainerFactory = new BlendingShaderMaintainerFactory(disposer,
+                gameData.PlayerData.ShaderData.BlendingRadius, gameData.PlayerData.ShaderData.BlendingLength, gameData.PlayerData.TrailMaterial);
             _playerFactory = new PlayerWithShaderFactory(gameData.PlayerData, game.InputService);
             _obstacleManagerFactory = new ObstacleManagerViewportFactory(gameData.ObstacleManagerData,
                 game.CameraController.ControlledCamera, gameData.GameCameraData.ViewportDepth);
@@ -49,8 +52,8 @@ namespace Project.Architecture
         {
             _context = new CreatedObjects()
             {
-                PlayerShaderMaintainer = _shaderMaintainerFactory.CreateNew(),
-                TrailShaderMaintainer = _shaderMaintainerFactory.CreateNew(),
+                PlayerShaderMaintainer = _playerShaderMaintainerFactory.CreateNew(),
+                TrailShaderMaintainer = _trailShaderMaintainerFactory.CreateNew(),
                 Background = _gameBackgroundFactory.CreateNew(),
                 GameCamera = _gameCameraFactory.CreateNew(),
                 GameFinisher = _gameFinisherFactory.CreateNew(),

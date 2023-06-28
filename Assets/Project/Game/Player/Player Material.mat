@@ -9,7 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Player Material
   m_Shader: {fileID: 4800000, guid: d5eb7b8f64061fe498c056a6cdcdaab1, type: 3}
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _COLORBLEND_OFF
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -25,6 +26,7 @@ Material:
     - _BlendingLength: 2.2
     - _BlendingRadius: 1.99971
     - _ColorBalance: 0.9548699
+    - _ColorBlend: 0
     m_Colors:
     - _ObstacleColor: {r: 0.8117647, g: 0.10980392, b: 0.10980392, a: 1}
     - _PlayerColor: {r: 1, g: 1, b: 1, a: 1}

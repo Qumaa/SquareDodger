@@ -7,6 +7,9 @@ Shader "Unlit/Player Shader"
         _ColorBalance ("Color Balance", Range(0, 1)) = 0
         _BlendingRadius ("Lower Blending Radius", float) = 1
         _BlendingLength ("Blending Width", float) = 1
+        
+        // in HLSL: (uppercase property name)_(uppercase enum value name)
+        [KeywordEnum(Off, Vert, Frag)] _ColorBlend ("Color Blending Mode", float) = 0
     }
     SubShader
     {
@@ -36,6 +39,8 @@ Shader "Unlit/Player Shader"
 
             #include "UnityCG.cginc"
 
+            #pragma multi_compile _COLORBLEND_OFF _COLORBLEND_VERT _COLORBLEND_FRAG
+
             uniform StructuredBuffer<float2> PosBuffer : register(t1);
 
             struct appdata
@@ -47,11 +52,17 @@ Shader "Unlit/Player Shader"
 
             struct v2f
             {
-                float3 worldPos : TEXCOORD0;
                 float4 vertex : SV_POSITION;
                 float4 playerColor : COLOR;
-                float4 obstacleColor : TEXCOORD1;
-                float blend : TEXCOORD2;
+                float4 obstacleColor : TEXCOORD0;
+
+                #ifdef _COLORBLEND_VERT
+                float blend : TEXCOORD1;
+                #endif
+                
+                #ifdef _COLORBLEND_FRAG
+                float3 worldPos : TEXCOORD2;
+                #endif
             };
 
             float4 _PlayerColor;
@@ -77,19 +88,33 @@ Shader "Unlit/Player Shader"
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.worldPos = mul(unity_ObjectToWorld, v.vertex);
                 
-                o.obstacleColor = float4(_ObstacleColor.rgb, max(_PlayerColor.a, _ObstacleColor.a));
-                o.playerColor = lerp(_PlayerColor, o.obstacleColor, _ColorBalance) * v.color;
+                #if !defined (_COLORBLEND_OFF)
+                float3 worldPos = mul(unity_ObjectToWorld, v.vertex);
 
-                o.blend = CalculateBlendForPosition(o.worldPos);
+                #ifdef _COLORBLEND_VERT
+                o.blend = CalculateBlendForPosition(worldPos);
+                #elif defined (_COLORBLEND_FRAG)
+                o.worldPos = worldPos;
+                #endif
+                
+                #endif
+                                
+                o.obstacleColor = float4(_ObstacleColor.rgb, max(_PlayerColor.a, _ObstacleColor.a));
+                o.playerColor = lerp(_PlayerColor, o.obstacleColor, _ColorBalance) * v.color;                
                 
                 return o;
             }
 
             fixed4 frag(v2f i) : SV_Target
             {
+                #ifdef _COLORBLEND_OFF
+                return i.playerColor;                
+                #elif defined (_COLORBLEND_VERT)
                 return lerp(i.obstacleColor, i.playerColor, i.blend);
+                #elif defined (_COLORBLEND_FRAG)
+                return lerp(i.obstacleColor, i.playerColor, CalculateBlendForPosition(i.worldPos));
+                #endif
             }
             ENDCG
         }

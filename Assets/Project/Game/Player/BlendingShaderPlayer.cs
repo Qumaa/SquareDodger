@@ -6,17 +6,15 @@ namespace Project.Game
     {
         private IBlendingShaderMaintainer _playerShaderMaintainer;
         private IBlendingShaderMaintainer _trailShaderMaintainer;
-        private Material _playerMaterial;
-        private Material _trailMaterial;
 
         public IBlendingShaderMaintainer PlayerShaderMaintainer
         {
-            set => SetPlayerMaintainer(value);
+            set => _playerShaderMaintainer = value;
         }
 
         public IBlendingShaderMaintainer TrailShaderMaintainer
         {
-            set => SetTrailMaintainer(value);
+            set => _trailShaderMaintainer = value;
         }
 
         public IObstacleManager ObstaclesSource { get; set; }
@@ -25,9 +23,6 @@ namespace Project.Game
             Material playerMaterial, Material trailMaterial) : 
             base(playerObject, collisionDetector)
         {
-            _playerMaterial = playerMaterial;
-            _trailMaterial = trailMaterial;
-            
             _renderer.material = playerMaterial;
             _trailRenderer.material = trailMaterial;
         }
@@ -53,21 +48,6 @@ namespace Project.Game
             SetMaintainerTheme(_trailShaderMaintainer, theme);
             SetMaintainerTheme(_playerShaderMaintainer, theme);
         }
-
-        private void SetPlayerMaintainer(IBlendingShaderMaintainer maintainer)
-        {
-            _playerShaderMaintainer = maintainer;
-            SetMaintainerMaterial(maintainer, _playerMaterial);
-        }
-        
-        private void SetTrailMaintainer(IBlendingShaderMaintainer maintainer)
-        {
-            _trailShaderMaintainer = maintainer;
-            SetMaintainerMaterial(maintainer, _trailMaterial);
-        }
-
-        private static void SetMaintainerMaterial(IBlendingShaderMaintainer maintainer, Material material) =>
-            maintainer.MaintainedShader.Material = material;
 
         private static void SetMaintainerTheme(IBlendingShaderMaintainer maintainer, IGameTheme theme)
         {
