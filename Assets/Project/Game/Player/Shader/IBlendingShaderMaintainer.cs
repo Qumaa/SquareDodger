@@ -7,6 +7,6 @@ namespace Project.Game
     public interface IBlendingShaderMaintainer : IDisposable, IPausableAndResettable
     {
         void UpdateShader(List<IObstacle> data);
-        IBlendingShader MaintainedShader { get; set; }
+        IBlendingShader MaintainedShader { get; }
     }
 }

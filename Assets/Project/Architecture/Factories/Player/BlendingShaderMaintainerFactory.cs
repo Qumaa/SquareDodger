@@ -21,8 +21,8 @@ namespace Project.Architecture
 
         public IBlendingShaderMaintainer CreateNew()
         {
-            var shaderMaintainer = new PlayerBlendingShaderMaintainer(_blendingRadius, _blendingLength);
-            shaderMaintainer.MaintainedShader = _shaderFactory.CreateNew();
+            var shader = _shaderFactory.CreateNew();
+            var shaderMaintainer = new PlayerBlendingShaderMaintainer(_blendingRadius, _blendingLength, shader);
             _disposer.Register(shaderMaintainer);
 
             return shaderMaintainer;

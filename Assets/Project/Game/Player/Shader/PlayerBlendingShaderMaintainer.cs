@@ -18,12 +18,15 @@ namespace Project.Game
         private readonly float _defaultBlendingRadius;
         private readonly float _defaultBlendingLength;
 
-        public IBlendingShader MaintainedShader { get; set; }
+        public IBlendingShader MaintainedShader { get; }
 
-        public PlayerBlendingShaderMaintainer(float defaultBlendingRadius, float defaultBlendingLength)
+        public PlayerBlendingShaderMaintainer(float defaultBlendingRadius, float defaultBlendingLength,
+            IBlendingShader shader)
         {
             _defaultBlendingRadius = defaultBlendingRadius;
             _defaultBlendingLength = defaultBlendingLength;
+            MaintainedShader = shader;
+            ResetShaderValues();
         }
 
         public void UpdateShader(List<IObstacle> data)
