@@ -35,7 +35,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.0000076293945, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1310357792339451299
@@ -224,7 +224,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32.95
+  m_fontSize: 72
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -359,7 +359,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 44.65
+  m_fontSize: 164.45
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -494,7 +494,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15.4
+  m_fontSize: 66.05
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -546,6 +546,14 @@ PrefabInstance:
     - target: {fileID: 697965563813340035, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
       propertyPath: m_Name
       value: BottonGroup
+      objectReference: {fileID: 0}
+    - target: {fileID: 3896700268537872667, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.13580322
+      objectReference: {fileID: 0}
+    - target: {fileID: 3896700268537872667, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4649080257199250153, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
       propertyPath: m_Pivot.x
@@ -631,17 +639,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6148290883684621077, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.22839355
+      objectReference: {fileID: 0}
+    - target: {fileID: 6148290883684621077, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6665707262986833713, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
       propertyPath: m_Name
       value: Button left
       objectReference: {fileID: 0}
     - target: {fileID: 7953566675940928678, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
       propertyPath: m_text
-      value: tap to play
+      value: "\u041A\u043E\u0441\u043D\u0438\u0442\u0435\u0441\u044C, \u0447\u0442\u043E\u0431\u044B
+        \u043D\u0430\u0447\u0430\u0442\u044C"
       objectReference: {fileID: 0}
     - target: {fileID: 7953566675940928678, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
       propertyPath: m_fontSize
-      value: 28.75
+      value: 42.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7953566675940928678, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
+      propertyPath: m_enableWordWrapping
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
@@ -650,6 +671,61 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4085095502465933159, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
   m_PrefabInstance: {fileID: 3627677693480312251}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1166368246866502496 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2483695723481497307, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
+  m_PrefabInstance: {fileID: 3627677693480312251}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1308423222914001984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166368246866502496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69beb381e244f92449b8c4cf954630e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TrackedObjects:
+  - rid: 6141796757867331609
+  references:
+    version: 2
+    RefIds:
+    - rid: 6141796757867331609
+      type: {class: TrackedUGuiGraphic, ns: UnityEngine.Localization.PropertyVariants.TrackedObjects, asm: Unity.Localization}
+      data:
+        m_Target: {fileID: 6645245301736567069}
+        m_TrackedProperties:
+          items:
+          - rid: 6141796757867331610
+          - rid: 6141796757867331611
+        m_UpdateType: 0
+    - rid: 6141796757867331610
+      type: {class: LocalizedStringProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
+      data:
+        m_Localized:
+          m_TableReference:
+            m_TableCollectionName: GUID:7abf019e07cf404419cfbb68c2227511
+          m_TableEntryReference:
+            m_KeyId: 3221678714880
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
+        m_PropertyPath: m_text
+    - rid: 6141796757867331611
+      type: {class: FloatTrackedProperty, ns: UnityEngine.Localization.PropertyVariants.TrackedProperties, asm: Unity.Localization}
+      data:
+        m_PropertyPath: m_fontSize
+        m_VariantData:
+        - localeIdentifier:
+            m_Code: en
+          value: 18
+        - localeIdentifier:
+            m_Code: ru
+          value: 46
 --- !u!114 &2142582187487709305 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3450850785804965314, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
@@ -675,6 +751,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6645245301736567069 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7953566675940928678, guid: be29b364fa068b6459c2e2f7b7852bf9, type: 3}
+  m_PrefabInstance: {fileID: 3627677693480312251}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166368246866502496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!224 &8276701841008625490 stripped

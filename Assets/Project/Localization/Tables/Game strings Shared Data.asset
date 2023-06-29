@@ -14,7 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TableCollectionName: Game strings
   m_TableCollectionNameGuidString: 7abf019e07cf404419cfbb68c2227511
-  m_Entries: []
+  m_Entries:
+  - m_Id: 3221678714880
+    m_Key: Main Menu/Canvas (Environment)/Main Menu/BottonGroup/Separator/Info text
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
