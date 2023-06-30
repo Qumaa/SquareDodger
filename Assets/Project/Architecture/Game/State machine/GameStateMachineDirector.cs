@@ -11,14 +11,13 @@ namespace Project.Architecture
         private GameRuntimeData _gameData;
         private IDisposer _disposer;
         private Camera _camera;
-        private IGameThemeApplierComposite _themeApplier;
         private ISettingsMenuOpener _settingsOpener;
         private IApplicationQuitter _applicationQuitter;
         private PlayerSettingsSavingSystem _settingsSavingSystem;
         private PlayerProgressSavingSystem _progressSavingSystem;
 
         public GameStateMachineDirector(IGameStateMachine stateMachine, IGame game, GameRuntimeData gameData,
-            IDisposer disposer, Camera camera, IGameThemeApplierComposite themeApplier,
+            IDisposer disposer, Camera camera,
             ISettingsMenuOpener settingsOpener, IApplicationQuitter applicationQuitter)
         {
             _stateMachine = stateMachine;
@@ -26,7 +25,6 @@ namespace Project.Architecture
             _gameData = gameData;
             _disposer = disposer;
             _camera = camera;
-            _themeApplier = themeApplier;
             _settingsOpener = settingsOpener;
             _applicationQuitter = applicationQuitter;
             _settingsSavingSystem = new PlayerSettingsSavingSystem();
@@ -36,7 +34,7 @@ namespace Project.Architecture
         public void Build(IGameStateMachine machine)
         {
             var bootstrap = 
-                new BootstrapState(_stateMachine, _game, _disposer, _gameData, _camera, _themeApplier);
+                new BootstrapState(_stateMachine, _game, _disposer, _gameData, _camera);
             var initializeMenu = 
                 new InitializeUIState(_stateMachine, _game, _gameData.GameUIData, _settingsOpener, _settingsSavingSystem);
             var menuState = 

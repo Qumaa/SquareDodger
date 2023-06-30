@@ -3,7 +3,7 @@ using Project.UI;
 
 namespace Project.Architecture
 {
-    public interface IGame : IUpdatableAnFixedUpdatable, IUpdater, IFixedUpdater, IGameThemeApplier
+    public interface IGame : IUpdatableAnFixedUpdatable, IUpdater, IFixedUpdater, IGameThemeObserver, IGameShaderModeObserver, IGameLocaleObserver
     {
         IGameplay Gameplay { get; set; }
         IGameCanvasUIRenderer UI { get; set; }

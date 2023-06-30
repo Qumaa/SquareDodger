@@ -6,7 +6,7 @@ namespace Project.Architecture
 {
     public class ResourcesGameThemeResolver : IGameThemeResolver
     {
-        private GameColorsRuntimeData _theme;
+        private readonly GameColorsRuntimeData _theme;
 
         public ResourcesGameThemeResolver()
         {

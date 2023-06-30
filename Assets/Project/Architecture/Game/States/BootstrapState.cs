@@ -9,15 +9,13 @@ namespace Project.Architecture
         private IDisposer _disposer;
         private GameRuntimeData _gameData;
         private Camera _controlledCamera;
-        private IGameThemeApplierComposite _themeApplier;
 
         public BootstrapState(IGameStateMachine stateMachine, IGame game, IDisposer disposer, GameRuntimeData gameData,
-            Camera controlledCamera, IGameThemeApplierComposite themeApplier) : base(stateMachine, game)
+            Camera controlledCamera) : base(stateMachine, game)
         {
             _disposer = disposer;
             _gameData = gameData;
             _controlledCamera = controlledCamera;
-            _themeApplier = themeApplier;
         }
 
         public override void Enter()
@@ -37,10 +35,11 @@ namespace Project.Architecture
             DOTween.Init();
             _game.CameraController = CreateCameraController();
             _game.GameSounds = CreateGameSounds();
+            _game.OnLocaleChanged += GameLocalization.SetLocale;
         }
 
         private void CreateGameplay() =>
-            _game.Gameplay = new PausedGameplayFactory(_themeApplier, _game, _gameData, _disposer).CreateNew();
+            _game.Gameplay = new PausedGameplayFactory(_game, _gameData, _disposer).CreateNew();
 
         private void MoveNext() =>
             _stateMachine.SetState<InitializeUIState>();

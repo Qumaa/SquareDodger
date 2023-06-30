@@ -17,11 +17,14 @@ namespace Project.Game
             settings.SetSettingsData(_data);
             settings.OnClosePressed += SaveOnClose;
 
-            game.ApplyTheme(_data.CurrentTheme, _data.IsCurrentThemeDark);
-            _data.OnThemeModified += game.ApplyTheme;
+            game.SetTheme(_data.CurrentTheme, _data.IsCurrentThemeDark);
+            _data.OnThemeModified += game.SetTheme;
 
-            game.Gameplay.Player.SetShaderMode(_data.ShaderMode);
-            _data.OnShaderModeModified += game.Gameplay.Player.SetShaderMode;
+            game.SetPlayerShaderMode(_data.ShaderMode);
+            _data.OnShaderModeModified += game.SetPlayerShaderMode;
+
+            // game.SetLocale(_data.GameLocale);
+            _data.OnGameLocaleModified += game.SetLocale;
         }
 
         private void SaveOnClose()

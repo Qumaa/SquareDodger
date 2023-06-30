@@ -4,8 +4,8 @@ namespace Project.Architecture
 {
     public struct PausedGameplayFactory : IFactory<IGameplay>
     {
-        private readonly IGameThemeApplierComposite _themeApplier;
         private readonly IGameSounds _gameSounds;
+        private readonly IGame _game;
 
         private readonly IFactory<IBlendingShaderMaintainer> _playerShaderMaintainerFactory;
         private readonly IFactory<IBlendingShaderMaintainer> _trailShaderMaintainerFactory;
@@ -18,11 +18,11 @@ namespace Project.Architecture
 
         private CreatedObjects _context;
 
-        public PausedGameplayFactory(IGameThemeApplierComposite themeApplier, IGame game, GameRuntimeData gameData,
+        public PausedGameplayFactory(IGame game, GameRuntimeData gameData,
             IDisposer disposer)
         {
-            _themeApplier = themeApplier;
             _gameSounds = game.GameSounds;
+            _game = game;
 
             _playerShaderMaintainerFactory = new BlendingShaderMaintainerFactory(disposer,
                 gameData.PlayerData.ShaderData.BlendingRadius, gameData.PlayerData.ShaderData.BlendingLength, gameData.PlayerData.PlayerMaterial);
@@ -44,7 +44,7 @@ namespace Project.Architecture
         {
             CreateDependencies();
             InjectDependencies();
-            AddThemeAppenders();
+            SubscribeToEvents();
             return CreateNewPausedGame();
         }
 
@@ -88,12 +88,14 @@ namespace Project.Architecture
             _context.ScoreCalculator.PlayerTransform = _context.Player.Transform;
         }
 
-        private void AddThemeAppenders()
+        private void SubscribeToEvents()
         {
-            _themeApplier.Add(_context.GameCamera);
-            _themeApplier.Add(_context.Player);
-            _themeApplier.Add(_context.Background);
-            _themeApplier.Add(_context.ObstacleManager);
+            _game.OnThemeChanged += _context.GameCamera.ApplyTheme;
+            _game.OnThemeChanged += _context.Player.ApplyTheme;
+            _game.OnThemeChanged += _context.Background.ApplyTheme;
+            _game.OnThemeChanged += _context.ObstacleManager.ApplyTheme;
+
+            _game.OnPlayerShaderModeChanged += _context.Player.SetShaderMode;
         }
 
         private IGameplay CreateNewPausedGame()

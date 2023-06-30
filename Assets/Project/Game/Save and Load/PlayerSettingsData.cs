@@ -10,6 +10,8 @@ namespace Project.Game
 
         private ShaderBlendingMode _shaderMode;
 
+        private GameLocale _gameLocale;
+
         public GameTheme CurrentTheme
         {
             get => _currentTheme;
@@ -27,9 +29,16 @@ namespace Project.Game
             get => _shaderMode;
             set => SetShaderMode(value);
         }
+        
+        public GameLocale GameLocale
+        {
+            get => _gameLocale;
+            set => SetGameLocale(value);
+        }
 
         [field: NonSerialized] public event Action<GameTheme, bool> OnThemeModified;
         [field: NonSerialized] public event Action<ShaderBlendingMode> OnShaderModeModified;
+        [field: NonSerialized] public event Action<GameLocale> OnGameLocaleModified;
 
         public PlayerSettingsData()
         {
@@ -41,6 +50,7 @@ namespace Project.Game
             CurrentTheme = GameTheme.Default;
             IsCurrentThemeDark = true;
             ShaderMode = ShaderBlendingMode.None;
+            GameLocale = GameLocale.English;
         }
 
         private void SetCurrentTheme(GameTheme theme)
@@ -68,6 +78,15 @@ namespace Project.Game
 
             _shaderMode = mode;
             OnShaderModeModified?.Invoke(_shaderMode);
+        }
+
+        private void SetGameLocale(GameLocale locale)
+        {
+            if (locale == _gameLocale)
+                return;
+            
+            _gameLocale = locale;
+            OnGameLocaleModified?.Invoke(_gameLocale);
         }
 
         private void InvokeThemeModified() =>

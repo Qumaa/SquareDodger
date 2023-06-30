@@ -19,7 +19,7 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 3221678714880
-    m_Localized: "Dotknij, aby rozpocz\u0105\u0107"
+    m_Localized: "Dotknij\naby rozpocz\u0105\u0107"
     m_Metadata:
       m_Items: []
   references:

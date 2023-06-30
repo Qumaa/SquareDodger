@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Project.Game;
 using Project.UI;
 using UnityEngine;
@@ -9,10 +10,10 @@ namespace Project.Architecture
     {
         private IGameStateMachine _stateMachine;
 
-        private GameThemeApplier _themeApplier;
         private GameRuntimeData _gameData;
         private Camera _camera;
         private IDisposer _disposer;
+        private readonly IGameThemeResolver _themeResolver;
 
         private List<IUpdatable> _updatables;
         private List<IFixedUpdatable> _fixedUpdatables;
@@ -23,16 +24,20 @@ namespace Project.Architecture
         public IGameInputService InputService { get; set; }
         public IGameSounds GameSounds { get; set; }
 
+        public event Action<IGameTheme> OnThemeChanged;
+        public event Action<ShaderBlendingMode> OnPlayerShaderModeChanged;
+        public event Action<GameLocale> OnLocaleChanged;
+
         public Game(GameRuntimeData gameData, Camera camera, IDisposer disposer,
-            IGameThemeResolver gameThemeResolver)
+            IGameThemeResolver themeResolver)
         {
-            _themeApplier = new GameThemeApplier(gameThemeResolver);
             _updatables = new List<IUpdatable>();
             _fixedUpdatables = new List<IFixedUpdatable>();
 
             _gameData = gameData;
             _camera = camera;
             _disposer = disposer;
+            _themeResolver = themeResolver;
 
             InitializeStateMachine();
             InitializeStates();
@@ -58,8 +63,14 @@ namespace Project.Architecture
             _fixedUpdatables.Add(Gameplay);
         }
 
-        public void ApplyTheme(GameTheme themeType, bool dark = true) =>
-            _themeApplier.ApplyTheme(themeType, dark);
+        public void SetTheme(GameTheme themeType, bool dark = true) =>
+            OnThemeChanged?.Invoke(_themeResolver.Resolve(themeType, dark));
+
+        public void SetPlayerShaderMode(ShaderBlendingMode mode) =>
+            OnPlayerShaderModeChanged?.Invoke(mode);
+
+        public void SetLocale(GameLocale locale) =>
+            OnLocaleChanged?.Invoke(locale);
 
         private void InitializeStateMachine()
         {
@@ -77,7 +88,6 @@ namespace Project.Architecture
                 _gameData,
                 _disposer,
                 _camera,
-                _themeApplier,
                 settingsOpener,
                 quitter
                 );
