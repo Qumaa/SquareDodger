@@ -2,6 +2,7 @@
 using Project.Game;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Project.Architecture
 {
@@ -18,19 +19,11 @@ namespace Project.Architecture
 
         private static void SetLocale(int index)
         {
-            var loadingOperation = LocalizationSettings.InitializationOperation;
-            
-            if (loadingOperation.IsDone)
-            {
-                SetLocaleInternal(index);
+            if (!LocalizationSettings.InitializationOperation.IsDone)
                 return;
-            }
-
-            loadingOperation.Completed += _ => SetLocaleInternal(index);
-        }
-
-        private static void SetLocaleInternal(int index) =>
+            
             LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
+        }
 
         private static int LocaleEnumToLocaleIndex(GameLocale enumEntry) =>
             (int) enumEntry;
