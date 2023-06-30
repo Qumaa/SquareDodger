@@ -10,7 +10,9 @@
         {
             _savePath = savePath;
         }
-        
+
+        public bool HasSavedData => CanLoadFromDisk(_savePath);
+
         public void SaveData(T data)
         {
             SetCachedInstance(data);

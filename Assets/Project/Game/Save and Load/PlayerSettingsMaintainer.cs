@@ -5,8 +5,8 @@ namespace Project.Game
 {
     public class PlayerSettingsMaintainer
     {
-        private PlayerSettingsData _data;
-        private ISavingSystem<PlayerSettingsData> _savingSystem;
+        private readonly PlayerSettingsData _data;
+        private readonly ISavingSystem<PlayerSettingsData> _savingSystem;
 
         public PlayerSettingsMaintainer(ISavingSystem<PlayerSettingsData> savingSystem, ISettingsMenu settings,
             IGame game)
@@ -23,7 +23,7 @@ namespace Project.Game
             game.SetPlayerShaderMode(_data.ShaderMode);
             _data.OnShaderModeModified += game.SetPlayerShaderMode;
 
-            // game.SetLocale(_data.GameLocale);
+            game.SetLocale(_data.GameLocale);
             _data.OnGameLocaleModified += game.SetLocale;
         }
 

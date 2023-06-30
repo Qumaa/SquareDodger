@@ -56,6 +56,7 @@ namespace Project.Architecture
             settingsMenu.Hide();
             _game.UI.Add(settingsMenu);
             _settingsMaintainer = new PlayerSettingsMaintainer(_savingSystem, settingsMenu, _game);
+            GameLocalization.AddGameLocaleSelector(new SavingSystemLocaleSelector(_savingSystem));
 
             _opener.Focuser = _game.UI;
             _opener.SettingsMenu = settingsMenu;
