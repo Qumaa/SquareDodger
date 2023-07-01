@@ -72,6 +72,7 @@ namespace Project.Game
 
         private void SetDefaultValues()
         {
+            MasterVolume = SoundsVolume = MusicVolume = 1;
             CurrentTheme = GameTheme.Default;
             IsCurrentThemeDark = true;
             ShaderMode = ShaderBlendingMode.None;
@@ -81,7 +82,7 @@ namespace Project.Game
         private void SetMasterVolume(float value)
         {
             _masterVolume = value;
-            OnMusicVolumeChanged?.Invoke(_masterVolume);
+            OnMasterVolumeChanged?.Invoke(_masterVolume);
         }
 
         private void SetSoundsVolume(float value)
