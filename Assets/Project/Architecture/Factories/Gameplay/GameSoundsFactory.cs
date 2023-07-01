@@ -1,4 +1,7 @@
-﻿namespace Project.Game
+﻿using UnityEngine;
+using UnityEngine.Audio;
+
+namespace Project.Game
 {
     public struct GameSoundsFactory : IFactory<IGameSounds>
     {
@@ -11,7 +14,22 @@
 
         public IGameSounds CreateNew()
         {
-            return new GameSounds();
+            var soundsAudioSource = CreateAudioSource(_soundsData.SoundsAudioSourcePrefab);
+            var musicAudioSource = CreateAudioSource(_soundsData.MusicAudioSourcePrefab);
+            
+            var gameSounds = new GameSounds(
+                _soundsData.MasterMixer, 
+                soundsAudioSource, 
+                musicAudioSource,
+                _soundsData.TurnClip,
+                _soundsData.InterfaceTapClip,
+                _soundsData.LoseClip
+                );
+            
+            return gameSounds;
         }
+
+        private static AudioSource CreateAudioSource(GameObject prefab) =>
+            GameObject.Instantiate(prefab).GetComponent<AudioSource>();
     }
 }

@@ -1,3 +1,15 @@
-﻿fileFormatVersion: 2
+fileFormatVersion: 2
 guid: c8ae725c1fc1431892f988345d01b53f
-timeCreated: 1687864150
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _audioSourcePrefab: {fileID: 5635256987038083334, guid: 66f990c9adf668d478e4e80722258a87, type: 3}
+  - _masterMixer: {fileID: 24300002, guid: 8bd87ca59b01ca446bfaee7ba31b64a6, type: 2}
+  - _soundsMixer: {fileID: -4998318265701796212, guid: 8bd87ca59b01ca446bfaee7ba31b64a6, type: 2}
+  - _musicMixer: {fileID: 24300002, guid: 8bd87ca59b01ca446bfaee7ba31b64a6, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

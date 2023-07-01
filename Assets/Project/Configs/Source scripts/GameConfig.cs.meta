@@ -3,7 +3,13 @@ guid: ac2e1038601f7f04ab95e5c065fd7d83
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _cameraConfig: {instanceID: 0}
+  - _managerConfig: {instanceID: 0}
+  - _playerConfig: {instanceID: 0}
+  - _gameBackgroundConfig: {instanceID: 0}
+  - _gameUIConfig: {instanceID: 0}
+  - _gameSoundsConfig: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
