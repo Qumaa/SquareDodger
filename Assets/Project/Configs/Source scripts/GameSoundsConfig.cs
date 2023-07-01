@@ -7,13 +7,16 @@ namespace Project.Game
     public class GameSoundsConfig : ScriptableObject
     {
         [SerializeField] private AudioSource _audioSourcePrefab;
-        [SerializeField] private AudioMixer _masterMixer;
-        [SerializeField] private AudioMixer _soundsMixer;
-        [SerializeField] private AudioMixer _musicMixer;
+        [SerializeField] private AudioMixerGroup  _masterMixer;
+        [SerializeField] private AudioMixerGroup _soundsMixer;
+        [SerializeField] private AudioMixerGroup _musicMixer;
 
         public GameObject AudioSourcePrefab => _audioSourcePrefab.gameObject;
-        public AudioMixer MasterMixer => _masterMixer;
-        public AudioMixer SoundsMixer => _soundsMixer;
-        public AudioMixer MusicMixer => _musicMixer;
+        public AudioMixerGroup MasterMixer => _masterMixer;
+        public AudioMixerGroup SoundsMixer => _soundsMixer;
+        public AudioMixerGroup MusicMixer => _musicMixer;
+     
+    
     }
+    
 }
