@@ -26,6 +26,7 @@ namespace Project.Game
             _defaultBlendingRadius = defaultBlendingRadius;
             _defaultBlendingLength = defaultBlendingLength;
             MaintainedShader = shader;
+            ReallocateBuffer(1);
             ResetShaderValues();
         }
 
