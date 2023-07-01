@@ -1,4 +1,6 @@
 using System;
+using Project.Architecture;
+using UnityEngine.Localization.Settings;
 
 namespace Project.Game
 {
@@ -76,7 +78,7 @@ namespace Project.Game
             CurrentTheme = GameTheme.Default;
             IsCurrentThemeDark = true;
             ShaderMode = ShaderBlendingMode.None;
-            GameLocale = GameLocale.English;
+            GameLocale = GameLocalization.GetCurrentLocale();
         }
 
         private void SetMasterVolume(float value)
