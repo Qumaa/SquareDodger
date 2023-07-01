@@ -1,16 +1,40 @@
 using System;
+using Project.Architecture;
+using UnityEngine.Localization.Settings;
 
 namespace Project.Game
 {
     [Serializable]
     public class PlayerSettingsData
     {
+        private float _masterVolume;
+        private float _soundsVolume;
+        private float _musicVolume;
+        
         private GameTheme _currentTheme;
         private bool _isCurrentThemeDark;
 
         private ShaderBlendingMode _shaderMode;
 
         private GameLocale _gameLocale;
+
+        public float MasterVolume
+        {
+            get => _masterVolume;
+            set => SetMasterVolume(value);
+        }
+
+        public float SoundsVolume
+        {
+            get => _soundsVolume;
+            set => SetSoundsVolume(value);
+        }
+
+        public float MusicVolume
+        {
+            get => _musicVolume;
+            set => SetMusicVolume(value);
+        }
 
         public GameTheme CurrentTheme
         {
@@ -29,7 +53,7 @@ namespace Project.Game
             get => _shaderMode;
             set => SetShaderMode(value);
         }
-        
+
         public GameLocale GameLocale
         {
             get => _gameLocale;
@@ -39,6 +63,9 @@ namespace Project.Game
         [field: NonSerialized] public event Action<GameTheme, bool> OnThemeModified;
         [field: NonSerialized] public event Action<ShaderBlendingMode> OnShaderModeModified;
         [field: NonSerialized] public event Action<GameLocale> OnGameLocaleModified;
+        [field: NonSerialized] public event Action<float> OnMasterVolumeChanged;
+        [field: NonSerialized] public event Action<float> OnSoundsVolumeChanged;
+        [field: NonSerialized] public event Action<float> OnMusicVolumeChanged;
 
         public PlayerSettingsData()
         {
@@ -47,10 +74,29 @@ namespace Project.Game
 
         private void SetDefaultValues()
         {
+            MasterVolume = SoundsVolume = MusicVolume = 1;
             CurrentTheme = GameTheme.Default;
             IsCurrentThemeDark = true;
             ShaderMode = ShaderBlendingMode.None;
-            GameLocale = GameLocale.English;
+            GameLocale = GameLocalization.GetCurrentLocale();
+        }
+
+        private void SetMasterVolume(float value)
+        {
+            _masterVolume = value;
+            OnMasterVolumeChanged?.Invoke(_masterVolume);
+        }
+
+        private void SetSoundsVolume(float value)
+        {
+            _soundsVolume = value;
+            OnSoundsVolumeChanged?.Invoke(_soundsVolume);
+        }
+
+        private void SetMusicVolume(float value)
+        {
+            _musicVolume = value;
+            OnMusicVolumeChanged?.Invoke(_musicVolume);
         }
 
         private void SetCurrentTheme(GameTheme theme)

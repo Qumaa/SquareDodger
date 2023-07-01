@@ -10,7 +10,7 @@ namespace Project.Architecture
         private IGame _game;
         private IDisposer _disposer;
 
-        private void Awake()
+        private void Start()
         {
             var controlledCamera = Camera.main;
             _disposer = new Disposer();
