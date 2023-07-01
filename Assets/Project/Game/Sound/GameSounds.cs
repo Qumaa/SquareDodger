@@ -31,32 +31,24 @@ namespace Project.Game
 
         public void PlayTurnSound()
         {
-            Debug.Log("turn");
             PlayClip(_turnSound);
         }
 
         public void PlayLoseSound()
         {
-            Debug.Log("lose");
             PlayClip(_loseSound);
         }
 
         public void PlayInterfaceTapSound()
         {
-            Debug.Log("interface tap");
             PlayClip(_interfaceTapSound);
         }
 
         public void PlayMusicInLoop()
         {
-            Debug.Log("music starts");
             _musicSource.Play();
         }
-
-        public void StopMusic()
-        {
-        }
-
+        
         private void PlayClip(AudioClip clip) =>
             _soundsSource.PlayOneShot(clip);
 

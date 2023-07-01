@@ -6,7 +6,6 @@
         void PlayLoseSound();
         void PlayInterfaceTapSound();
         void PlayMusicInLoop();
-        void StopMusic();
         void SetMasterVolume(float volume);
         void SetSoundsVolume(float volume);
         void SetMusicVolume(float volume);
