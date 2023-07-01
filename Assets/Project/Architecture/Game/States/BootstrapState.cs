@@ -56,7 +56,7 @@ namespace Project.Architecture
 
         private IGameSounds CreateGameSounds()
         {
-            var factory = new GameSoundsFactory(_gameData.GameSoundsData);
+            var factory = new GameSoundsFactory(_gameData.GameSoundsData, _game);
             var sounds = factory.CreateNew();
 
             return sounds;

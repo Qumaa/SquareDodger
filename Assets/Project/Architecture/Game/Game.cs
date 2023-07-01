@@ -27,6 +27,9 @@ namespace Project.Architecture
         public event Action<IGameTheme> OnThemeChanged;
         public event Action<ShaderBlendingMode> OnPlayerShaderModeChanged;
         public event Action<GameLocale> OnLocaleChanged;
+        public event Action<float> OnMasterVolumeChanged;
+        public event Action<float> OnSoundsVolumeChanged;
+        public event Action<float> OnMusicVolumeChanged;
 
         public Game(GameRuntimeData gameData, Camera camera, IDisposer disposer,
             IGameThemeResolver themeResolver)
@@ -63,15 +66,6 @@ namespace Project.Architecture
             _fixedUpdatables.Add(Gameplay);
         }
 
-        public void SetTheme(GameTheme themeType, bool dark = true) =>
-            OnThemeChanged?.Invoke(_themeResolver.Resolve(themeType, dark));
-
-        public void SetPlayerShaderMode(ShaderBlendingMode mode) =>
-            OnPlayerShaderModeChanged?.Invoke(mode);
-
-        public void SetLocale(GameLocale locale) =>
-            OnLocaleChanged?.Invoke(locale);
-
         private void InitializeStateMachine()
         {
             _stateMachine = new GameStateMachine();
@@ -106,5 +100,23 @@ namespace Project.Architecture
 
         public void Remove(IFixedUpdatable item) =>
             _fixedUpdatables.Remove(item);
+
+        public void SetTheme(GameTheme themeType, bool dark = true) =>
+            OnThemeChanged?.Invoke(_themeResolver.Resolve(themeType, dark));
+
+        public void SetPlayerShaderMode(ShaderBlendingMode mode) =>
+            OnPlayerShaderModeChanged?.Invoke(mode);
+
+        public void SetLocale(GameLocale locale) =>
+            OnLocaleChanged?.Invoke(locale);
+
+        public void SetMasterVolume(float volume) =>
+            OnMasterVolumeChanged?.Invoke(volume);
+
+        public void SetSoundsVolume(float volume) =>
+            OnSoundsVolumeChanged?.Invoke(volume);
+
+        public void SetMusicVolume(float volume) =>
+            OnMusicVolumeChanged?.Invoke(volume);
     }
 }

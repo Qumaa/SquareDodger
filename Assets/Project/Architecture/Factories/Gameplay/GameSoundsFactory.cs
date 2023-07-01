@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
-using UnityEngine.Audio;
 
 namespace Project.Game
 {
     public struct GameSoundsFactory : IFactory<IGameSounds>
     {
         private GameSoundsRuntimeData _soundsData;
+        private IGameSoundsVolumeObserver _soundsObserver;
 
-        public GameSoundsFactory(GameSoundsRuntimeData soundsData)
+        public GameSoundsFactory(GameSoundsRuntimeData soundsData, IGameSoundsVolumeObserver soundsObserver)
         {
             _soundsData = soundsData;
+            _soundsObserver = soundsObserver;
         }
 
         public IGameSounds CreateNew()
@@ -25,8 +26,17 @@ namespace Project.Game
                 _soundsData.InterfaceTapClip,
                 _soundsData.LoseClip
                 );
+
+            SubscribeObserverEvents(gameSounds);
             
             return gameSounds;
+        }
+
+        private void SubscribeObserverEvents(IGameSounds sounds)
+        {
+            _soundsObserver.OnMasterVolumeChanged += sounds.SetMasterVolume;
+            _soundsObserver.OnSoundsVolumeChanged += sounds.SetSoundsVolume;
+            _soundsObserver.OnMusicVolumeChanged += sounds.SetMusicVolume;
         }
 
         private static AudioSource CreateAudioSource(GameObject prefab) =>

@@ -25,6 +25,13 @@ namespace Project.Game
 
             game.SetLocale(_data.GameLocale);
             _data.OnGameLocaleModified += game.SetLocale;
+            
+            game.SetMasterVolume(_data.MasterVolume);
+            game.SetSoundsVolume(_data.SoundsVolume);
+            game.SetMusicVolume(_data.MusicVolume);
+            _data.OnMasterVolumeChanged += game.SetMasterVolume;
+            _data.OnSoundsVolumeChanged += game.SetSoundsVolume;
+            _data.OnMusicVolumeChanged += game.SetMusicVolume;
         }
 
         private void SaveOnClose()
