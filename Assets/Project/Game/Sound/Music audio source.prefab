@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2493414484393259518}
   - component: {fileID: 5635256987038083334}
   m_Layer: 0
-  m_Name: audioSource
+  m_Name: Music audio source
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2388156895691205986}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 320.27, y: 559.5824, z: 4.857599}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -41,12 +41,12 @@ AudioSource:
   m_GameObject: {fileID: 2388156895691205986}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -4998318265701796212, guid: 8bd87ca59b01ca446bfaee7ba31b64a6, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 963469dc167f36f4a85ebe918324fbaf, type: 3}
+  OutputAudioMixerGroup: {fileID: -4868037736385720098, guid: 8bd87ca59b01ca446bfaee7ba31b64a6, type: 2}
+  m_audioClip: {fileID: 8300000, guid: d882ebf23c639be4fa05e9a0a57ee1bf, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

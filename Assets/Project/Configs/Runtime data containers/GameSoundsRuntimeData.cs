@@ -5,22 +5,21 @@ namespace Project.Game
 {
     public class GameSoundsRuntimeData : ILoadableFrom<GameSoundsConfig>
     {
-    
-
-        public GameObject AudioSourcePrefab { get; private set; }
-        public AudioMixerGroup MasterMixerGroup { get; private set; }
-        public AudioMixerGroup SoundsMixerGroup { get; private set; }
-        public AudioMixerGroup MusicMixerGroup { get; private set; }
-  
+        public GameObject SoundsAudioSourcePrefab { get; private set; }
+        public GameObject MusicAudioSourcePrefab { get; private set; }
+        public AudioMixer MasterMixer { get; private set; }
+        public AudioClip TurnClip { get; private set; }
+        public AudioClip InterfaceTapClip { get; private set; }
+        public AudioClip LoseClip { get; private set; }
 
         public void Load(GameSoundsConfig data)
         {
-            AudioSourcePrefab = data.AudioSourcePrefab;
-            MasterMixerGroup = data.MasterMixer; 
-            SoundsMixerGroup = data.SoundsMixer; 
-            MusicMixerGroup = data.MusicMixer;
-            
+            SoundsAudioSourcePrefab = data.SoundsAudioSourcePrefab;
+            MusicAudioSourcePrefab = data.MusicAudioSourcePrefab;
+            MasterMixer = data.MasterMixer;
+            TurnClip = data.TurnClip;
+            InterfaceTapClip = data.InterfaceTapClip;
+            LoseClip = data.LoseClip;
         }
-       
     }
 }

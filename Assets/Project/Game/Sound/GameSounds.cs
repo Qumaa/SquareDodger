@@ -9,47 +9,56 @@ namespace Project.Game
         private const string _MUSIC_VOLUME = "MusicVolume";
         private const string _SOUNDS_VOLUME = "SoundVolume";
 
-        private AudioMixer _masterMixer;
-        private AudioSource _audioSource;
-        private AudioMixerGroup _soundsMixer;
-        private AudioMixerGroup _musicMixer;
-       
+        private readonly AudioMixer _masterMixer;
+        private readonly AudioSource _soundsSource;
+        private readonly AudioSource _musicSource;
 
-        public GameSounds(AudioMixer masterMixer, AudioSource audioSource,AudioMixerGroup soundsMixer,AudioMixerGroup musicMixer)
+        private readonly AudioClip _turnSound;
+        private readonly AudioClip _interfaceTapSound;
+        private readonly AudioClip _loseSound;
+
+        public GameSounds(AudioMixer masterMixer, AudioSource soundsSource, AudioSource musicSource,
+            AudioClip turnSound, AudioClip interfaceTapSound, AudioClip loseSound)
         {
             _masterMixer = masterMixer;
-            _audioSource = audioSource;
-            _soundsMixer = soundsMixer;
-            _musicMixer = musicMixer;
-        }
-        
+            _soundsSource = soundsSource;
+            _musicSource = musicSource;
 
+            _turnSound = turnSound;
+            _interfaceTapSound = interfaceTapSound;
+            _loseSound = loseSound;
+        }
 
         public void PlayTurnSound()
         {
             Debug.Log("turn");
+            PlayClip(_turnSound);
         }
 
         public void PlayLoseSound()
         {
             Debug.Log("lose");
+            PlayClip(_loseSound);
         }
 
         public void PlayInterfaceTapSound()
         {
             Debug.Log("interface tap");
-            _audioSource.Play();
-
+            PlayClip(_interfaceTapSound);
         }
 
         public void PlayMusicInLoop()
         {
             Debug.Log("music starts");
+            _musicSource.Play();
         }
 
         public void StopMusic()
         {
         }
+
+        private void PlayClip(AudioClip clip) =>
+            _soundsSource.PlayOneShot(clip);
 
         public void SetMasterVolume(float volume) =>
             _masterMixer.SetFloat(_MASTER_VOLUME, InputToVolume(volume));
